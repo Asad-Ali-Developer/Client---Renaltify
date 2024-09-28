@@ -5,6 +5,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BsCreditCardFill } from 'react-icons/bs';
+import { apiClient } from '../apiClient';
 
 interface Tenant {
   _id: string,
@@ -34,7 +35,7 @@ const ShowTenantDetails = () => {
 
   const fetchTenant = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/api/tenant/${_id}`, {
+      const response = await fetch(`${apiClient}/api/tenant/${_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

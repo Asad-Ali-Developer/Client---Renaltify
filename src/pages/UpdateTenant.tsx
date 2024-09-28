@@ -15,6 +15,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { RiIdCardFill } from "react-icons/ri";
 import { PiUploadSimpleBold } from "react-icons/pi";
+import { apiClient } from "../apiClient";
 
 const tenantSchema = z.object({
     tenantName: z.string().min(3, { message: "Name must be at least 3 characters" }),
@@ -72,7 +73,7 @@ const UpdateTenant = () => {
     // First of All we have to get that tenant details
     const fetchTenant = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/api/tenant/${_id}`, {
+            const response = await fetch(`${apiClient}/api/tenant/${_id}`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -161,7 +162,7 @@ const UpdateTenant = () => {
 
         try {
             const response = await fetch(
-                `http://localhost:4000/api/update-tenant/${_id}`, {
+                `${apiClient}/api/update-tenant/${_id}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
