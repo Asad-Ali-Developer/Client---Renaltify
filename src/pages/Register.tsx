@@ -103,7 +103,6 @@ const Register = () => {
     }
   }
 
-
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
 
@@ -117,7 +116,6 @@ const Register = () => {
     })
 
     console.log(response);
-
 
     if (response.ok) {
       toast.success("Account created successfully")
@@ -134,9 +132,7 @@ const Register = () => {
     } else {
       toast.error('User not registered!')
     }
-
   }
-
 
   return (
     <Box

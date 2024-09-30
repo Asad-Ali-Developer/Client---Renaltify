@@ -15,6 +15,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { RiIdCardFill } from "react-icons/ri";
 import { PiUploadSimpleBold } from "react-icons/pi";
 import { BsFillPeopleFill } from "react-icons/bs";
+import { apiClient } from "../apiClient";
 
 
 const tenantSchema = z.object({
@@ -46,6 +47,8 @@ const RegisterTenant = () => {
     const [imageURL, setImageURL] = useState<string>('');
     const { authenticatedUser } = useAuth();
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const [tenant, setTenant] = useState<tenantData>({
         tenantName: "",
         phone: "",
@@ -75,12 +78,12 @@ const RegisterTenant = () => {
 
         // console.log(e);
 
-
         setTenant({
             ...tenant,
             [e.target.name]: e.target.value
         });
     };
+
 
     const handleFileInput = async (e: ChangeEvent<HTMLInputElement>) => {
         e.preventDefault();
@@ -88,6 +91,7 @@ const RegisterTenant = () => {
         const fileInput = e.target.files?.[0];
         if (fileInput) {
             try {
+                setIsLoading(true);
                 const options = {
                     maxSizeMB: 1,
                     maxWidthOrHeight: 1024,
@@ -102,9 +106,10 @@ const RegisterTenant = () => {
 
                 const downloadURL = await getDownloadURL(storageRef);
                 setImageURL(downloadURL);
+                setIsLoading(false);
 
                 // URL Of the Uploaded Image
-                // console.log(downloadURL);
+                console.log(downloadURL);
 
 
                 setValue('IdFileLink', downloadURL); // Ensure this updates the form state
@@ -115,13 +120,21 @@ const RegisterTenant = () => {
         }
     };
 
-
     const onSubmit = async (data: FieldValues) => {
         console.log(data);
 
         try {
+            // Upload the ID file and get the download URL
+            if (!imageURL) {
+                toast.error('Please upload an ID file');
+                return;
+            }
+
+            data.IdFileLink = imageURL;
+
+
             const response = await fetch(
-                `http://localhost:4000/api/add-tenant/${authenticatedUser?._id}`, {
+                `${apiClient}/api/add-tenant/${authenticatedUser?._id}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -135,10 +148,9 @@ const RegisterTenant = () => {
 
             console.log('API response:', res_data);
 
-
             if (response.ok) {
                 toast.success('Tenant added successfully!')
-                console.log('Tenant added successfully!');
+                // console.log('Tenant added successfully!');
                 navigate('/tenants');
             }
             else {
@@ -184,7 +196,6 @@ const RegisterTenant = () => {
                 <form onSubmit={handleSubmit(onSubmit)}>
 
                     <CardBody>
-
                         <Grid
                             gap={6}
                             templateColumns={{ base: "1fr", md: "repeat(2, 1fr)" }}>
@@ -203,7 +214,7 @@ const RegisterTenant = () => {
                                             placeholder="Enter tenant name"
                                         />
                                     </InputGroup>
-                                    <Text color="red.500">{errors.tenantName?.message}</Text>
+                                    <Text color="red.500" fontSize='sm'>{errors.tenantName?.message}</Text>
                                 </Box>
 
                                 <Box mb={4}>
@@ -256,8 +267,8 @@ const RegisterTenant = () => {
                                             placeholder="Enter address"
                                             h={{ base: 'auto', lg: 32 }}
                                         />
-                                        <Text color="red.500">{errors.address?.message}</Text>
                                     </InputGroup>
+                                    <Text color="red.500" fontSize='sm'>{errors.address?.message}</Text>
                                 </Box>
                             </Box>
 
@@ -277,7 +288,7 @@ const RegisterTenant = () => {
                                             placeholder="Total members"
                                         />
                                     </InputGroup>
-                                    <Text color="red.500">{errors.members?.message}</Text>
+                                    <Text color="red.500" fontSize='sm'>{errors.members?.message}</Text>
                                 </Box>
 
                                 <Box mb={4}>
@@ -294,7 +305,7 @@ const RegisterTenant = () => {
                                             value={tenant.rentDecided}
                                             placeholder="Rent decided"
                                         />
-                                        <Text color="red.500">{errors.rentDecided?.message}</Text>
+                                        <Text color="red.500" fontSize='sm'>{errors.rentDecided?.message}</Text>
                                     </InputGroup>
                                 </Box>
 
@@ -308,7 +319,7 @@ const RegisterTenant = () => {
                                         onChange={handleInput}
                                         placeholder="Shifting Date"
                                     />
-                                    <Text color="red.500">{errors.date?.message}</Text>
+                                    <Text color="red.500" fontSize='sm'>{errors.date?.message}</Text>
                                 </Box>
 
                                 <Box mb={4}>
@@ -325,7 +336,7 @@ const RegisterTenant = () => {
                                             placeholder="Enter ID number"
                                         />
                                     </InputGroup>
-                                    <Text color="red.500">{errors.idNumber?.message}</Text>
+                                    <Text color="red.500" fontSize='sm'>{errors.idNumber?.message}</Text>
                                 </Box>
 
                                 <Box mb={4}>
@@ -341,7 +352,8 @@ const RegisterTenant = () => {
                                         onChange={handleFileInput}
                                         className="FileInputStyling"
                                     />
-                                    <Text color="red.500">{errors.IdFileLink?.message}</Text>
+                                    {isLoading ? <Text fontSize='sm'>Please wait uploading...</Text> : null}
+                                    <Text color="red.500" fontSize='sm'>{errors.IdFileLink?.message}</Text>
                                 </Box>
                             </Box>
                         </Grid>
