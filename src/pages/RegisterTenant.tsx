@@ -1,27 +1,28 @@
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Grid, Heading, Input, InputGroup, InputLeftElement, Text, Textarea, useColorModeValue } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent, useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
-import { GoArrowUpRight } from "react-icons/go";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../store/authToken";
-import z from "zod";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import firebaseApp from "../firebaseConfig";
 import imageCompression from 'browser-image-compression';
-import { toast } from "react-toastify";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { ChangeEvent, useState } from "react";
+import { useForm } from "react-hook-form";
+import { BsFillPeopleFill } from "react-icons/bs";
 import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import { FaLocationDot } from "react-icons/fa6";
-import { RiIdCardFill } from "react-icons/ri";
+import { GoArrowUpRight } from "react-icons/go";
 import { PiUploadSimpleBold } from "react-icons/pi";
-import { BsFillPeopleFill } from "react-icons/bs";
-import { apiClient } from "../apiClient";
+import { RiIdCardFill } from "react-icons/ri";
+import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import z from "zod";
+import firebaseApp from "../firebaseConfig";
+import useAddTenant from "../hooks/useAddTenant";
+import { Tenant } from "./ShowTenantDetails";
+import useUploadImage from "../hooks/useUploadImage";
 
 
 const tenantSchema = z.object({
     tenantName: z.string().min(3, { message: "Name must be at least 3 characters" }),
-    phone: z.string().length(11, { message: "Phone number must be 11 characters" }),
-    AnotherPhone: z.string().length(11, { message: "Phone number must be 11 characters" }),
+    phone: z.string().length(11, { message: "Phone number must be 11 digits" }),
+    AnotherPhone: z.string().length(11, { message: "Phone number must be 11 digits" }),
     members: z.string().refine((val) => !isNaN(Number(val)), {
         message: "Members must be a number",
     }),
@@ -29,7 +30,7 @@ const tenantSchema = z.object({
     rentDecided: z.string().refine((val) => !isNaN(Number(val)), {
         message: "Rent must be a number",
     }),
-    idNumber: z.string().min(4, { message: "Id number must be at least 4 characters" }),
+    idNumber: z.string().min(4, { message: "Id number must be at least 13 digits" }),
     IdFileLink: z.string().optional(), // Ensure it's a string
     date: z.string().refine((val) => !isNaN(Date.parse(val)), {
         message: "Please provide a valid date",
@@ -41,127 +42,90 @@ type tenantData = z.infer<typeof tenantSchema>;
 
 const RegisterTenant = () => {
     document.title = "Add Tenant";
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
+    // To Upload data
+    const { uploadData } = useAddTenant();
+
+    // To Upload Image
+    const { uploadImage, ImageURL, setIsLoading, isLoading } = useUploadImage()
 
     const [imageURL, setImageURL] = useState<string>('');
-    const { authenticatedUser } = useAuth();
 
-    const [isLoading, setIsLoading] = useState(false)
+    document.title = "Add Tenant";
 
-    const [tenant, setTenant] = useState<tenantData>({
-        tenantName: "",
-        phone: "",
-        AnotherPhone: "",
-        members: "1",  // Treat as string for form handling
-        address: "",
-        rentDecided: "1000",  // Treat as string for form handling
-        idNumber: "",
-        IdFileLink: imageURL || "",
-        date: new Date().toISOString().split("T")[0],  // Initialize with the current date in YYYY-MM-DD format
-        isActive: false
+    // Form handling
+    const { register, setValue, handleSubmit, formState: { errors } } = useForm<tenantData>({
+        resolver: zodResolver(tenantSchema),
+        defaultValues: {
+            members: "1",
+            rentDecided: "1000",
+            date: new Date().toISOString().split("T")[0],
+        }
     });
 
-    const {
-        register,
-        setValue,
-        handleSubmit,
-        formState: { errors }
-    } = useForm<tenantData>({
-        resolver: zodResolver(tenantSchema)
-    });
-
-
-
-    const handleInput = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        e.preventDefault();
-
-        // console.log(e);
-
-        setTenant({
-            ...tenant,
-            [e.target.name]: e.target.value
-        });
-    };
-
-
+    // Image Upload Handler
     const handleFileInput = async (e: ChangeEvent<HTMLInputElement>) => {
-        e.preventDefault();
-
         const fileInput = e.target.files?.[0];
+
         if (fileInput) {
+            setIsLoading(true);
+
             try {
-                setIsLoading(true);
-                const options = {
-                    maxSizeMB: 1,
-                    maxWidthOrHeight: 1024,
-                    useWebWorker: true,
-                };
 
-                const compressedFile = await imageCompression(fileInput, options);
+                await uploadImage(fileInput);
 
-                const storage = getStorage(firebaseApp);
-                const storageRef = ref(storage, `images/${compressedFile.name}`);
-                await uploadBytes(storageRef, compressedFile);
+                const Url = ImageURL
 
-                const downloadURL = await getDownloadURL(storageRef);
-                setImageURL(downloadURL);
+                setImageURL(Url)
+
+                setValue('IdFileLink', Url);
+
+                console.log(Url);
+
                 setIsLoading(false);
 
-                // URL Of the Uploaded Image
-                console.log(downloadURL);
-
-
-                setValue('IdFileLink', downloadURL); // Ensure this updates the form state
-
             } catch (error) {
-                console.error('Error processing image:', error);
+                console.log(error);
+                setIsLoading(false);
             }
+
+
         }
     };
 
-    const onSubmit = async (data: FieldValues) => {
-        console.log(data);
+    // Form submission
+    const onSubmit = async (data: tenantData) => {
+        if (!imageURL) {
+            toast.error('Please upload an ID file');
+            return;
+        }
 
         try {
-            // Upload the ID file and get the download URL
-            if (!imageURL) {
-                toast.error('Please upload an ID file');
-                return;
-            }
+            const tenantDataForSubmission: Tenant = {
+                _id: '', // If the server generates it
+                tenantName: data.tenantName,
+                phone: Number(data.phone),
+                AnotherPhone: Number(data.AnotherPhone),
+                members: Number(data.members),
+                address: data.address,
+                rentDecided: data.rentDecided,
+                date: data.date,
+                idNumber: data.idNumber,
+                IdFileLink: data.IdFileLink!,
+                isActive: data.isActive || false,
+                QrCode: '',
+            };
 
-            data.IdFileLink = imageURL;
-
-
-            const response = await fetch(
-                `${apiClient}/api/add-tenant/${authenticatedUser?._id}`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${localStorage.getItem('serverToken')}`
-                },
-                body: JSON.stringify(data),
-                credentials: "include",
-            });
-
-            const res_data = await response.json();
-
-            console.log('API response:', res_data);
-
-            if (response.ok) {
-                toast.success('Tenant added successfully!')
-                // console.log('Tenant added successfully!');
-                navigate('/tenants');
-            }
-            else {
-                toast.error('Error adding tenant. Please try again later.')
-            }
+            await uploadData(tenantDataForSubmission);
+            toast.success('Tenant added successfully!');
+            navigate('/tenants');
 
         } catch (error) {
+            toast.error('Error adding tenant. Please try again later.');
             console.error('Error adding tenant:', error);
         }
     };
-
     return (
 
         <Box
@@ -209,8 +173,6 @@ const RegisterTenant = () => {
                                         <Input
                                             {...register("tenantName")}
                                             variant='filled'
-                                            value={tenant.tenantName}
-                                            onChange={handleInput}
                                             placeholder="Enter tenant name"
                                         />
                                     </InputGroup>
@@ -227,8 +189,6 @@ const RegisterTenant = () => {
                                             {...register('phone')}
                                             type="tel"
                                             variant='filled'
-                                            value={tenant.phone}
-                                            onChange={handleInput}
                                             placeholder="Enter phone"
                                         />
                                     </InputGroup>
@@ -244,8 +204,6 @@ const RegisterTenant = () => {
                                             {...register('AnotherPhone')}
                                             type="tel"
                                             variant='filled'
-                                            onChange={handleInput}
-                                            value={tenant.AnotherPhone}
                                             placeholder="Enter another phone"
                                         />
                                     </InputGroup>
@@ -262,8 +220,6 @@ const RegisterTenant = () => {
                                             {...register('address')}
                                             variant='filled'
                                             pl={10}
-                                            value={tenant.address}
-                                            onChange={handleInput}
                                             placeholder="Enter address"
                                             h={{ base: 'auto', lg: 32 }}
                                         />
@@ -283,8 +239,6 @@ const RegisterTenant = () => {
                                             type="tel"
                                             {...register('members')}
                                             variant='filled'
-                                            onChange={handleInput}
-                                            value={tenant.members}
                                             placeholder="Total members"
                                         />
                                     </InputGroup>
@@ -301,8 +255,6 @@ const RegisterTenant = () => {
                                             {...register('rentDecided')}
                                             type="number"
                                             variant='filled'
-                                            onChange={handleInput}
-                                            value={tenant.rentDecided}
                                             placeholder="Rent decided"
                                         />
                                         <Text color="red.500" fontSize='sm'>{errors.rentDecided?.message}</Text>
@@ -315,8 +267,6 @@ const RegisterTenant = () => {
                                         {...register('date')}
                                         type="date"
                                         variant='filled'
-                                        value={tenant.date}
-                                        onChange={handleInput}
                                         placeholder="Shifting Date"
                                     />
                                     <Text color="red.500" fontSize='sm'>{errors.date?.message}</Text>
@@ -331,8 +281,6 @@ const RegisterTenant = () => {
                                         <Input
                                             {...register('idNumber')}
                                             variant='filled'
-                                            onChange={handleInput}
-                                            value={tenant.idNumber}
                                             placeholder="Enter ID number"
                                         />
                                     </InputGroup>
@@ -352,7 +300,11 @@ const RegisterTenant = () => {
                                         onChange={handleFileInput}
                                         className="FileInputStyling"
                                     />
-                                    {isLoading ? <Text fontSize='sm'>Please wait uploading...</Text> : null}
+                                    {isLoading
+                                        ? <Text fontSize='sm'>Please wait uploading...</Text>
+                                        : null}
+                                    {ImageURL && <Text fontSize='sm'>Uploaded</Text>}
+
                                     <Text color="red.500" fontSize='sm'>{errors.IdFileLink?.message}</Text>
                                 </Box>
                             </Box>

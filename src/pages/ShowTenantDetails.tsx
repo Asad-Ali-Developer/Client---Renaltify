@@ -5,9 +5,10 @@ import { IoArrowBack } from "react-icons/io5";
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BsCreditCardFill } from 'react-icons/bs';
-import { apiClient } from '../apiClient';
 
-interface Tenant {
+import { apiClientOK } from '../services/apiClient';
+
+export interface Tenant {
   _id: string,
   tenantName: string,
   phone: number,
@@ -35,7 +36,7 @@ const ShowTenantDetails = () => {
 
   const fetchTenant = async () => {
     try {
-      const response = await fetch(`${apiClient}/api/tenant/${_id}`, {
+      const response = await fetch(`${apiClientOK}/api/tenant/${_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -53,6 +54,7 @@ const ShowTenantDetails = () => {
 
       console.log(data.tenant);
 
+      document.title = `${data.tenant.tenantName} | Dashboard`;
 
     } catch (error) {
       console.error('Error fetching tenant:', error);

@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { apiClient } from "../apiClient";
+import { apiClientOK } from "../services/apiClient";
 
 interface AuthenticatedUser {
     _id: string,
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }: Props) => {
         if (!token) return;
 
         try {
-            const response = await fetch(`${apiClient}/api/auth/user`, {
+            const response = await fetch(`${apiClientOK}/api/auth/user`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -80,6 +80,7 @@ export const AuthProvider = ({ children }: Props) => {
             } else {
                 LogoutUser();
             }
+            
         } catch (error) {
             console.log(error);
             LogoutUser();
@@ -92,7 +93,7 @@ export const AuthProvider = ({ children }: Props) => {
 
         try {
             const response = await fetch(
-                `${apiClient}/api/all-tenants/${authenticatedUser?._id}`, {
+                `${apiClientOK}/api/all-tenants/${authenticatedUser?._id}`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,

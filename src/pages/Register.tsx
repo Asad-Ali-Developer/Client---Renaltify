@@ -23,7 +23,7 @@ import { toast } from "react-toastify";
 import { z } from "zod";
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import firebaseApp from "../firebaseConfig";
-import { apiClient } from "../apiClient";
+import { apiClientOK } from "../services/apiClient";
 
 
 const schema = z.object({
@@ -106,7 +106,7 @@ const Register = () => {
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
 
-    const response = await fetch(`${apiClient}/api/auth/register`, {
+    const response = await fetch(`${apiClientOK}/api/auth/register`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

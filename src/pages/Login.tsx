@@ -12,7 +12,7 @@ import {
 
 import { z } from "zod";
 import { toast } from "react-toastify";
-import { apiClient } from "../apiClient";
+import { apiClientOK } from "../services/apiClient";
 import { MdEmail } from "react-icons/md";
 import { useAuth } from "../store/authToken";
 import { ChangeEvent, useState } from "react";
@@ -65,7 +65,7 @@ const Login = () => {
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
 
-    const response = await fetch(`${apiClient}/api/auth/login`, {
+    const response = await fetch(`${apiClientOK}/api/auth/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -32,22 +32,26 @@ import { Link } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../store/authToken";
 import { toast } from "react-toastify";
-import { apiClient } from "../apiClient";
+import { apiClientOK } from "../services/apiClient";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoEyeOutline } from "react-icons/io5";
-
-interface Tenants {
-  _id: string,
-  phone: number,
-  idNumber: string,
-  isActive: boolean,
-  tenantName: string,
-  rentDecided: number
-}
+import useAllTenants from "../hooks/useAllTenants";
+import type { Tenants } from "../hooks/useAllTenants";
 
 
 const Tenants = () => {
-  const { authenticatedUser, tenants, activeTenants, totalTenants, getAllTenants } = useAuth()
+
+  const { authenticatedUser, getAllTenants, activeTenants, totalTenants } = useAuth()
+
+  // const { data } = useAllTenants();
+  const { data, refetch } = useAllTenants(); // Make sure to retrieve the tenants from your hook properly
+
+  const tenants: Tenants[] = data?.tenants || [];
+
+  // console.log(data);
+
+  refetch();
+
   const cancelRef = useRef<HTMLButtonElement>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedTenant, setSelectedTenant] = useState<Tenants | null>(null);
@@ -56,11 +60,10 @@ const Tenants = () => {
   document.title = "Tenant Data | Dashboard"
   const deleteTenant = async () => {
 
-
     try {
 
       const response = await fetch(
-        `${apiClient}/api/delete-tenant/${selectedTenant?._id}`, {
+        `${apiClientOK}/api/delete-tenant/${selectedTenant?._id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
@@ -113,7 +116,7 @@ const Tenants = () => {
 
     try {
 
-      const response = await fetch(`${apiClient}/api/update-tenant/${tenant._id}`, {
+      const response = await fetch(`${apiClientOK}/api/update-tenant/${tenant._id}`, {
         method: "PATCH",
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
@@ -247,102 +250,93 @@ const Tenants = () => {
                       <Th>Actions</Th>
                     </Tr>
                   </Thead>
-                  {tenants.length ?
-                    <Tbody>
 
-                      {/* Add rows as needed */}
+                  <Tbody>
 
-                      {tenants.map((tenant) => (
-                        <Tr key={tenant._id} position='relative'>
-                          <Td>{tenant.tenantName}</Td>
-                          <Td>{tenant.idNumber}</Td>
-                          <Td>{tenant.phone}</Td>
-                          <Td>
-                            <Flex
-                              gap={5}
-                              mr={{ base: 5, md: 5, lg: 5 }}
-                              alignItems='center'
-                              position='relative'>
-                              <Badge
-                                colorScheme={tenant.isActive ? 'green' : 'red'}
-                                variant='solid'>
-                                {tenant.isActive ? 'Active' : 'Inactive'}
-                              </Badge>
+                    {/* Add rows as needed */}
+                    {tenants?.map((tenant) => (
+                      <Tr key={tenant._id} position='relative'>
+                        <Td>{tenant.tenantName}</Td>
+                        <Td>{tenant.idNumber}</Td>
+                        <Td>{tenant.phone}</Td>
+                        <Td>
+                          <Flex
+                            gap={5}
+                            mr={{ base: 5, md: 5, lg: 5 }}
+                            alignItems='center'
+                            position='relative'>
+                            <Badge
+                              colorScheme={tenant.isActive ? 'green' : 'red'}
+                              variant='solid'>
+                              {tenant.isActive ? 'Active' : 'Inactive'}
+                            </Badge>
 
-                              <Menu>
-                                <Box
-                                  // mr={{ base: 5, md: 5, lg: 5 }}
-                                  className="p-2 bg-zinc-700/10 rounded-full flex justify-center items-center absolute left-16">
-                                  <MenuButton>
-                                    <FiEdit size='1.2em' />
-                                  </MenuButton>
-                                </Box>
-
-                                <Portal>
-                                  <MenuList>
-                                    <MenuItem
-                                      fontWeight='semibold'
-                                      color='green.400'
-                                      onClick={() => toggleStatus(tenant, true)}>
-                                      Active
-                                    </MenuItem>
-                                    <MenuItem
-                                      fontWeight='semibold'
-                                      color='red.400'
-                                      onClick={() => toggleStatus(tenant, false)}>
-                                      Inactive
-                                    </MenuItem>
-                                  </MenuList>
-                                </Portal>
-                              </Menu>
-                            </Flex>
-
-                          </Td>
-                          <Td fontWeight='semibold'>{tenant.rentDecided}</Td>
-                          <Td>
-                            <Flex gap={2} direction={{ base: "row", sm: "row" }}>
-
-                              <Link to={`/tenant/${tenant._id}/view`}>
-                                <Box className="p-2 bg-zinc-700/10 rounded-full flex hover:bg-zinc-700/20 justify-center items-center">
-                                  <IoEyeOutline size='1.2em' />
-                                </Box>
-                              </Link>
-
-                              <Link to={`/tenant/${tenant._id}/update`}>
-                                <Box className="p-2 bg-zinc-700/10 rounded-full hover:bg-zinc-700/20 flex justify-center items-center">
-                                  <FiEdit size='1.2em' />
-                                </Box>
-                              </Link>
-
+                            <Menu>
                               <Box
-                                className="bg-zinc-700/10 p-2 rounded-full hover:bg-zinc-700/20 cursor-pointer flex justify-center items-center"
-                                onClick={() => openDeleteDialog(tenant)} >
-                                <RiDeleteBinLine size='1.2em' />
+                                // mr={{ base: 5, md: 5, lg: 5 }}
+                                className="p-2 bg-zinc-700/10 rounded-full flex justify-center items-center absolute left-16">
+                                <MenuButton>
+                                  <FiEdit size='1.2em' />
+                                </MenuButton>
                               </Box>
 
-                            </Flex>
-                          </Td>
-                          {/* <Box className="w-[85%] mx-auto bg-red-500 absolute left-0 h-52">
+                              <Portal>
+                                <MenuList>
+                                  <MenuItem
+                                    fontWeight='semibold'
+                                    color='green.400'
+                                    onClick={() => toggleStatus(tenant, true)}>
+                                    Active
+                                  </MenuItem>
+                                  <MenuItem
+                                    fontWeight='semibold'
+                                    color='red.400'
+                                    onClick={() => toggleStatus(tenant, false)}>
+                                    Inactive
+                                  </MenuItem>
+                                </MenuList>
+                              </Portal>
+                            </Menu>
+                          </Flex>
+
+                        </Td>
+                        <Td fontWeight='semibold'>{tenant.rentDecided}</Td>
+                        <Td>
+                          <Flex gap={2} direction={{ base: "row", sm: "row" }}>
+
+                            <Link to={`/tenant/${tenant._id}/view`}>
+                              <Box className="p-2 bg-zinc-700/10 rounded-full flex hover:bg-zinc-700/20 justify-center items-center">
+                                <IoEyeOutline size='1.2em' />
+                              </Box>
+                            </Link>
+
+                            <Link to={`/tenant/${tenant._id}/update`}>
+                              <Box className="p-2 bg-zinc-700/10 rounded-full hover:bg-zinc-700/20 flex justify-center items-center">
+                                <FiEdit size='1.2em' />
+                              </Box>
+                            </Link>
+
+                            <Box
+                              className="bg-zinc-700/10 p-2 rounded-full hover:bg-zinc-700/20 cursor-pointer flex justify-center items-center"
+                              onClick={() => openDeleteDialog(tenant)} >
+                              <RiDeleteBinLine size='1.2em' />
+                            </Box>
+
+                          </Flex>
+                        </Td>
+                        {/* <Box className="w-[85%] mx-auto bg-red-500 absolute left-0 h-52">
                             ID
                           </Box> */}
-                        </Tr>
-
-                      ))
-
-
-                      }
-
-                    </Tbody>
-
-                    :
-                    <Tbody>
-                      <Tr>
-                        <Td>
-                          No data available
-                        </Td>
                       </Tr>
-                    </Tbody>
-                  }
+
+                    ))
+
+
+                    }
+
+                  </Tbody>
+
+
                 </Table>
               </TableContainer>
             </Box>

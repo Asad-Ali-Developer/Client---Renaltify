@@ -12,7 +12,6 @@ const Home = () => {
   const { authenticatedUser } = useAuth()
   const { colorMode } = useColorMode()
 
-
   return (
     <>
 
@@ -32,15 +31,17 @@ const Home = () => {
               <VStack align="start" spacing={4}>
                 <VStack align="start" spacing={2}>
 
-                  <Flex
-                    gap={2}
-                    fontSize={20}
-                    justifyContent='center'>
-                    <Text>Hey, </Text>
-                    <Text fontWeight='bold'
-                      color={colorMode === 'dark' ? 'red.300' : 'red.500'}>
-                      {authenticatedUser?.username}</Text>
-                  </Flex>
+                  {authenticatedUser &&
+                    <Flex
+                      gap={2}
+                      fontSize={20}
+                      justifyContent='center'>
+                      <Text>Hey, </Text>
+                      <Text fontWeight='bold'
+                        color={colorMode === 'dark' ? 'red.300' : 'red.500'}>
+                        {authenticatedUser?.username}</Text>
+                    </Flex>
+                  }
 
                   <Heading
                     as="h1"
