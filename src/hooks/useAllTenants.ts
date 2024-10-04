@@ -3,10 +3,6 @@ import { CACHE_KEY_TENANTS } from "./constants";
 import { apiClientOK } from "../services/apiClient";
 import axios from "axios";
 
-interface TenantsResponse {
-    tenants: Tenant[];
-}
-
 export interface Tenant {
     _id: string;
     phone: number;
@@ -14,6 +10,10 @@ export interface Tenant {
     isActive: boolean;
     tenantName: string;
     rentDecided: number;
+}
+
+interface TenantsResponse {
+    tenants: Tenant[];
 }
 
 interface queryTenants {
@@ -45,9 +45,9 @@ const useAllTenants = (query: queryTenants) => {
 
     const tenants = data?.tenants || [];
 
-    const totalTenants = tenants.length;
+    const totalTenants = tenants.length || 0;
 
-    const activeTenants = tenants.filter((tenant: Tenant) => tenant.isActive).length;
+    const activeTenants = tenants.filter((tenant: Tenant) => tenant.isActive).length || 0;
 
     console.log(totalTenants, activeTenants);
 

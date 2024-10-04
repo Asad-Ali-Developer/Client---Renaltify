@@ -37,22 +37,30 @@ import { apiClientOK } from "../services/apiClient";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoEyeOutline } from "react-icons/io5";
 import useAllTenants, { Tenant } from "../hooks/useAllTenants";
-
-
+import useDeleteTenant from "../hooks/useDeleteTenant";
+import useTenantStatusUpdater from "../hooks/useTenantStatusUpdator";
 
 
 const Tenants = () => {
 
-  const { authenticatedUser, activeTenants } = useAuth()
+  document.title = "Tenant Data | Dashboard"
+
+  const { authenticatedUser } = useAuth();
 
   const _id = authenticatedUser?._id
-  
+
   const tenantName = authenticatedUser?.username
 
-  const { tenants, totalTenants } = useAllTenants({_id, tenantName});
+  // This hook is for getting all the tenants
+  const { tenants, totalTenants, activeTenants } = useAllTenants({ _id, tenantName });
 
-  console.log(tenants);
+  console.log(`Active tenants: ${activeTenants}, TotalTenants: ${totalTenants}`);
 
+  // This hook is for deleting a tenant
+  const delTenant = useDeleteTenant();
+
+  // This hook is for updating the status of a tenant
+  const updateTenantStatus = useTenantStatusUpdater();
 
 
   const cancelRef = useRef<HTMLButtonElement>(null);
@@ -60,48 +68,35 @@ const Tenants = () => {
   const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
 
 
-  document.title = "Tenant Data | Dashboard"
 
-  const deleteTenant = async () => {
 
-    try {
+  // This function is for deleting a tenant
+  const deleteTenant = () => {
 
-      const response = await fetch(
-        `${apiClientOK}/api/delete-tenant/${selectedTenant?._id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
-          'Content-Type': 'application/json'
+    const _id = selectedTenant?._id || ''
+
+    if (selectedTenant?._id) {
+      delTenant.mutate(
+        _id,
+        {
+          onSuccess: () => {
+            toast.success('Tenant deleted successfully')
+            onClose()
+            setSelectedTenant(null)
+          },
+
+          onError: () => {
+            toast.error('Not deleted tenant')
+          }
         }
-      })
-
-      if (response.ok) {
-        toast.success("Tenant deleted successfully");
-      }
-
-      if (!response.ok) {
-        toast.error("Tenant not deleted!");
-        throw new Error('Network response was not ok');
-      }
-
-      const res_data = await response.json();
-
-      console.log(res_data);
-
-    } catch (error) {
-      console.log(error);
-
-    } finally {
-      onClose();
+      )
     }
-
   }
 
 
   const openDeleteDialog = (tenant: Tenant) => {
     setSelectedTenant(tenant);
     console.log(tenant);
-
     onOpen();
   };
 
@@ -109,28 +104,48 @@ const Tenants = () => {
   // Function for Toggle Status
   const toggleStatus = async (tenant: Tenant, newStatus: boolean) => {
 
-    try {
+    // Only proceed if the status is actually changing
+    if (tenant.isActive !== newStatus) {
 
-      const response = await fetch(`${apiClientOK}/api/update-tenant/${tenant._id}`, {
-        method: "PATCH",
-        headers: {
-          'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ isActive: newStatus }),
-        credentials: 'include'
-      })
+      updateTenantStatus.mutate(
 
-      if (response.ok) {
-        toast.success('Tenant status changed!')
-      }
-      else {
-        toast.error('Tenant status not changed!')
-      }
+        // In this we are sending data to the hook => {tenantId, newUpdatedStatus}
+        { _id: tenant._id, newStatus: newStatus },
 
-    } catch (error) {
-      console.log(error);
+        // After success or failure shows the message or notification
+        {
+          onSuccess: () => {
+            toast.success('Tenant status updated!')
+          },
+          onError: () => {
+            toast.error('Tenant status not updated!')
+          }
+        }
+      )
     }
+
+
+    // try {
+    //   const response = await fetch(`${apiClientOK}/api/update-tenant/${tenant._id}`, {
+    //     method: "PATCH",
+    //     headers: {
+    //       'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
+    //       'Content-Type': 'application/json'
+    //     },
+    //     body: JSON.stringify({ isActive: newStatus }),
+    //     credentials: 'include'
+    //   })
+
+    //   if (response.ok) {
+    //     toast.success('Tenant status changed!')
+    //   }
+    //   else {
+    //     toast.error('Tenant status not changed!')
+    //   }
+
+    // } catch (error) {
+    //   console.log(error);
+    // }
 
   }
 
