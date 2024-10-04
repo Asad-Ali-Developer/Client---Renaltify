@@ -1,9 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { CACHE_KEY_TENANTS } from "./constants";
-import { useAuth } from "../store/authToken";
-import APIClient from "../services/apiClient";
+import { apiClientOK } from "../services/apiClient";
+import axios from "axios";
 
-export interface Tenants {
+interface TenantsResponse {
+    tenants: Tenant[];
+}
+
+export interface Tenant {
     _id: string;
     phone: number;
     idNumber: string;
@@ -12,34 +16,43 @@ export interface Tenants {
     rentDecided: number;
 }
 
+interface queryTenants {
+    _id?: string;
+    tenantName?: string;
+}
 
-const useAllTenants = () => {
-    const { authenticatedUser } = useAuth(); // Retrieve authenticated user
+const useAllTenants = (query: queryTenants) => {
 
-    return useQuery<Tenants[], Error>({
-        queryKey: [CACHE_KEY_TENANTS, authenticatedUser?._id], // Cache key includes userId
-        queryFn: () => {
-            if (!authenticatedUser?._id) {
-                return [];
-            }
-            
-            const apiClient = new APIClient<Tenants>(`/api/all-tenants/${authenticatedUser._id}`);
+    const { data } = useQuery<TenantsResponse, Error>({
 
+        enabled: !!query._id,
 
-            return apiClient.getAll({
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-            });
-        },
-        staleTime: 24 * 60 * 60 * 1000, // 24 hours cache validity
-        cacheTime: 24 * 60 * 60 * 1000,
-        enabled: !!authenticatedUser?._id, // Only run the query if the user ID is available
-    });
+        queryKey: [CACHE_KEY_TENANTS, `Tenants of '${query.tenantName}' and id: ${query._id}`],
 
-    // return tenants
-};
+        staleTime : 20 * 60 * 1000, // 30 minutes
+
+        queryFn: () =>
+            axios
+                .get<TenantsResponse>(`${apiClientOK}/api/all-tenants/${query._id}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
+                        'Content-Type': 'application/json'
+                    },
+                    withCredentials: true
+                })
+                .then((res) => res.data),
+    })
+
+    const tenants = data?.tenants || [];
+
+    const totalTenants = tenants.length;
+
+    const activeTenants = tenants.filter((tenant: Tenant) => tenant.isActive).length;
+
+    console.log(totalTenants, activeTenants);
+
+    return { tenants, totalTenants, activeTenants };
+
+}
 
 export default useAllTenants;

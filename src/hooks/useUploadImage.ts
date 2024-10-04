@@ -9,8 +9,8 @@ const useUploadImage = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const uploadImage = async (fileInput: File) => {
-
-
+        setIsLoading(true);
+        
         try {
             const compressedFile = await imageCompression(fileInput, {
                 maxSizeMB: 1,

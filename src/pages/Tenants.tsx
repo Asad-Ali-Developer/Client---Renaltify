@@ -24,40 +24,44 @@ import {
   MenuList,
   MenuItem,
   Menu,
-  MenuButton
+  MenuButton,
+  Text
 } from "@chakra-ui/react";
 import { Card, CardHeader, CardBody } from "@chakra-ui/card";
 import { FiEdit } from "react-icons/fi";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useAuth } from "../store/authToken";
 import { toast } from "react-toastify";
 import { apiClientOK } from "../services/apiClient";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoEyeOutline } from "react-icons/io5";
-import useAllTenants from "../hooks/useAllTenants";
-import type { Tenants } from "../hooks/useAllTenants";
+import useAllTenants, { Tenant } from "../hooks/useAllTenants";
+
+
 
 
 const Tenants = () => {
 
-  const { authenticatedUser, getAllTenants, activeTenants, totalTenants } = useAuth()
+  const { authenticatedUser, activeTenants } = useAuth()
 
-  // const { data } = useAllTenants();
-  const { data, refetch } = useAllTenants(); // Make sure to retrieve the tenants from your hook properly
+  const _id = authenticatedUser?._id
+  
+  const tenantName = authenticatedUser?.username
 
-  const tenants: Tenants[] = data?.tenants || [];
+  const { tenants, totalTenants } = useAllTenants({_id, tenantName});
 
-  // console.log(data);
+  console.log(tenants);
 
-  refetch();
+
 
   const cancelRef = useRef<HTMLButtonElement>(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedTenant, setSelectedTenant] = useState<Tenants | null>(null);
+  const [selectedTenant, setSelectedTenant] = useState<Tenant | null>(null);
 
 
   document.title = "Tenant Data | Dashboard"
+
   const deleteTenant = async () => {
 
     try {
@@ -72,7 +76,6 @@ const Tenants = () => {
       })
 
       if (response.ok) {
-        getAllTenants();
         toast.success("Tenant deleted successfully");
       }
 
@@ -95,15 +98,7 @@ const Tenants = () => {
   }
 
 
-  useEffect(() => {
-    if (authenticatedUser?._id) {
-      getAllTenants();
-    }
-
-  }, [authenticatedUser?._id])
-
-
-  const openDeleteDialog = (tenant: Tenants) => {
+  const openDeleteDialog = (tenant: Tenant) => {
     setSelectedTenant(tenant);
     console.log(tenant);
 
@@ -112,7 +107,7 @@ const Tenants = () => {
 
 
   // Function for Toggle Status
-  const toggleStatus = async (tenant: Tenants, newStatus: boolean) => {
+  const toggleStatus = async (tenant: Tenant, newStatus: boolean) => {
 
     try {
 
@@ -128,7 +123,6 @@ const Tenants = () => {
 
       if (response.ok) {
         toast.success('Tenant status changed!')
-        getAllTenants();
       }
       else {
         toast.error('Tenant status not changed!')
@@ -355,8 +349,11 @@ const Tenants = () => {
             <AlertDialogContent>
               <AlertDialogHeader>Delete Tenant?</AlertDialogHeader>
               <AlertDialogCloseButton />
-              <AlertDialogBody>Are you sure you want to delete
-                <span style={{ fontWeight: "bold" }}> {selectedTenant?.tenantName} </span>?
+              <AlertDialogBody>
+                <Flex gap={1}>
+                  <Text>Are you sure you want to delete</Text>
+                  <Text style={{ fontWeight: "bold" }}> {selectedTenant?.tenantName} </Text>?
+                </Flex>
               </AlertDialogBody>
               <AlertDialogFooter>
                 <Button ref={cancelRef} onClick={onClose}>

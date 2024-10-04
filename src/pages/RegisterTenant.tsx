@@ -72,18 +72,16 @@ const RegisterTenant = () => {
             setIsLoading(true);
 
             try {
-
                 await uploadImage(fileInput);
 
                 const Url = ImageURL
+                console.log(ImageURL);
 
-                setImageURL(Url)
-
-                setValue('IdFileLink', Url);
-
-                console.log(Url);
-
-                setIsLoading(false);
+                if(Url){
+                    setValue('IdFileLink', ImageURL);
+                    setImageURL(Url)
+                    setIsLoading(false);
+                }
 
             } catch (error) {
                 console.log(error);
@@ -112,7 +110,7 @@ const RegisterTenant = () => {
                 rentDecided: data.rentDecided,
                 date: data.date,
                 idNumber: data.idNumber,
-                IdFileLink: data.IdFileLink!,
+                IdFileLink: data.IdFileLink || imageURL,
                 isActive: data.isActive || false,
                 QrCode: '',
             };
@@ -303,7 +301,6 @@ const RegisterTenant = () => {
                                     {isLoading
                                         ? <Text fontSize='sm'>Please wait uploading...</Text>
                                         : null}
-                                    {ImageURL && <Text fontSize='sm'>Uploaded</Text>}
 
                                     <Text color="red.500" fontSize='sm'>{errors.IdFileLink?.message}</Text>
                                 </Box>
