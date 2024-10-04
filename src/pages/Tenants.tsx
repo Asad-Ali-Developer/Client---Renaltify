@@ -33,7 +33,6 @@ import { Link } from "react-router-dom";
 import { useRef, useState } from "react";
 import { useAuth } from "../store/authToken";
 import { toast } from "react-toastify";
-import { apiClientOK } from "../services/apiClient";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoEyeOutline } from "react-icons/io5";
 import useAllTenants, { Tenant } from "../hooks/useAllTenants";
