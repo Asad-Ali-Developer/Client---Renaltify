@@ -138,7 +138,7 @@ const ShowTenantDetails = () => {
                   <Flex
                     gap={10}
                     justifyContent='space-between'
-                    flexDirection={{ base: 'column', md : 'row', lg: 'row' }}>
+                    flexDirection={{ base: 'column', md: 'row', lg: 'row' }}>
                     <VStack spacing={5} align="start" mt={10}>
 
                       <Flex alignItems='center' gap={5}>
@@ -281,7 +281,7 @@ const ShowTenantDetails = () => {
                       alignItems="center"
                       justifyContent="center"
                     >
-                      <img
+                      <Image
                         src={tenant?.IdFileLink}
                         alt="Tenant ID Document"
                         style={{ width: '100%', height: 'auto', objectFit: 'cover' }}
