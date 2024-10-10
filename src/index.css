@@ -11,6 +11,13 @@
   font-family: Urbanist !important;
 }
 
+
+a:focus{
+  border-bottom: 2px solid black;
+  transition: 0.3s ease-in-out;
+}
+
+
 *::selection{
   background-color: rgb(185, 79, 97);
   color: white;

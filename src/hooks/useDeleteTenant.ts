@@ -8,8 +8,8 @@ const useDeleteTenant = () => {
 
   const queryClient = useQueryClient();
 
-  return useMutation<void, Error, string >({
-    
+  return useMutation<void, Error, string>({
+
     mutationFn: (_id: string) => axios
       .delete(`${apiClientOK}/api/delete-tenant/${_id}`, {
         headers: {

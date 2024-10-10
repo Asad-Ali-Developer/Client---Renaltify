@@ -1,27 +1,12 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
 import { Box, Card, CardBody, CardHeader, Heading, Text, VStack, Flex, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Badge, Image } from '@chakra-ui/react';
 import { FaPhoneAlt, FaHome, FaUser, FaCalendarAlt, FaDownload } from 'react-icons/fa';
 import { IoArrowBack } from "react-icons/io5";
 import { Link, useParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BsCreditCardFill } from 'react-icons/bs';
+import useTenant from '../hooks/useTenant';
 
-import { apiClientOK } from '../services/apiClient';
-
-export interface Tenant {
-  _id: string,
-  tenantName: string,
-  phone: number,
-  AnotherPhone: number,
-  members: number,
-  address: string,
-  rentDecided: string,
-  date: string,
-  idNumber: string,
-  IdFileLink: string,
-  isActive: boolean,
-  QrCode: string
-};
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -29,43 +14,15 @@ const containerVariants = {
 };
 
 
-
 const ShowTenantDetails = () => {
   const { _id } = useParams<{ _id: string }>();
-  const [tenant, setTenant] = useState<Tenant | null>(null);
 
-  const fetchTenant = async () => {
-    try {
-      const response = await fetch(`${apiClientOK}/api/tenant/${_id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
-        },
-        credentials: 'include',
-      });
+  const id = _id || '';
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch tenant');
-      }
+  const { tenant } = useTenant(id)
 
-      const data = await response.json();
-      setTenant(data.tenant);
+  console.log(tenant);
 
-      console.log(data.tenant);
-
-      document.title = `${data.tenant.tenantName} | Dashboard`;
-
-    } catch (error) {
-      console.error('Error fetching tenant:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (_id) {
-      fetchTenant();
-    }
-  }, [_id]);
 
   return (
     <Box
@@ -296,7 +253,7 @@ const ShowTenantDetails = () => {
         </Card>
       </motion.div>
     </Box>
-  );
+  )
 };
 
 export default ShowTenantDetails;

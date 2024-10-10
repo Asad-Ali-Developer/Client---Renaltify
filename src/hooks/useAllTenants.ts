@@ -4,13 +4,19 @@ import { apiClientOK } from "../services/apiClient";
 import axios from "axios";
 
 export interface Tenant {
-    _id: string;
-    phone: number;
-    idNumber: string;
-    isActive: boolean;
-    tenantName: string;
-    rentDecided: number;
-}
+    _id: string,
+    tenantName: string,
+    phone: number,
+    AnotherPhone: number,
+    members: number,
+    address: string,
+    rentDecided: string,
+    date: string,
+    idNumber: string,
+    IdFileLink: string,
+    isActive: boolean,
+    QrCode: string
+  };
 
 interface TenantsResponse {
     tenants: Tenant[];
@@ -23,13 +29,13 @@ interface queryTenants {
 
 const useAllTenants = (query: queryTenants) => {
 
-    const { data } = useQuery<TenantsResponse, Error>({
+    const { data, isLoading } = useQuery<TenantsResponse, Error>({
 
         enabled: !!query._id,
 
         queryKey: [CACHE_KEY_TENANTS, `Tenants of '${query.tenantName}' and id: ${query._id}`],
 
-        staleTime : 20 * 60 * 1000, // 30 minutes
+        staleTime : 60 * 60 * 1000, // 60 minutes
 
         queryFn: () =>
             axios
@@ -48,10 +54,11 @@ const useAllTenants = (query: queryTenants) => {
     const totalTenants = tenants.length || 0;
 
     const activeTenants = tenants.filter((tenant: Tenant) => tenant.isActive).length || 0;
+    const inactiveTenants = tenants.filter((tenant: Tenant) => !tenant.isActive).length || 0;
 
     console.log(totalTenants, activeTenants);
 
-    return { tenants, totalTenants, activeTenants };
+    return { tenants, totalTenants, activeTenants, isLoading, inactiveTenants };
 
 }
 
