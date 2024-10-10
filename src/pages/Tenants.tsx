@@ -14,6 +14,7 @@ import { useAuth } from "../store/authToken";
 import useAllTenants from "../hooks/useAllTenants";
 import TenantsShow from "../components/TenantsShow";
 import TenantSkeleton from "../components/TenantSkeleton";
+import { Link } from "react-router-dom";
 // import useDeleteTenant from "../hooks/useDeleteTenant";
 // import useTenantStatusUpdater from "../hooks/useTenantStatusUpdator";
 
@@ -167,14 +168,14 @@ const Tenants = () => {
 
           <Flex justifyContent='space-between' alignItems='center' mb={5}>
             <Heading size='md' ml={2}>All Tenants</Heading>
-            <Button >Add Tenant</Button>
+            <Link to='/tenants/add_tenant'>
+              <Button size={{ base: 'sm', md: 'md' }}>Add Tenant</Button>
+            </Link>
           </Flex>
 
           <SimpleGrid
             columns={{ base: 1, lg: 2 }}
-            gap={{ base: 3, sm: 4, md: 4, lg: 7 }}
-          // px={{ base: 0, sm: 2, md: 8, lg: 24}}
-          >
+            gap={{ base: 3, sm: 4, md: 4, lg: 7 }}>
 
             {isLoading
               ? skeletons.map(s => (

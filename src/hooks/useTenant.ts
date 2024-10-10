@@ -16,11 +16,11 @@ interface Tenant {
     IdFileLink?: string;
     isActive?: boolean;
     QrCode?: string;
-  }
+}
 
 const useTenant = (id: string) => {
 
-    const { data} = useQuery<Tenant, Error>({
+    const { data, isLoading } = useQuery<Tenant, Error>({
 
         enabled: !!id,
 
@@ -29,18 +29,18 @@ const useTenant = (id: string) => {
         staleTime: 30 * 60 * 1000,
 
         queryFn: () => axios
-            .get<{tenant: Tenant}>(`${apiClientOK}/api/tenant/${id}`, {
+            .get<{ tenant: Tenant }>(`${apiClientOK}/api/tenant/${id}`, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
                     'Content-Type': 'application/json'
                 },
                 withCredentials: true
             }).then(res => res.data.tenant),
-        
+
 
     })
 
-    return {tenant: data || {}};
+    return { isLoading, tenant: data || {} };
 
 }
 

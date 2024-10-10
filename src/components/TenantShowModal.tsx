@@ -4,7 +4,6 @@ import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaCalendarAlt, FaHome, FaIdCard, FaPhoneAlt, FaUser } from "react-icons/fa";
 import { BsCreditCardFill } from "react-icons/bs";
 import ImageSkeleton from "./ImageSkeleton";
-import { useState } from "react";
 
 interface Props {
     tenantId: string,
@@ -16,11 +15,9 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const { tenant } = useTenant(tenantId)
+    const { tenant, isLoading } = useTenant(tenantId)
 
     // console.log(tenantId);
-
-    const [imageLoaded, setImageLoaded] = useState(false)
 
 
     return (
@@ -150,15 +147,12 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
                             <Box mt={4} borderRadius={5} overflow='hidden'>
 
-                                {!imageLoaded && <ImageSkeleton />}
+                                {isLoading
+                                    ? <ImageSkeleton />
+                                    : <Img src={tenant.IdFileLink}
+                                        alt={tenant.tenantName} />
+                                }
 
-                                <Img
-                                    src={tenant.IdFileLink}
-                                    onLoad={() => setImageLoaded(true)}
-                                    onError={() => setImageLoaded(false)} // Fallback in case of an error
-                                    style={{ display: imageLoaded ? "block" : "none" }} // Hide image until it's loaded
-                                    alt="Tenant ID"
-                                />
                             </Box>
 
                         </VStack>
