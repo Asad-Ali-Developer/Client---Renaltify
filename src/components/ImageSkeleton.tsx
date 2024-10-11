@@ -1,12 +1,17 @@
-import { Card, Skeleton } from "@chakra-ui/react"
+import { Card, CardBody, Skeleton } from "@chakra-ui/react"
 
 const ImageSkeleton = () => {
     return (
         <>
-            <Card>
+            <Card overflow='hidden'>
 
-                <Skeleton height={40} width='100%' borderRadius='md' />
-
+                <CardBody overflow='hidden'>
+                    <Skeleton
+                    borderRadius='md'
+                    height={{ base: 170, md: 200, lg: 200 }}
+                    width={{ base: '290px', md: '350px', lg: '350px' }}
+                    />
+                </CardBody>
             </Card>
         </>
     )

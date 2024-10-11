@@ -19,33 +19,32 @@ const TenantsShow = ({ tenants }: Props) => {
         <>
             {tenants.map((tenant) => (
                 <Card
-                    px={{ base: 3, lg: 5 }}
                     display='flex'
                     key={tenant._id}
                     overflow='hidden'
+                    flexDirection='row'
                     borderLeft='5px solid'
                     borderLeftColor='green'
+                    px={{ base: 3, lg: 5 }}
+                    py={{ base: 4, lg: 5 }}
                     justifyContent='space-between'
-                    fontSize={{ base: 12, lg: 16 }}
+                    fontSize={{ base: 14, lg: 16 }}
                     gap={{ base: 2, sm: 0, lg: 0 }}
                     bg={useColorModeValue('white', '')}
-                    py={{ base: 2, sm: 3, md: 4, lg: 5 }}
-                    flexDirection={{ base: 'row', sm: 'row' }}
                     borderColor={tenant.isActive
                         ? useColorModeValue('green.300', 'green.500')
                         : useColorModeValue('red.300', 'red.500')}>
 
                     <Flex
-                        pt={2}
-                        gap={14}
                         alignItems='center'
+                        gap={{ base: 6, md: 12, lg: 14 }}
                         justifyContent={{ base: 'space-evenly', md: 'space-between' }}>
 
                         <Flex
                             gap={2}
                             alignItems='center'
-                            w={{ base: '60px', sm: 'auto', lg: '80px' }}>
-                            <FaUser size={12} />
+                            w={{ base: '50px', sm: '50px', lg: '80px' }}>
+                            <FaUser size='1em' />
                             <Text fontWeight='semibold'>{tenant.tenantName}</Text>
                         </Flex>
 

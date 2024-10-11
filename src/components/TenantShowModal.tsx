@@ -40,6 +40,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                 <ModalOverlay />
 
                 <ModalContent
+                    overflow='hidden'
                     w={{ base: '90%', md: '100%', lg: '100%' }}>
 
                     <Flex
@@ -80,7 +81,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                             py={5}
                             spacing={3}
                             align="start"
-                            fontSize={{ base: 12, lg: 16 }}>
+                            fontSize={{ base: 'sm', lg: 16 }}>
 
                             <Flex alignItems='center' gap={5}>
 
@@ -145,7 +146,13 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                 </Text>
                             </Flex>
 
-                            <Box mt={4} borderRadius={5} overflow='hidden'>
+                            <Box
+                                mt={4}
+                                borderRadius={5}
+                                overflow='hidden'
+                                border='2px solid'
+                                borderColor={useColorModeValue('#f2f3f6', '#282828')}
+                            >
 
                                 {isLoading
                                     ? <ImageSkeleton />

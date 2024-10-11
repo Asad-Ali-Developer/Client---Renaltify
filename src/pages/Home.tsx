@@ -1,6 +1,6 @@
 import { Text, Image, Button, Box, Flex, Container, VStack, Heading, HStack, Divider, useColorModeValue, useColorMode } from "@chakra-ui/react"
 import { Link } from "react-router-dom"
-import tenant from '../assets/tenant.jpg'
+import rent from '../assets/rent.svg'
 import features from '../assets/tenant.jpg'
 import review from '../assets/reviews.jpg'
 import { useAuth } from "../store/authToken"
@@ -82,32 +82,32 @@ const Home = () => {
                       shadow="md"
                       height="10"
                       fontSize="sm"
-                      to="/tenants/add_tenant"
                       colorScheme="telegram"
                       fontWeight="semibold"
+                      to="/tenants/add_tenant"
                       w={{ base: "full", sm: "auto", md: "auto", lg: "auto" }}>
                       Add Tenant
                     </Button>
                   }
 
                   <Button
+                    px={8}
+                    size="lg"
                     as={Link}
+                    shadow="sm"
                     to="/about"
+                    height="10"
+                    fontSize="sm"
                     variant="outline"
                     colorScheme="telegram"
-                    size="lg"
-                    w={{ base: "full", sm: "auto", md: "auto", lg: "auto" }}
-                    height="10"
-                    px={8}
-                    fontSize="sm"
                     fontWeight="semibold"
-                    shadow="sm">
+                    w={{ base: "full", sm: "auto", md: "auto", lg: "auto" }}>
                     Learn More
                   </Button>
                 </HStack>
               </VStack>
               <Image
-                src={tenant}
+                src={rent}
                 alt="Hero"
                 width="full"
                 height="auto"
@@ -121,11 +121,11 @@ const Home = () => {
         </Box>
 
         <Box as="section" w="full" py={{ base: 12, md: 24, lg: 32 }}
-          bg={useColorModeValue('gray.100', 'gray.700')}>
+          bg={useColorModeValue('#f2f3f6', '#282828')}>
           <Container maxW="container.xl">
             <VStack align="center" spacing={4} textAlign="center">
               <VStack spacing={2}>
-                <Text mb={3} bg={useColorModeValue('gray.200', 'gray.600')} px={3} py={1} rounded="lg" fontSize="sm">
+                <Text mb={3} bg={useColorModeValue('gray.100', '#2f2f2f')} px={3} py={1} rounded="lg" fontSize="sm">
                   Key Features
                 </Text>
                 <Heading as="h2" size={{ base: "2xl", sm: "3xl" }} fontWeight="bold" letterSpacing="tight">
@@ -134,8 +134,8 @@ const Home = () => {
                 <Text
                   maxW="900px"
                   color="gray.500"
-                  fontSize={{ base: "lg", md: "xl", lg: "base", xl: "xl" }}
                   lineHeight="relaxed"
+                  fontSize={{ base: "lg", md: "xl", lg: "base", xl: "xl" }}
                 >
                   Our tenant data record application provides a comprehensive solution to streamline your rental
                   property management, from tenant onboarding to rent tracking and reporting.
@@ -186,7 +186,9 @@ const Home = () => {
           <Container maxW="container.xl">
             <VStack align="center" spacing={4} textAlign="center">
               <VStack spacing={2}>
-                <Text bg={useColorModeValue("gray.100", "gray.600")} mb={2} px={3} py={1} rounded="lg" fontSize="sm">
+                <Text
+                  bg={useColorModeValue("#f2f3f6", "#2f2f2f")}
+                  mb={2} px={3} py={1} rounded="lg" fontSize="sm">
                   Testimonials
                 </Text>
                 <Heading as="h2" size={{ base: "2xl", sm: "3xl" }} fontWeight="bold" letterSpacing="tight">
