@@ -1,9 +1,7 @@
-import { Badge, Box, Flex, Img, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Text, useColorModeValue, useDisclosure, VStack } from "@chakra-ui/react"
+import { Badge, Box, Flex, Image, Img, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Spinner, Text, useColorModeValue, useDisclosure, VStack } from "@chakra-ui/react"
 import useTenant from "../hooks/useTenant";
-import { MdOutlineRemoveRedEye } from "react-icons/md";
-import { FaCalendarAlt, FaHome, FaIdCard, FaPhoneAlt, FaUser } from "react-icons/fa";
+import { FaCalendarAlt, FaChevronDown, FaHome, FaIdCard, FaPhoneAlt, FaUser } from "react-icons/fa";
 import { BsCreditCardFill } from "react-icons/bs";
-import ImageSkeleton from "./ImageSkeleton";
 
 interface Props {
     tenantId: string,
@@ -17,14 +15,11 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
     const { tenant, isLoading } = useTenant(tenantId)
 
-    // console.log(tenantId);
-
-
     return (
         <>
 
             <Box as="button" onClick={onOpen}>
-                <MdOutlineRemoveRedEye size='1em' />
+                < FaChevronDown size='0.8em' />
             </Box>
 
             <Modal
@@ -37,7 +32,15 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
                 <ModalContent
                     overflow='hidden'
+                    position='relative'
                     w={{ base: '90%', md: '100%', lg: '100%' }}>
+
+                    <Box position='absolute' 
+                    top={{ base: 16, lg: 20 }} 
+                    right={{base: 2, lg : 6}} 
+                    zIndex='1'>
+                        <Image w={20} h={20} src={tenant.QrCode} />
+                    </Box>
 
                     <Flex
                         gap={8}
@@ -107,8 +110,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                     Rent:
                                 </Text>
                                 <Text>{tenant.idNumber
-                                    ?
-                                    `${String(tenant.idNumber).slice(0, 5)}-${String(tenant.idNumber).slice(5, 12)}-${String(tenant.idNumber).slice(12)}`
+                                    ? `${String(tenant.idNumber).slice(0, 5)}-${String(tenant.idNumber).slice(5, 12)}-${String(tenant.idNumber).slice(12)}`
                                     : 'N/A'}
                                 </Text>
                             </Flex>
@@ -132,7 +134,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                 <Text>
                                     {tenant?.date
                                         ? new Date(tenant.date).toLocaleDateString()
-                                        : 'Unknown'}
+                                        : 'N/A'}
                                 </Text>
                             </Flex>
 
@@ -151,16 +153,15 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                 mt={4}
                                 borderRadius={5}
                                 overflow='hidden'
+                                position='relative'
                                 border={isLoading ? '' : '2px solid'}
                                 borderColor={useColorModeValue('#f2f3f6', '#282828')}>
-
                                 {
                                     isLoading
-                                        ? <ImageSkeleton />
+                                        ? <Spinner size='sm' />
                                         : <Img src={tenant.IdFileLink}
-                                            alt={tenant.tenantName} />
+                                            alt='N/A' />
                                 }
-
                             </Box>
 
                         </VStack>

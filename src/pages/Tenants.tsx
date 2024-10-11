@@ -152,11 +152,11 @@ const Tenants = () => {
 
               <Flex direction="row" align="center" gap={4}>
                 <Box>Active Tenants:</Box>
-                <Heading size="xl" color={useColorModeValue('red.500', 'red.300')}>{activeTenants}</Heading>
+                <Heading size="xl" color={useColorModeValue('green.500', 'green.300')}>{activeTenants}</Heading>
               </Flex>
               <Flex direction="row" align="center" gap={4}>
                 <Box>Inactive Tenants:</Box>
-                <Heading size="xl" color={useColorModeValue('green.500', 'green.300')}>{inactiveTenants}</Heading>
+                <Heading size="xl" color={useColorModeValue('red.500', 'red.300')}>{inactiveTenants}</Heading>
               </Flex>
             </Flex>
           </CardBody>

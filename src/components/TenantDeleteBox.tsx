@@ -1,14 +1,20 @@
 import { AlertDialog, AlertDialogBody, AlertDialogCloseButton, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogOverlay, Button, Flex, Text, useDisclosure } from "@chakra-ui/react"
 import { useRef } from "react";
 
+interface Props {
+    tenantId: string,
+    isOpen: boolean,
+    onClose: () => void
+}
 
-const TennantDeleteBix = () => {
+
+const TenantDeleteBox = ({ tenantId }: Props) => {
 
     const cancelRef = useRef<HTMLButtonElement>(null);
     const { isOpen, onClose } = useDisclosure();
 
-
-
+    console.log(tenantId);
+    
 
     return (
         <>
@@ -47,4 +53,4 @@ const TennantDeleteBix = () => {
     )
 }
 
-export default TennantDeleteBix
+export default TenantDeleteBox

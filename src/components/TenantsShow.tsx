@@ -6,6 +6,7 @@ import { FiEdit } from "react-icons/fi";
 import { useState } from "react";
 import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import TenantShowModal from "./TenantShowModal";
+import TenantDeleteBox from "./TenantDeleteBox";
 
 interface Props {
     tenants: Tenant[];
@@ -37,13 +38,13 @@ const TenantsShow = ({ tenants }: Props) => {
 
                     <Flex
                         alignItems='center'
-                        gap={{ base: 1, sm : 12, lg: 14 }}
+                        gap={{ base: 1, sm: 12, lg: 14 }}
                         justifyContent={{ base: 'space-evenly', md: 'space-between' }}>
 
                         <Flex
                             gap={2}
                             alignItems='center'
-                            w={{ base: '80px', sm: '60px', lg: '80px' }}>
+                            w={{ base: '80px', sm: '60px', lg: '90px' }}>
                             <FaUser size='1em' />
                             <Text fontWeight='semibold'>{tenant.tenantName}</Text>
                         </Flex>
@@ -61,17 +62,29 @@ const TenantsShow = ({ tenants }: Props) => {
                     <Flex gap={1} alignItems='center' justifyContent='center'>
 
                         <Flex gap={{ base: 3, lg: 5 }}>
-                            <Box cursor='pointer' className="rounded-full flex justify-center items-center">
-                                <FiEdit size='1em' />
-                            </Box>
 
-                            <Box className="rounded-full cursor-pointer flex justify-center items-center">
-                                <RiDeleteBinLine size='1em' />
+                            <Box
+                                cursor='pointer' className="rounded-full flex justify-center items-center">
+                                <FiEdit size='1em' />
+
                             </Box>
 
                             <Box
-                                className="rounded-full cursor-pointer flex justify-center items-center"
-                                onClick={() => setActiveTenantId(tenant._id)}>
+                                onClick={() => setActiveTenantId(tenant._id)}
+                                className="rounded-full cursor-pointer flex justify-center items-center">
+
+                                <RiDeleteBinLine size='1em' />
+                                <TenantDeleteBox
+                                    isOpen={true}
+                                    onClose={() => setActiveTenantId(null)}
+                                    tenantId={activeTenantId === tenant._id
+                                        ? tenant._id
+                                        : ''} />
+                            </Box>
+
+                            <Box
+                                onClick={() => setActiveTenantId(tenant._id)}
+                                className="rounded-full cursor-pointer flex justify-center items-center">
 
                                 <TenantShowModal
                                     isOpen={true}
@@ -83,12 +96,6 @@ const TenantsShow = ({ tenants }: Props) => {
                     </Flex>
                 </Card>
 
-                // {/* <AccordionPanel
-                //     mt={2}
-                //     border={0}
-                //     w='100%'
-                //     p={0}>
-                //     {activeTenantId === tenant._id && <ShowTenant tenantId={tenant._id} />} */}
 
             ))}
         </>
