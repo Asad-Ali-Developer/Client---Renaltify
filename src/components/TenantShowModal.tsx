@@ -1,4 +1,4 @@
-import { Badge, Box, Flex, Img, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Text, useColorModeValue, useDisclosure, VStack } from "@chakra-ui/react"
+import { Badge, Box, Flex, Img, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Text, useColorModeValue, useDisclosure, VStack } from "@chakra-ui/react"
 import useTenant from "../hooks/useTenant";
 import { MdOutlineRemoveRedEye } from "react-icons/md";
 import { FaCalendarAlt, FaHome, FaIdCard, FaPhoneAlt, FaUser } from "react-icons/fa";
@@ -40,21 +40,23 @@ const TenantShowModal = ({ tenantId }: Props) => {
                     w={{ base: '90%', md: '100%', lg: '100%' }}>
 
                     <Flex
-                        gap={14}
+                        gap={8}
                         alignItems='center'
                         bg={useColorModeValue('#f2f3f6', '#282828')}>
 
                         <Flex
+                            h={14}
+                            gap={6}
                             alignItems='center'
-                            ml={{ base: 3, lg: 8 }}
-                            justifyContent='center'>
+                            justifyContent='center'
+                            ml={{ base: 5, lg: 8 }}>
 
                             <FaUser size='0.8em' />
-                            <ModalHeader
+                            <Text
                                 ml={-2}
                                 fontSize={{ base: 'lg', lg: 'xl' }}>
                                 {tenant.tenantName || 'Tenant...'}
-                            </ModalHeader>
+                            </Text>
 
                         </Flex>
 
@@ -69,7 +71,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                         </Badge>
                     </Flex>
 
-                    <ModalCloseButton mt={1.5} />
+                    <ModalCloseButton mt={1} />
 
                     <ModalBody>
 
