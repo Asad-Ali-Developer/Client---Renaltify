@@ -37,13 +37,13 @@ const TenantsShow = ({ tenants }: Props) => {
 
                     <Flex
                         alignItems='center'
-                        gap={{ base: 6, md: 12, lg: 14 }}
+                        gap={{ base: 1, sm : 12, lg: 14 }}
                         justifyContent={{ base: 'space-evenly', md: 'space-between' }}>
 
                         <Flex
                             gap={2}
                             alignItems='center'
-                            w={{ base: '50px', sm: '50px', lg: '80px' }}>
+                            w={{ base: '80px', sm: '60px', lg: '80px' }}>
                             <FaUser size='1em' />
                             <Text fontWeight='semibold'>{tenant.tenantName}</Text>
                         </Flex>

@@ -5,11 +5,11 @@ const ImageSkeleton = () => {
         <>
             <Card overflow='hidden'>
 
-                <CardBody overflow='hidden'>
+                <CardBody>
                     <Skeleton
-                    borderRadius='md'
-                    height={{ base: 170, md: 200, lg: 200 }}
-                    width={{ base: '290px', md: '350px', lg: '350px' }}
+                        borderRadius='md'
+                        height={{ base: 170, md: 200, lg: 200 }}
+                        width={{ base: '200px', md: '350px', lg: '350px' }}
                     />
                 </CardBody>
             </Card>

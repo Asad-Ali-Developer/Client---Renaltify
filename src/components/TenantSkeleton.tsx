@@ -20,10 +20,9 @@ const TenantSkeleton = () => {
                         <SkeletonText
                             ml={2}
                             w='70%'
+                            noOfLines={1}
                             borderRadius={10}
-                            mt={{ base: 3, sm: 3, lg: 0 }}
-                            noOfLines={{ base: 2, sm: 2, lg: 1 }}
-                            skeletonHeight={{ base: 3, sm: 3, lg: 6 }} />
+                            skeletonHeight={{ base: 5, sm: 5, lg: 6 }} />
 
                         <Box
                             gap={2}
@@ -32,17 +31,21 @@ const TenantSkeleton = () => {
                             justifyContent='center'>
 
                             <SkeletonCircle
-                                borderRadius={5}
                                 w={{ base: 3, sm: 4, lg: 5 }}
-                                h={{ base: 3, sm: 4, lg: 5 }} />
+                                h={{ base: 3, sm: 4, lg: 5 }} 
+                                borderRadius={{ base: 2, sm: 2, lg: 5 }}
+                                />
                             <SkeletonCircle
-                                borderRadius={5}
                                 w={{ base: 3, sm: 4, lg: 5 }}
-                                h={{ base: 3, sm: 4, lg: 5 }} />
+                                h={{ base: 3, sm: 4, lg: 5 }} 
+                                borderRadius={{ base: 2, sm: 2, lg: 5 }}
+                                />
                             <SkeletonCircle
-                                borderRadius={5}
                                 w={{ base: 3, sm: 4, lg: 5 }}
-                                h={{ base: 3, sm: 4, lg: 5 }} />
+                                h={{ base: 3, sm: 4, lg: 5 }} 
+                                borderRadius={{ base: 2, sm: 2, lg: 5 }}
+                                />
+                           
                         </Box>
 
                         <SkeletonCircle

@@ -23,10 +23,6 @@ const TenantShowModal = ({ tenantId }: Props) => {
     return (
         <>
 
-            {/* <Button >
-                View
-            </Button> */}
-
             <Box as="button" onClick={onOpen}>
                 <MdOutlineRemoveRedEye size='1em' />
             </Box>
@@ -114,14 +110,6 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                     : 'N/A'}
                                 </Text>
                             </Flex>
-                            <Flex alignItems='center' gap={5}>
-                                <FaHome size='0.8em' />
-                                <Text fontWeight="bold">
-                                    Address:
-                                </Text>
-                                <Text>{tenant.address || 'N/A'}
-                                </Text>
-                            </Flex>
 
                             <Flex alignItems='center' gap={5}>
                                 <BsCreditCardFill size='0.8em' />
@@ -146,18 +134,29 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                 </Text>
                             </Flex>
 
+                            <Flex gap={5} alignItems='center'>
+                                <Flex gap={5} alignItems='center'>
+                                    <FaHome size='0.8em' />
+                                    <Text fontWeight="bold">
+                                        Address:
+                                    </Text>
+                                </Flex>
+                                <Text>{tenant.address || 'N/A'}
+                                </Text>
+                            </Flex>
+
                             <Box
                                 mt={4}
                                 borderRadius={5}
                                 overflow='hidden'
-                                border='2px solid'
-                                borderColor={useColorModeValue('#f2f3f6', '#282828')}
-                            >
+                                border={isLoading ? '' : '2px solid'}
+                                borderColor={useColorModeValue('#f2f3f6', '#282828')}>
 
-                                {isLoading
-                                    ? <ImageSkeleton />
-                                    : <Img src={tenant.IdFileLink}
-                                        alt={tenant.tenantName} />
+                                {
+                                    isLoading
+                                        ? <ImageSkeleton />
+                                        : <Img src={tenant.IdFileLink}
+                                            alt={tenant.tenantName} />
                                 }
 
                             </Box>
