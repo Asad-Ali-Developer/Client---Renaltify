@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from "axios";
 import APIClient from "../services/apiClient";
 import { useAuth } from "../store/authToken";
-import { Tenant } from "../pages/ShowTenantDetails";
+import { Tenant } from "../hooks/useAllTenants";
 import { useQueryClient } from "@tanstack/react-query";
 import { CACHE_KEY_TENANTS } from "./constants";
 

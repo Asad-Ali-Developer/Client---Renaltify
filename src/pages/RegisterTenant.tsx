@@ -1,7 +1,5 @@
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Grid, Heading, Input, InputGroup, InputLeftElement, Text, Textarea, useColorModeValue } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import imageCompression from 'browser-image-compression';
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsFillPeopleFill } from "react-icons/bs";
@@ -13,9 +11,8 @@ import { RiIdCardFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import z from "zod";
-import firebaseApp from "../firebaseConfig";
 import useAddTenant from "../hooks/useAddTenant";
-import { Tenant } from "./ShowTenantDetails";
+import { Tenant } from "../hooks/useAllTenants";
 import useUploadImage from "../hooks/useUploadImage";
 
 
