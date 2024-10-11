@@ -70,7 +70,7 @@ const Navbar = () => {
                         <Text
                             color='telegram'
                             fontWeight='semibold'
-                            fontSize={{ base: 'medium', md: 'large', lg: 'x-large' }}
+                            fontSize={{ base: 'xl', md: 'large', lg: 'x-large' }}
                         >
 
                             <Link to='/'>Rentify</Link>

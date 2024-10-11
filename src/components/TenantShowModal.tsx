@@ -13,7 +13,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure();
 
-    const { tenant, isLoading } = useTenant(tenantId)
+    const { tenant, isLoading } = useTenant(tenantId);
 
     return (
         <>
@@ -35,11 +35,14 @@ const TenantShowModal = ({ tenantId }: Props) => {
                     position='relative'
                     w={{ base: '90%', md: '100%', lg: '100%' }}>
 
-                    <Box position='absolute' 
-                    top={{ base: 16, lg: 20 }} 
-                    right={{base: 2, lg : 6}} 
-                    zIndex='1'>
-                        <Image w={20} h={20} src={tenant.QrCode} />
+                    <Box position='absolute'
+                        top={{ base: 16, lg: 20 }}
+                        right={{ base: 2, lg: 6 }}
+                        zIndex='1'>
+                        {isLoading
+                            ? <Spinner size='sm' />
+                            : <Image w={20} h={20} src={tenant.QrCode} />
+                        }
                     </Box>
 
                     <Flex
