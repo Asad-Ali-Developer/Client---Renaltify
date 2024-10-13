@@ -26,7 +26,7 @@ const TenantsShow = ({ tenants }: Props) => {
                     flexDirection='row'
                     borderLeft='5px solid'
                     borderLeftColor='green'
-                    py={{ base: 3, lg: 5 }}
+                    py={{ base: 3, lg: 3 }}
                     px={{ base: 1, sm: 3, lg: 5 }}
                     justifyContent='space-between'
                     fontSize={{ base: 14, lg: 16 }}
@@ -73,7 +73,7 @@ const TenantsShow = ({ tenants }: Props) => {
 
                             <Box
                                 cursor='pointer' className="rounded-full flex justify-center items-center">
-                                <FiEdit size='1em' />
+                                <FiEdit color="green" size='1em' />
 
                             </Box>
 
@@ -81,7 +81,7 @@ const TenantsShow = ({ tenants }: Props) => {
                                 onClick={() => setActiveTenantId(tenant._id)}
                                 className="rounded-full cursor-pointer flex justify-center items-center">
 
-                                <RiDeleteBinLine size='1em' />
+                                <RiDeleteBinLine color='red' size='1em' />
                                 <TenantDeleteBox
                                     isOpen={true}
                                     onClose={() => setActiveTenantId(null)}

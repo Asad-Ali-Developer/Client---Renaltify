@@ -22,9 +22,12 @@ const TenantShowModal = ({ tenantId }: Props) => {
                 type="button"
                 onClick={onOpen}
                 fontWeight='semibold'
-                h={{ base: 7, md: 7 }}
-                px={{ base: 1, sm: 2 }}
-                fontSize={{ base: 12, md: 14, lg: 16 }}>
+                // h={{ base: 7, md: 7 }}
+                px={0}
+                backgroundColor='transparent'
+                fontSize={{ base: 12, md: 14 }}
+                _hover={{ backgroundColor: 'transparent' }}
+                color={useColorModeValue('blue.500', 'blue.300')}>
                 View
             </Button>
 
