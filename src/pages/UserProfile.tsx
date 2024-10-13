@@ -2,11 +2,16 @@ import { motion } from 'framer-motion';
 import { EnvelopeIcon, IdentificationIcon } from '@heroicons/react/24/solid';
 import { Box, Heading, Text, Flex, Link, useColorModeValue, Card, Image, Avatar, Stack } from '@chakra-ui/react';
 import { useAuth } from '../store/authToken';
+import { useContext } from 'react';
+import TenantsContext from '../context/TenantsContext';
 
 
 const UserProfile = () => {
 
-    const { authenticatedUser, activeTenants, totalTenants } = useAuth()
+
+    const { authenticatedUser } = useAuth()
+
+    const {activeTenants, totalTenants} = useContext(TenantsContext)    
 
 
     const containerVariants = {

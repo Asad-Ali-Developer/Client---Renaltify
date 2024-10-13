@@ -11,6 +11,7 @@ import RegisterTenant from "./pages/RegisterTenant"
 import ShowTenantDetails from "./pages/ShowTenantDetails"
 import UpdateTenant from "./pages/UpdateTenant"
 import UserProfile from "./pages/UserProfile"
+import TenantsProvider from "./store/TenantsProvider"
 
 
 
@@ -38,7 +39,9 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <AuthProvider>
-      <RouterProvider router={router} />
+      <TenantsProvider>
+        <RouterProvider router={router} />
+      </TenantsProvider>
     </AuthProvider>
   )
 }

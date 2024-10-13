@@ -52,7 +52,7 @@ const TenantsShow = ({ tenants }: Props) => {
                         <Flex
                             gap={2}
                             alignItems='center'>
-                            <FaPhoneAlt size={12} />
+                            <FaPhoneAlt size={14} />
                             <Text fontWeight='semibold'>{`0${tenant.phone}`}</Text>
                         </Flex>
 

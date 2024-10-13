@@ -1,20 +1,19 @@
+import { Card, CardBody, CardHeader } from "@chakra-ui/card";
 import {
   Box,
+  Button,
   Flex,
   Heading,
-  useColorModeValue,
-
   SimpleGrid,
-  Button
+  useColorModeValue
 } from "@chakra-ui/react";
-import { Card, CardHeader, CardBody } from "@chakra-ui/card";
 
-import { useAuth } from "../store/authToken";
 
-import useAllTenants from "../hooks/useAllTenants";
-import TenantsShow from "../components/TenantsShow";
-import TenantSkeleton from "../components/TenantSkeleton";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
+import TenantSkeleton from "../components/TenantSkeleton";
+import TenantsShow from "../components/TenantsShow";
+import TenantsContext from "../context/TenantsContext";
 // import useDeleteTenant from "../hooks/useDeleteTenant";
 // import useTenantStatusUpdater from "../hooks/useTenantStatusUpdator";
 
@@ -24,14 +23,9 @@ const Tenants = () => {
 
   document.title = "Tenant Data | Dashboard"
 
-  const { authenticatedUser } = useAuth();
+  const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
-  const _id = authenticatedUser?._id
-
-  const tenantName = authenticatedUser?.username
-
-  // This hook is for getting all the tenants
-  const { tenants, totalTenants, activeTenants, isLoading, inactiveTenants } = useAllTenants({ _id, tenantName });
+  const { activeTenants, totalTenants, tenants, isLoading, inactiveTenants } = useContext(TenantsContext)
 
   console.log(`Active tenants: ${activeTenants}, TotalTenants: ${totalTenants}`);
 
@@ -45,7 +39,6 @@ const Tenants = () => {
   // const [setSelectedTenant] = useState<Tenant | null>(null);
 
 
-  const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 
   // // This function is for deleting a tenant
@@ -134,10 +127,7 @@ const Tenants = () => {
 
       <Box mx={{ base: 0, sm: 2, md: 8, lg: 10, xl: 52 }} p={4} flex="1">
         <Card
-          borderRadius={14}
-        // border='1px solid'
-        // borderColor={useColorModeValue('gray.300', 'gray.500')}
-        >
+          borderRadius={14}>
 
           <CardHeader>
             <Heading size="md">Analytics</Heading>
@@ -151,11 +141,11 @@ const Tenants = () => {
               alignItems="center">
 
               <Flex direction="row" align="center" gap={4}>
-                <Box>Active Tenants:</Box>
+                <Box fontSize={{ base: 14, lg: 16 }}>Active Tenants:</Box>
                 <Heading size="xl" color={useColorModeValue('green.500', 'green.300')}>{activeTenants}</Heading>
               </Flex>
               <Flex direction="row" align="center" gap={4}>
-                <Box>Inactive Tenants:</Box>
+                <Box fontSize={{ base: 14, lg: 16 }}>Inactive Tenants:</Box>
                 <Heading size="xl" color={useColorModeValue('red.500', 'red.300')}>{inactiveTenants}</Heading>
               </Flex>
             </Flex>

@@ -4,14 +4,12 @@ import rent from '../assets/rent.svg'
 import features from '../assets/tenant.jpg'
 import review from '../assets/reviews.jpg'
 import { useAuth } from "../store/authToken"
-// import bg from '../assets/bg.jpg'
-// const gradient = 'linear-gradient(90deg, rgba(7,4,37,1) 0%, rgba(10,6,60,1) 60%, rgba(4,4,29,1) 100%)'
 
 const Home = () => {
 
   const { authenticatedUser } = useAuth()
   const { colorMode } = useColorMode()
-
+  
   return (
     <>
 

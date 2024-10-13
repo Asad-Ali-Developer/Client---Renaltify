@@ -1,7 +1,7 @@
-import { Badge, Box, Flex, Image, Img, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Spinner, Text, useColorModeValue, useDisclosure, VStack } from "@chakra-ui/react"
-import useTenant from "../hooks/useTenant";
-import { FaCalendarAlt, FaChevronDown, FaHome, FaIdCard, FaPhoneAlt, FaUser } from "react-icons/fa";
+import { Badge, Box, Button, Flex, Image, Img, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Spinner, Text, useColorModeValue, useDisclosure, VStack } from "@chakra-ui/react";
 import { BsCreditCardFill } from "react-icons/bs";
+import { FaCalendarAlt, FaHome, FaIdCard, FaPhoneAlt, FaUser } from "react-icons/fa";
+import useTenant from "../hooks/useTenant";
 
 interface Props {
     tenantId: string,
@@ -18,9 +18,14 @@ const TenantShowModal = ({ tenantId }: Props) => {
     return (
         <>
 
-            <Box as="button" onClick={onOpen}>
-                < FaChevronDown size='0.8em' />
-            </Box>
+            <Button
+                h={8}
+                px={2}
+                type="button"
+                onClick={onOpen}
+                fontWeight='semibold'>
+                View
+            </Button>
 
             <Modal
                 isCentered

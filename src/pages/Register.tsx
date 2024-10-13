@@ -10,20 +10,20 @@ import {
   Flex,
   Text,
 } from "@chakra-ui/react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent, useState } from "react";
-import { FieldValues, useForm } from "react-hook-form";
-import { FaPhoneAlt, FaUser } from "react-icons/fa";
+import { z } from "zod";
+import { toast } from "react-toastify";
 import { MdEmail } from "react-icons/md";
-import imageCompression from 'browser-image-compression';
+import firebaseApp from "../firebaseConfig";
+import { ChangeEvent, useState } from "react";
+import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import { PiUploadSimpleBold } from "react-icons/pi";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { NavLink, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { z } from "zod";
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
-import firebaseApp from "../firebaseConfig";
 import { apiClientOK } from "../services/apiClient";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { FieldValues, useForm } from "react-hook-form";
+import { NavLink, useNavigate } from "react-router-dom";
+import imageCompression from 'browser-image-compression';
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 
 
 const schema = z.object({

@@ -1,7 +1,7 @@
-import { useQuery } from "@tanstack/react-query";
-import { CACHE_KEY_TENANTS } from "./constants";
-import { apiClientOK } from "../services/apiClient";
 import axios from "axios";
+import { CACHE_KEY_TENANTS } from "./constants";
+import { useQuery } from "@tanstack/react-query";
+import { apiClientOK } from "../services/apiClient";
 
 export interface Tenant {
     _id: string,
@@ -16,7 +16,7 @@ export interface Tenant {
     IdFileLink: string,
     isActive: boolean,
     QrCode: string
-  };
+};
 
 interface TenantsResponse {
     tenants: Tenant[];
@@ -24,7 +24,7 @@ interface TenantsResponse {
 
 interface queryTenants {
     _id?: string;
-    tenantName?: string;
+    userName?: string;
 }
 
 const useAllTenants = (query: queryTenants) => {
@@ -33,9 +33,9 @@ const useAllTenants = (query: queryTenants) => {
 
         enabled: !!query._id,
 
-        queryKey: [CACHE_KEY_TENANTS, `Tenants of '${query.tenantName}' and id: ${query._id}`],
+        queryKey: [CACHE_KEY_TENANTS, `Tenants of '${query.userName}' and id: ${query._id}`],
 
-        staleTime : 60 * 60 * 1000, // 60 minutes
+        staleTime: 60 * 60 * 1000, // 60 minutes
 
         queryFn: () =>
             axios
@@ -54,9 +54,8 @@ const useAllTenants = (query: queryTenants) => {
     const totalTenants = tenants.length || 0;
 
     const activeTenants = tenants.filter((tenant: Tenant) => tenant.isActive).length || 0;
-    const inactiveTenants = tenants.filter((tenant: Tenant) => !tenant.isActive).length || 0;
 
-    console.log(totalTenants, activeTenants);
+    const inactiveTenants = tenants.filter((tenant: Tenant) => !tenant.isActive).length || 0;
 
     return { tenants, totalTenants, activeTenants, isLoading, inactiveTenants };
 
