@@ -26,8 +26,8 @@ const TenantsShow = ({ tenants }: Props) => {
                     flexDirection='row'
                     borderLeft='5px solid'
                     borderLeftColor='green'
-                    px={{ base: 3, lg: 5 }}
-                    py={{ base: 4, lg: 5 }}
+                    py={{ base: 3, lg: 5 }}
+                    px={{ base: 1, sm: 3, lg: 5 }}
                     justifyContent='space-between'
                     fontSize={{ base: 14, lg: 16 }}
                     gap={{ base: 2, sm: 0, lg: 0 }}
@@ -44,16 +44,24 @@ const TenantsShow = ({ tenants }: Props) => {
                         <Flex
                             gap={2}
                             alignItems='center'
-                            w={{ base: '80px', sm: '60px', lg: '90px' }}>
-                            <FaUser size='1em' />
-                            <Text fontWeight='semibold'>{tenant.tenantName}</Text>
+                            w={{ base: '70px', sm: '60px', lg: '90px' }}>
+                            <FaUser size='14' />
+                            <Text
+                                fontWeight='semibold'
+                                fontSize={{ base: 12, sm: 14, lg: 16 }}>
+                                {tenant.tenantName}
+                            </Text>
                         </Flex>
 
                         <Flex
                             gap={2}
                             alignItems='center'>
                             <FaPhoneAlt size={14} />
-                            <Text fontWeight='semibold'>{`0${tenant.phone}`}</Text>
+                            <Text
+                                fontWeight='semibold'
+                                fontSize={{ base: 12, sm: 14, lg: 16 }}>
+                                {`0${tenant.phone}`}
+                            </Text>
                         </Flex>
 
 

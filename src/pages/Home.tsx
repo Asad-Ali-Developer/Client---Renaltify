@@ -119,7 +119,7 @@ const Home = () => {
         </Box>
 
         <Box as="section" w="full" py={{ base: 12, md: 24, lg: 32 }}
-          bg={useColorModeValue('#f2f3f6', '#282828')}>
+          bg={useColorModeValue('#f2f3f1', '#282828')}>
           <Container maxW="container.xl">
             <VStack align="center" spacing={4} textAlign="center">
               <VStack spacing={2}>

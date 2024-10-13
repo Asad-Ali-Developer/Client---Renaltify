@@ -19,11 +19,12 @@ const TenantShowModal = ({ tenantId }: Props) => {
         <>
 
             <Button
-                h={8}
-                px={2}
                 type="button"
                 onClick={onOpen}
-                fontWeight='semibold'>
+                fontWeight='semibold'
+                h={{ base: 7, md: 7 }}
+                px={{ base: 1, sm: 2 }}
+                fontSize={{ base: 12, md: 14, lg: 16 }}>
                 View
             </Button>
 
@@ -45,7 +46,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                         right={{ base: 2, lg: 6 }}
                         zIndex='1'>
                         {isLoading
-                            ? <Spinner size='sm' />
+                            ? <Spinner color='green.500' size='sm' />
                             : <Image w={20} h={20} src={tenant.QrCode} />
                         }
                     </Box>
@@ -166,7 +167,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                 borderColor={useColorModeValue('#f2f3f6', '#282828')}>
                                 {
                                     isLoading
-                                        ? <Spinner size='sm' />
+                                        ? <Spinner color='blue.500' size='sm' />
                                         : <Img src={tenant.IdFileLink}
                                             alt='N/A' />
                                 }

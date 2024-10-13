@@ -1,11 +1,11 @@
 import { Outlet } from "react-router-dom"
 import Navbar from "./Navbar"
-import { Box } from "@chakra-ui/react"
+import { Box, useColorModeValue } from "@chakra-ui/react"
 
 
 const MainLayout = () => {
     return (
-        <>
+        <Box bg={useColorModeValue('#f2f3f6', '')}>
             <Box>
 
             <header>
@@ -17,7 +17,7 @@ const MainLayout = () => {
             </main>
 
             </Box>
-        </>
+        </Box>
     )
 }
 
