@@ -127,13 +127,14 @@ const Tenants = () => {
 
       <Box mx={{ base: 0, sm: 2, md: 8, lg: 10, xl: 52 }} p={4} flex="1">
         <Card
+          mb={5}
           borderRadius={14}>
 
           <CardHeader>
             <Heading size="md">Analytics</Heading>
           </CardHeader>
 
-          <CardBody>
+          <CardBody mt={-3}>
             <Flex
               wrap="wrap"
               gap={{ base: 2, lg: 32 }}

@@ -10,7 +10,7 @@ const useDeleteTenant = () => {
 
   return useMutation<void, Error, string>({
 
-    mutationFn: (_id: string) => axios
+    mutationFn: (_id) => axios
       .delete(`${apiClientOK}/api/delete-tenant/${_id}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
