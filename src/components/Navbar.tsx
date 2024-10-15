@@ -58,8 +58,7 @@ const Navbar = () => {
                     fontWeight='medium'
                     background='transparent'
                     justifyContent='space-between'
-                    px={{ base: 6, sm: 10, lg: 20 }}
-                >
+                    px={{ base: 6, sm: 10, lg: 20 }}>
 
                     <Flex alignItems='center' gap={4}>
                         <Show below='lg'>
@@ -70,17 +69,16 @@ const Navbar = () => {
                         <Text
                             color='telegram'
                             fontWeight='semibold'
-                            fontSize={{ base: 'xl', md: 'large', lg: 'x-large' }}
-                        >
+                            fontSize={{ base: 'xl', md: 'large', lg: 'x-large' }}>
 
                             <Link to='/'>Rentify</Link>
                         </Text>
                     </Flex>
 
                     <HStack
-                        gap={{ base: 5, md: 7, lg: 10 }}
                         display='flex'
-                    >
+                        gap={{ base: 5, md: 7, lg: 10 }}>
+
                         <Box
                             display='flex'
                             alignItems='center'
@@ -89,13 +87,18 @@ const Navbar = () => {
 
                             <Show above="lg">
                                 {navLinks.map(item => (
-                                    <List display='flex' key={item.id} gap={10} fontSize={18} fontWeight='medium'>
+                                    <List
+                                        gap={10}
+                                        key={item.id}
+                                        display='flex'
+                                        fontSize={18} fontWeight='medium'>
                                         <ListItem>
                                             <NavLink to={item.path}>{item.Item}</NavLink>
                                         </ListItem>
                                     </List>
                                 ))}
                             </Show>
+
                         </Box>
 
 

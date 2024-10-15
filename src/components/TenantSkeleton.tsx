@@ -25,7 +25,7 @@ const TenantSkeleton = () => {
                             skeletonHeight={{ base: 5, sm: 5, lg: 6 }} />
 
                         <Box
-                            gap={2}
+                            gap={3}
                             display='flex'
                             alignItems='center'
                             justifyContent='center'>

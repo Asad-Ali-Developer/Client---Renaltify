@@ -19,11 +19,10 @@ const TenantShowModal = ({ tenantId }: Props) => {
         <>
 
             <Button
+                px={0}
                 type="button"
                 onClick={onOpen}
                 fontWeight='semibold'
-                // h={{ base: 7, md: 7 }}
-                px={0}
                 backgroundColor='transparent'
                 fontSize={{ base: 12, md: 14 }}
                 _hover={{ backgroundColor: 'transparent' }}
@@ -119,7 +118,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                             <Flex alignItems='center' gap={5}>
                                 <FaIdCard size='0.8em' />
                                 <Text fontWeight="bold">
-                                    Rent:
+                                    ID Card:
                                 </Text>
                                 <Text>{tenant.idNumber
                                     ? `${String(tenant.idNumber).slice(0, 5)}-${String(tenant.idNumber).slice(5, 12)}-${String(tenant.idNumber).slice(12)}`

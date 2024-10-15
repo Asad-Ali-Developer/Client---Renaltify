@@ -48,10 +48,10 @@ import {
   
     const _id = authenticatedUser?._id
   
-    const tenantName = authenticatedUser?.username
+    const userName = authenticatedUser?.username
   
     // This hook is for getting all the tenants
-    const { tenants, totalTenants, activeTenants } = useAllTenants({ _id, tenantName });
+    const { tenants, totalTenants, activeTenants } = useAllTenants({ _id, userName });
   
     console.log(`Active tenants: ${activeTenants}, TotalTenants: ${totalTenants}`);
   

@@ -1,3 +1,4 @@
+import z from "zod";
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Grid, Heading, Input, InputGroup, InputLeftElement, Text, Textarea, useColorModeValue } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChangeEvent, useState } from "react";
@@ -10,7 +11,6 @@ import { PiUploadSimpleBold } from "react-icons/pi";
 import { RiIdCardFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import z from "zod";
 import useAddTenant from "../hooks/useAddTenant";
 import { Tenant } from "../hooks/useAllTenants";
 import useUploadImage from "../hooks/useUploadImage";
@@ -74,7 +74,7 @@ const RegisterTenant = () => {
                 const Url = ImageURL
                 console.log(ImageURL);
 
-                if(Url){
+                if (Url) {
                     setValue('IdFileLink', ImageURL);
                     setImageURL(Url)
                     setIsLoading(false);
