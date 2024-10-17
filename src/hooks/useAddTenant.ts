@@ -14,7 +14,7 @@ const useAddTenant = () => {
         const apiClient = new APIClient<Tenant>(`/api/add-tenant/${authenticatedUser?._id}`);
 
         try {
-            const response = await apiClient.post(
+            const response = apiClient.post(
                 tenantData,
                 {
                     ...config,

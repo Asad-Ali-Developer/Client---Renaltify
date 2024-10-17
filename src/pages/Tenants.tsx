@@ -14,112 +14,17 @@ import { Link } from "react-router-dom";
 import TenantSkeleton from "../components/TenantSkeleton";
 import TenantsShow from "../components/TenantsShow";
 import TenantsContext from "../context/TenantsContext";
-// import useDeleteTenant from "../hooks/useDeleteTenant";
-// import useTenantStatusUpdater from "../hooks/useTenantStatusUpdator";
-
 
 
 const Tenants = () => {
 
   document.title = "Tenant Data | Dashboard"
 
-  const skeletons = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  const skeletons = [1, 2, 3, 4, 5, 6]
 
-  const { activeTenants, totalTenants, tenants, isLoading, inactiveTenants } = useContext(TenantsContext)
+  const { activeTenants, tenants, isLoading, inactiveTenants } = useContext(TenantsContext)
 
-  console.log(`Active tenants: ${activeTenants}, TotalTenants: ${totalTenants}`);
-
-  // // This hook is for deleting a tenant
-  // const delTenant = useDeleteTenant();
-
-  // // This hook is for updating the status of a tenant
-  // const updateTenantStatus = useTenantStatusUpdater();
-
-
-  // const [setSelectedTenant] = useState<Tenant | null>(null);
-
-
-
-
-  // // This function is for deleting a tenant
-  // const deleteTenant = () => {
-
-  //   const _id = selectedTenant?._id || ''
-
-  //   if (selectedTenant?._id) {
-  //     delTenant.mutate(
-  //       _id,
-  //       {
-  //         onSuccess: () => {
-  //           toast.success('Tenant deleted successfully')
-  //           onClose()
-  //           setSelectedTenant(null)
-  //         },
-
-  //         onError: () => {
-  //           toast.error('Not deleted tenant')
-  //         }
-  //       }
-  //     )
-  //   }
-  // }
-
-
-  // const openDeleteDialog = (tenant: Tenant) => {
-  //   setSelectedTenant(tenant);
-  //   console.log(tenant);
-  //   onOpen();
-  // };
-
-
-  // // Function for Toggle Status
-  // const toggleStatus = async (tenant: Tenant, newStatus: boolean) => {
-
-  //   // Only proceed if the status is actually changing
-  //   if (tenant.isActive !== newStatus) {
-
-  //     updateTenantStatus.mutate(
-
-  //       // In this we are sending data to the hook => {tenantId, newUpdatedStatus}
-  //       { _id: tenant._id, newStatus: newStatus },
-
-  //       // After success or failure shows the message or notification
-  //       {
-  //         onSuccess: () => {
-  //           toast.success('Tenant status updated!')
-  //         },
-  //         onError: () => {
-  //           toast.error('Tenant status not updated!')
-  //         }
-  //       }
-  //     )
-  //   }
-
-
-  //   // try {
-  //   //   const response = await fetch(`${apiClientOK}/api/update-tenant/${tenant._id}`, {
-  //   //     method: "PATCH",
-  //   //     headers: {
-  //   //       'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
-  //   //       'Content-Type': 'application/json'
-  //   //     },
-  //   //     body: JSON.stringify({ isActive: newStatus }),
-  //   //     credentials: 'include'
-  //   //   })
-
-  //   //   if (response.ok) {
-  //   //     toast.success('Tenant status changed!')
-  //   //   }
-  //   //   else {
-  //   //     toast.error('Tenant status not changed!')
-  //   //   }
-
-  //   // } catch (error) {
-  //   //   console.log(error);
-  //   // }
-
-  // }
-
+  // console.log(`Active tenants: ${activeTenants}, TotalTenants: ${totalTenants}`);
 
 
   return (

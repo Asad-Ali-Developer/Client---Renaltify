@@ -37,15 +37,14 @@ a:focus{
 
 
 .FileInputStyling::-webkit-file-upload-button {
-  background-color: #3b3a3a;
+  background-color: #494848;
   color: #fff;
-  padding: 5px 10px;
-  border: 1px dashed #373636;
-  font-size: 8px;
+  padding: 8px 7px;
+  border: 1px  #373636;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 14px;
   margin-right: 20px;
-  margin-left: -15px;
+  margin-left: -20px;
 }
 
 

@@ -71,7 +71,7 @@ const Navbar = () => {
                             fontWeight='semibold'
                             fontSize={{ base: 'xl', md: 'large', lg: 'x-large' }}>
 
-                            <Link to='/'>Rentify</Link>
+                            <Link to='/'>Rentalify</Link>
                         </Text>
                     </Flex>
 

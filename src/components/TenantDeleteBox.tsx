@@ -5,9 +5,9 @@ import {
     AlertDialogContent,
     AlertDialogFooter,
     AlertDialogHeader,
-    AlertDialogOverlay,
     Button,
     Flex,
+    ModalOverlay,
     Text,
 } from "@chakra-ui/react";
 import { useRef } from "react";
@@ -45,7 +45,7 @@ const TenantDeleteBox = ({ tenantId, isOpen, onClose, tenantName }: Props) => {
         }
     }
 
-    
+
     return (
         <AlertDialog
             isCentered
@@ -54,28 +54,28 @@ const TenantDeleteBox = ({ tenantId, isOpen, onClose, tenantName }: Props) => {
             motionPreset="slideInBottom"
             leastDestructiveRef={cancelRef}>
 
-            <AlertDialogOverlay>
-                <AlertDialogContent>
-                    <AlertDialogHeader>Delete Tenant?</AlertDialogHeader>
-                    <AlertDialogCloseButton />
-                    <AlertDialogBody>
-                        <Flex gap={1}>
-                            <Text>Are you sure you want to delete</Text>
-                            <Text fontWeight="bold">{tenantName}</Text>?
-                        </Flex>
-                    </AlertDialogBody>
-                    <AlertDialogFooter>
-                        <Button ref={cancelRef} onClick={onClose}>
-                            No
-                        </Button>
-                        <Button colorScheme="red" ml={3}
-                            onClick={handleDeleteBtn}>
-                            Yes
-                        </Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialogOverlay>
-        </AlertDialog>
+            <ModalOverlay />
+
+            <AlertDialogContent fontSize={{ base: 14, lg: 16 }}>
+                <AlertDialogHeader>Delete Tenant?</AlertDialogHeader>
+                <AlertDialogCloseButton />
+                <AlertDialogBody>
+                    <Flex gap={1}>
+                        <Text>Are you sure you want to delete</Text>
+                        <Text fontWeight="bold">{tenantName}</Text>?
+                    </Flex>
+                </AlertDialogBody>
+                <AlertDialogFooter>
+                    <Button ref={cancelRef} onClick={onClose}>
+                        No
+                    </Button>
+                    <Button colorScheme="red" ml={3}
+                        onClick={handleDeleteBtn}>
+                        Yes
+                    </Button>
+                </AlertDialogFooter>
+            </AlertDialogContent>
+        </AlertDialog >
     );
 };
 

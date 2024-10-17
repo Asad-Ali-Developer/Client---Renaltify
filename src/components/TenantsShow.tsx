@@ -6,6 +6,7 @@ import { useState } from "react";
 import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import TenantShowModal from "./TenantShowModal";
 import TenantDeleteBox from "./TenantDeleteBox";
+import UpdateTenantBox from "./UpdateTenantBox";
 
 interface Props {
     tenants: Tenant[];
@@ -14,6 +15,12 @@ interface Props {
 const TenantsShow = ({ tenants }: Props) => {
 
     const [activeTenantId, setActiveTenantId] = useState<string | null>(null);
+    const {
+        isOpen: isOpenUdater,
+        onOpen: onOpenUdater,
+        onClose: onCloseUpdater,
+    } = useDisclosure(); // Manage modal state
+
     const { isOpen, onOpen, onClose } = useDisclosure(); // Manage modal state
     const [activeTenantName, setActiveTenantName] = useState<string | null>(null)
 
@@ -25,54 +32,91 @@ const TenantsShow = ({ tenants }: Props) => {
                     key={tenant._id}
                     overflow="hidden"
                     flexDirection="row"
-                    borderLeft="5px solid"
-                    borderLeftColor="green"
-                    py={{ base: 3, lg: 3 }}
-                    px={{ base: 1, sm: 3, lg: 5 }}
+                    py={{ base: 2, lg: 3 }}
+                    px={{ base: 3, lg: 5 }}
                     justifyContent="space-between"
                     fontSize={{ base: 14, lg: 16 }}
-                    gap={{ base: 2, sm: 0, lg: 0 }}
-                    bg={useColorModeValue("white", "")}
-                    borderColor={
-                        tenant.isActive
+                    gap={{ base: 2, sm: '', lg: '' }}
+                    bg={useColorModeValue("white", "")}>
+
+                    <Box
+                        top={0}
+                        h='100%'
+                        left={0}
+                        position='absolute'
+                        w={{ base: 1, md: 1.5 }}
+                        backgroundColor={tenant.isActive
                             ? useColorModeValue("green.300", "green.500")
-                            : useColorModeValue("red.300", "red.500")
-                    }
-                >
+                            : useColorModeValue("red.300", "red.500")}></Box>
+
                     <Flex
-                        alignItems="center"
-                        gap={{ base: 1, sm: 12, lg: 14 }}
-                        justifyContent={{ base: "space-evenly", md: "space-between" }}
-                    >
-                        <Flex gap={2} alignItems="center" w={{ base: "70px", sm: "60px", lg: "90px" }}>
+                        alignItems="left"
+                        px={{ base: 2, sm: '' }}
+                        gap={{ base: 2, sm: 12, lg: 14 }}
+                        flexDirection={{ base: "column", sm: "row" }}
+                        justifyContent={{ base: 'left', md: "space-between" }}>
+
+                        <Flex
+                            gap={2}
+                            alignItems="center"
+                            w={{ base: '', sm: "100px", md: '100px', lg: "70px", xl: '120px' }}
+                            >
+
                             <FaUser size="14" />
-                            <Text fontWeight="semibold" fontSize={{ base: 12, sm: 14, lg: 16 }}>
+                            <Text fontWeight="semibold"
+                                fontSize={{ base: 14, lg: 16 }}>
                                 {tenant.tenantName}
                             </Text>
                         </Flex>
 
-                        <Flex gap={2} alignItems="center">
+                        <Flex
+                            gap={2}
+                            alignItems="center">
                             <FaPhoneAlt size={14} />
-                            <Text fontWeight="semibold" fontSize={{ base: 12, sm: 14, lg: 16 }}>
+                            <Text
+                                fontWeight="semibold"
+                                fontSize={{ base: 14, lg: 16 }}>
                                 {`0${tenant.phone}`}
                             </Text>
                         </Flex>
                     </Flex>
 
-                    <Flex gap={1} alignItems="center" justifyContent="center">
+                    <Flex
+                        gap={1}
+                        alignItems="center"
+                        justifyContent="center"
+                    >
                         <Flex gap={{ base: 3, lg: 5 }}>
-                            <Box cursor="pointer" className="rounded-full flex justify-center items-center">
-                                <FiEdit color="green" size="1em" />
-                            </Box>
 
                             <Box
+                                cursor="pointer"
+                                onClick={() => {
+                                    setActiveTenantId(tenant._id)
+                                    onOpenUdater();
+                                }}
+                                className="rounded-full flex justify-center items-center">
+                                <FiEdit size="1em" />
+                            </Box>
+
+                            <UpdateTenantBox
+                                tenant={tenant}
+                                tenantId={tenant._id}
+                                isOpenUdater={isOpenUdater}
+                                onCloseUpdater={() => {
+                                    setActiveTenantId(null);
+                                    onCloseUpdater();
+                                }} />
+
+
+                            <Box
+                                mr={-1}
                                 onClick={() => {
                                     setActiveTenantId(tenant._id);
                                     setActiveTenantName(tenant.tenantName)
                                     onOpen(); // Open delete confirmation modal
                                 }}
                                 className="rounded-full cursor-pointer flex justify-center items-center">
-                                <RiDeleteBinLine color="red" size="1em" />
+                                <RiDeleteBinLine size="1em" />
                             </Box>
 
                             {/* Modal to confirm tenant deletion */}

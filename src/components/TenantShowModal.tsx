@@ -1,4 +1,4 @@
-import { Badge, Box, Button, Flex, Image, Img, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Spinner, Text, useColorModeValue, useDisclosure, VStack } from "@chakra-ui/react";
+import { Badge, Box, Button, Flex, Img, Modal, ModalBody, ModalCloseButton, ModalContent, ModalOverlay, Spinner, Text, useColorModeValue, useDisclosure, VStack } from "@chakra-ui/react";
 import { BsCreditCardFill } from "react-icons/bs";
 import { FaCalendarAlt, FaHome, FaIdCard, FaPhoneAlt, FaUser } from "react-icons/fa";
 import useTenant from "../hooks/useTenant";
@@ -40,18 +40,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
                 <ModalContent
                     overflow='hidden'
-                    position='relative'
                     w={{ base: '90%', md: '100%', lg: '100%' }}>
-
-                    <Box position='absolute'
-                        top={{ base: 16, lg: 20 }}
-                        right={{ base: 2, lg: 6 }}
-                        zIndex='1'>
-                        {isLoading
-                            ? <Spinner color='green.500' size='sm' />
-                            : <Image w={20} h={20} src={tenant.QrCode} />
-                        }
-                    </Box>
 
                     <Flex
                         gap={8}
@@ -59,13 +48,13 @@ const TenantShowModal = ({ tenantId }: Props) => {
                         bg={useColorModeValue('#f2f3f6', '#282828')}>
 
                         <Flex
-                            h={14}
                             gap={6}
                             alignItems='center'
                             justifyContent='center'
-                            ml={{ base: 5, lg: 8 }}>
+                            ml={{ base: 5, lg: 8 }}
+                            h={{ base: 12, lg: 14 }}>
 
-                            <FaUser size='0.8em' />
+                            <FaUser size='1em' />
                             <Text
                                 ml={-2}
                                 fontSize={{ base: 'lg', lg: 'xl' }}>
@@ -85,7 +74,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                         </Badge>
                     </Flex>
 
-                    <ModalCloseButton mt={1} />
+                    <ModalCloseButton mt={{ base: 0, lg: 1 }} />
 
                     <ModalBody>
 
@@ -97,7 +86,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
                             <Flex alignItems='center' gap={5}>
 
-                                <FaPhoneAlt size='0.8em' />
+                                <FaPhoneAlt size='1em' />
 
                                 <Text fontWeight="bold">
                                     Phone:
@@ -108,7 +97,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                             </Flex>
 
                             <Flex alignItems='center' gap={5}>
-                                <FaUser size='0.8em' />
+                                <FaUser size='1em' />
                                 <Text fontWeight="bold">
                                     Members:
                                 </Text>
@@ -116,7 +105,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                             </Flex>
 
                             <Flex alignItems='center' gap={5}>
-                                <FaIdCard size='0.8em' />
+                                <FaIdCard size='1em' />
                                 <Text fontWeight="bold">
                                     ID Card:
                                 </Text>
@@ -127,7 +116,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                             </Flex>
 
                             <Flex alignItems='center' gap={5}>
-                                <BsCreditCardFill size='0.8em' />
+                                <BsCreditCardFill size='1em' />
                                 <Text fontWeight="bold">
                                     Rent:
                                 </Text>
@@ -138,7 +127,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                             </Flex>
 
                             <Flex alignItems='center' gap={5}>
-                                <FaCalendarAlt size='0.8em' />
+                                <FaCalendarAlt size='1em' />
                                 <Text fontWeight="bold">
                                     Date:
                                 </Text>
@@ -151,7 +140,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
                             <Flex gap={5} alignItems='center'>
                                 <Flex gap={5} alignItems='center'>
-                                    <FaHome size='0.8em' />
+                                    <FaHome size='1em' />
                                     <Text fontWeight="bold">
                                         Address:
                                     </Text>
@@ -162,8 +151,12 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
                             <Box
                                 mt={4}
+                                mx='auto'
+                                height={250}
                                 borderRadius={5}
                                 overflow='hidden'
+                                objectFit='cover'
+                                objectPosition='center center'
                                 position='relative'
                                 border={isLoading ? '' : '2px solid'}
                                 borderColor={useColorModeValue('#f2f3f6', '#282828')}>
