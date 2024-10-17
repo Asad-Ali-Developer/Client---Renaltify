@@ -5,16 +5,20 @@ import { Box, useColorModeValue } from "@chakra-ui/react"
 
 const MainLayout = () => {
     return (
-        <Box bg={useColorModeValue('#f2f3f6', '')}>
+        <Box >
             <Box>
 
-            <header>
-                <Navbar />
-            </header>
+                <header>
+                    <Navbar />
+                </header>
 
-            <main>
-                <Outlet />
-            </main>
+                <main>
+                    <Box
+                        h='93vh'
+                        bg={useColorModeValue('#f2f3f6', '')}>
+                        <Outlet />
+                    </Box>
+                </main>
 
             </Box>
         </Box>

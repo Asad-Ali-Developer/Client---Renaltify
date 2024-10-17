@@ -1,10 +1,10 @@
 import axios from "axios";
-import { CACHE_KEY_TENANTS } from "./constants";
+import { CACHE_KEY_TENANT, CACHE_KEY_TENANTS } from "./constants";
 import { apiClientOK } from "../services/apiClient";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface updateTenantQuery {
-    _id: string,
+    _id: string | undefined,
     newStatus: boolean,
 }
 
@@ -30,6 +30,10 @@ const useTenantStatusUpdater = () => {
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: [CACHE_KEY_TENANTS]
+            })
+
+            queryClient.invalidateQueries({
+                queryKey: [CACHE_KEY_TENANT]
             })
         }
     })

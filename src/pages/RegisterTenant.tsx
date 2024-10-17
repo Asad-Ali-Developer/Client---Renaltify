@@ -144,7 +144,7 @@ const RegisterTenant = () => {
                                 fontSize='small'
                                 alignItems='center'
                                 fontWeight='semibold'
-                                color={useColorModeValue('blue.500', 'blue.300')}>
+                                color={useColorModeValue('#FF6B6B', '#FF8E8E')}>
                                 <Text>Go to All tenants</Text>
                                 <GoArrowUpRight />
                             </Flex>
@@ -309,8 +309,9 @@ const RegisterTenant = () => {
                     <CardFooter>
                         <Button
                             type="submit"
-                            variant='solid'
-                            colorScheme="telegram"
+                            bg="#FF6B6B"
+                            _hover={{ bg: "#FF8E8E" }}
+                            color="white"
                             w={{ base: '100%', sm: 'auto' }}>
                             Add Tenant
                         </Button>

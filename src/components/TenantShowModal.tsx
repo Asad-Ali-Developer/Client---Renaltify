@@ -2,6 +2,7 @@ import { Badge, Box, Button, Flex, Img, Modal, ModalBody, ModalCloseButton, Moda
 import { BsCreditCardFill } from "react-icons/bs";
 import { FaCalendarAlt, FaHome, FaIdCard, FaPhoneAlt, FaUser } from "react-icons/fa";
 import useTenant from "../hooks/useTenant";
+import StatusUpdater from "./StatusUpdater";
 
 interface Props {
     tenantId: string,
@@ -22,11 +23,16 @@ const TenantShowModal = ({ tenantId }: Props) => {
                 px={0}
                 type="button"
                 onClick={onOpen}
+                bg="#FF6B6B"
+                // colorScheme='red'
+                // _hover={{ bg: "#FF8E8E" }}
+                // color="white"
                 fontWeight='semibold'
                 backgroundColor='transparent'
                 fontSize={{ base: 12, md: 14 }}
                 _hover={{ backgroundColor: 'transparent' }}
-                color={useColorModeValue('blue.500', 'blue.300')}>
+                color={useColorModeValue('#FF6B6B', '#FF8E8E')}
+                >
                 View
             </Button>
 
@@ -34,7 +40,8 @@ const TenantShowModal = ({ tenantId }: Props) => {
                 isCentered
                 isOpen={isOpen}
                 onClose={onClose}
-                blockScrollOnMount={false}>
+                blockScrollOnMount={false}
+                motionPreset='slideInBottom'>
 
                 <ModalOverlay />
 
@@ -63,15 +70,24 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
                         </Flex>
 
-                        <Badge
-                            px={1}
-                            variant='solid'
-                            colorScheme={tenant.isActive ? 'green' : 'red'}>
+                        <Flex
+                            gap={1}
+                            alignItems='center'>
 
-                            <Text fontSize={{ base: 10, md: 11, lg: 10 }}>
-                                {tenant.isActive ? 'Active' : 'Inactive'}
-                            </Text>
-                        </Badge>
+                            <Badge
+                                px={1}
+                                py={0.5}
+                                variant='solid'
+                                colorScheme={tenant.isActive ? 'green' : 'red'}>
+                                <Text fontSize={{ base: 10, md: 11, lg: 12 }}>
+                                    {tenant.isActive ? 'Active' : 'Inactive'}
+                                </Text>
+                            </Badge>
+
+                            <StatusUpdater
+                                tenantId={tenant._id} />
+
+                        </Flex>
                     </Flex>
 
                     <ModalCloseButton mt={{ base: 0, lg: 1 }} />
@@ -152,14 +168,13 @@ const TenantShowModal = ({ tenantId }: Props) => {
                             <Box
                                 mt={4}
                                 mx='auto'
-                                height={250}
                                 borderRadius={5}
                                 overflow='hidden'
                                 objectFit='cover'
-                                objectPosition='center center'
                                 position='relative'
+                                objectPosition='center center'
                                 border={isLoading ? '' : '2px solid'}
-                                borderColor={useColorModeValue('#f2f3f6', '#282828')}>
+                                borderColor={useColorModeValue('#f2f3f6', 'white')}>
                                 {
                                     isLoading
                                         ? <Spinner color='blue.500' size='sm' />

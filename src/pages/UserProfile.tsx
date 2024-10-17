@@ -11,8 +11,10 @@ const UserProfile = () => {
 
     const { authenticatedUser } = useAuth()
 
-    const {activeTenants, totalTenants} = useContext(TenantsContext)    
+    const { activeTenants, totalTenants, inactiveTenants } = useContext(TenantsContext)
 
+    const userName = authenticatedUser?.username || '';
+    const capitalizeFirstLetterOfUserName = userName?.charAt(0).toUpperCase() + userName?.slice(1);
 
     const containerVariants = {
         hidden: { opacity: 0, y: 50 },
@@ -37,19 +39,24 @@ const UserProfile = () => {
     };
 
     return (
-        <Box py={12} px={4}>
+        <Box
+            px={4}
+            py={{ base: 12, lg: 24 }}>
+
             <motion.div
-                className="max-w-4xl mx-auto"
                 initial="hidden"
                 animate="visible"
                 variants={containerVariants}
-            >
-                <Card border='1px solid' borderColor={useColorModeValue('gray.200', 'gray.500')}>
+                className="max-w-4xl mx-auto">
+
+                <Card
+                    border='1px solid'
+                    borderColor={useColorModeValue('gray.200', 'gray.500')}>
                     <motion.div
                         className="shadow-xl rounded-lg overflow-hidden"
                         variants={itemVariants}>
 
-                        <Box p={{ base: 10, lg: 6 }}>
+                        <Box p={{ base: 5, lg: 6 }}>
                             <motion.div
                                 className="flex flex-col sm:flex-row items-center"
                                 variants={itemVariants}
@@ -78,26 +85,32 @@ const UserProfile = () => {
                                     }
                                 </motion.div>
                                 <Box
-                                    mt={4} ml={{ base: 4, lg: 6 }}
+                                    mt={4}
+                                    ml={{ base: 4, lg: 6 }}
                                     textAlign={{ base: 'center', sm: 'left' }}>
                                     <motion.h1
                                         variants={itemVariants}
                                         className="text-2xl font-bold">
-                                        {authenticatedUser?.username}
+                                        {capitalizeFirstLetterOfUserName}
                                     </motion.h1>
 
                                 </Box>
                             </motion.div>
 
-                            <motion.div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2" variants={itemVariants}>
+                            <motion.div
+                                variants={itemVariants}
+                                className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
                                 <motion.div
                                     className="flex items-center"
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}>
 
-                                    <EnvelopeIcon className="h-6 w-6" />
+                                    <EnvelopeIcon className="h-5 w-5" />
 
-                                    <Text ml={2} color={useColorModeValue('gray.700', 'gray.300')}>
+                                    <Text
+                                        ml={2}
+                                        fontSize={{ base: 14, md: 16 }}
+                                        color={useColorModeValue('gray.700', 'gray.300')}>
                                         {authenticatedUser?.email}
                                     </Text>
                                 </motion.div>
@@ -107,14 +120,14 @@ const UserProfile = () => {
                                     whileHover={{ scale: 1.05 }}
                                     className="flex items-center">
 
-                                    <IdentificationIcon className="h-6 w-6" />
+                                    <IdentificationIcon className="h-5 w-5" />
 
                                     <Link
-                                        href={authenticatedUser?.IdFileLink}
                                         ml={2}
-                                        color={useColorModeValue('indigo.600', 'indigo.400')}
+                                        fontSize={{ base: 14, md: 16 }}
+                                        href={authenticatedUser?.IdFileLink}
                                         _hover={{ textDecoration: 'underline' }}
-                                    >
+                                        color={useColorModeValue('indigo.600', 'indigo.400')}>
                                         View ID File
                                     </Link>
 
@@ -125,29 +138,22 @@ const UserProfile = () => {
 
                         <motion.div variants={itemVariants}>
 
-                            <Box bg={useColorModeValue('blue.50', 'blue.700')} p={8} mt={5}>
+                            <Box
+                                p={6}
+                                mt={2}
+                                bg={useColorModeValue('gray.50', 'gray.800')}>
                                 <Heading
-                                    size="lg"
-                                    mb={4}>
+                                    mb={4}
+                                    size="md">
                                     Tenant Statistics
                                 </Heading>
-                                <Flex flexWrap="wrap" gap={4} justify="space-between" align="center">
-                                    <motion.div
-                                        className="flex items-center gap-4"
-                                        whileHover={{ scale: 1.05 }}
-                                        whileTap={{ scale: 0.95 }}
-                                    >
-                                        <Text>Total Tenants</Text>
-                                        <motion.span
-                                            className="text-2xl font-bold"
-                                            initial={{ opacity: 0 }}
-                                            animate={{ opacity: 1 }}
-                                            transition={{ duration: 0.5, delay: 0.5 }}>
-                                            <Text color={useColorModeValue('red.500', 'red.200')}>
-                                                {totalTenants}
-                                            </Text>
-                                        </motion.span>
-                                    </motion.div>
+                                <Flex
+                                    // px={2}
+                                    gap={2}
+                                    align="center"
+                                    flexWrap="wrap"
+                                    justify="space-between">
+
 
                                     <motion.div
                                         className="flex items-center gap-4"
@@ -170,8 +176,60 @@ const UserProfile = () => {
 
                                         </motion.span>
                                     </motion.div>
+
+                                    <motion.div
+                                        whileTap={{ scale: 0.95 }}
+                                        whileHover={{ scale: 1.05 }}
+                                        className="flex items-center gap-4">
+
+                                        <Text>Inactive Tenants</Text>
+                                        <motion.span
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="text-2xl font-bold"
+                                            transition={{ duration: 0.5, delay: 0.7 }}>
+
+                                            <Text
+                                                color={
+                                                    useColorModeValue('red.500', 'red.200')
+                                                }>
+                                                {inactiveTenants}
+                                            </Text>
+
+                                        </motion.span>
+                                    </motion.div>
+
                                 </Flex>
                             </Box>
+                            <Flex
+                                h={14}
+                                w='100%'
+                                justifyContent='center'
+                                bg={useColorModeValue('gray.50', '#1a202c')}>
+
+                                <motion.div
+                                    whileTap={{ scale: 0.95 }}
+                                    whileHover={{ scale: 1.05 }}
+                                    className="flex items-center gap-4">
+                                    <Text
+                                        textAlign='center'
+                                        fontWeight='semibold'
+                                        fontSize={16}>
+                                        Total Tenants:
+                                    </Text>
+                                    <motion.span
+                                        className="text-2xl font-bold"
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        transition={{ duration: 0.5, delay: 0.5 }}>
+                                        <Text
+                                            fontSize={{ base: 28, md: 32 }}
+                                            color={useColorModeValue('blue.500', 'blue.200')}>
+                                            {totalTenants}
+                                        </Text>
+                                    </motion.span>
+                                </motion.div>
+                            </Flex>
                         </motion.div>
                     </motion.div>
                 </Card>

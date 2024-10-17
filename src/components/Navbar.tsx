@@ -25,11 +25,13 @@ import {
     WrapItem,
     Image,
     VStack,
+    useColorMode,
 } from "@chakra-ui/react";
 import CustomSwitch from "./CustomSwitch";
 import { useAuth } from "../store/authToken";
 import { LuMenu } from "react-icons/lu";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { FaBuilding } from "react-icons/fa";
 
 const Navbar = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -43,6 +45,8 @@ const Navbar = () => {
     const { isLoggedIn, LogoutUser, authenticatedUser } = useAuth();
     const navigate = useNavigate();
 
+    const { colorMode } = useColorMode()
+
     const handleLogout = () => {
         LogoutUser();
         navigate('/login'); // Redirect after logout
@@ -50,7 +54,19 @@ const Navbar = () => {
 
     return (
         <>
-            <Card w='100%' borderRadius={0}>
+            <Card
+                w='100%'
+                as="header"
+                zIndex="10"
+                pos="sticky"
+                display='flex'
+                borderRadius={0}
+                justifyContent='space-between'
+                px={{ base: 2, sm: 10, lg: 20 }}
+                backdropFilter="blur(10px)"
+                bg={colorMode === 'dark'
+                    ? "rgba(26, 26, 26, 0.8)"
+                    : "rgba(255, 255, 255, 0.8)"}>
                 <HStack
                     h={14}
                     width='100%'
@@ -58,7 +74,7 @@ const Navbar = () => {
                     fontWeight='medium'
                     background='transparent'
                     justifyContent='space-between'
-                    px={{ base: 6, sm: 10, lg: 20 }}>
+                    px={{ base: 6, sm: 8, lg: 20 }}>
 
                     <Flex alignItems='center' gap={4}>
                         <Show below='lg'>
@@ -66,13 +82,15 @@ const Navbar = () => {
                                 <LuMenu size={20} />
                             </Box>
                         </Show>
-                        <Text
-                            color='telegram'
-                            fontWeight='semibold'
-                            fontSize={{ base: 'xl', md: 'large', lg: 'x-large' }}>
 
-                            <Link to='/'>Rentalify</Link>
-                        </Text>
+                        <Link to='/'>
+                            <Flex alignItems='center' gap={1}>
+                                <FaBuilding size='1em' color="#FF6B6B" />
+                                <Text fontSize={{ base: 18, md: 20, lg:20 }} fontWeight='semibold'>
+                                    Rentalify
+                                </Text>
+                            </Flex>
+                        </Link>
                     </Flex>
 
                     <HStack

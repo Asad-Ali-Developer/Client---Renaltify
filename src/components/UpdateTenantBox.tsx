@@ -157,10 +157,11 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
         <>
             <Modal
                 isCentered
-                onClose={onCloseUpdater}
                 isOpen={isOpenUdater}
+                onClose={onCloseUpdater}
                 blockScrollOnMount={false}
-            >
+                motionPreset='slideInBottom'>
+
                 <ModalOverlay />
                 <ModalContent
                     mx="auto"
@@ -174,13 +175,13 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
                             <FormControl>
                                 <FormLabel
-                                fontSize={{ base: 14, md: 16 }}>Tenant Name</FormLabel>
+                                    fontSize={{ base: 14, md: 16 }}>Tenant Name</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <FaUser />
                                     </InputLeftElement>
                                     <Input {...register("tenantName")}
-                                    fontSize={{ base: 14, md: 16 }}
+                                        fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Enter tenant name" />
                                 </InputGroup>
                                 <Text color="red.500">{errors.tenantName?.message}</Text>
@@ -188,13 +189,13 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
 
                             <FormControl>
                                 <FormLabel
-                                fontSize={{ base: 14, md: 16 }}>Phone</FormLabel>
+                                    fontSize={{ base: 14, md: 16 }}>Phone</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <FaPhoneAlt />
                                     </InputLeftElement>
                                     <Input {...register("phone")}
-                                    fontSize={{ base: 14, md: 16 }}
+                                        fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Enter phone" />
                                 </InputGroup>
                                 <Text color="red.500">{errors.phone?.message}</Text>
@@ -202,13 +203,13 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
 
                             <FormControl>
                                 <FormLabel
-                                fontSize={{ base: 14, md: 16 }}>Another Phone</FormLabel>
+                                    fontSize={{ base: 14, md: 16 }}>Another Phone</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <FaPhoneAlt />
                                     </InputLeftElement>
                                     <Input {...register("AnotherPhone")}
-                                    fontSize={{ base: 14, md: 16 }}
+                                        fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Enter another phone" />
                                 </InputGroup>
                                 <Text color="red.500">{errors.AnotherPhone?.message}</Text>
@@ -216,13 +217,13 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
 
                             <FormControl>
                                 <FormLabel
-                                fontSize={{ base: 14, md: 16 }}>Members</FormLabel>
+                                    fontSize={{ base: 14, md: 16 }}>Members</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <BsFillPeopleFill />
                                     </InputLeftElement>
                                     <Input {...register("members")}
-                                    fontSize={{ base: 14, md: 16 }}
+                                        fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Total members" />
                                 </InputGroup>
                                 <Text color="red.500">{errors.members?.message}</Text>
@@ -230,11 +231,11 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
 
                             <FormControl>
                                 <FormLabel
-                                fontSize={{ base: 14, md: 16 }}>Rent Decided</FormLabel>
+                                    fontSize={{ base: 14, md: 16 }}>Rent Decided</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>Rs.</InputLeftElement>
                                     <Input {...register("rentDecided")}
-                                    fontSize={{ base: 14, md: 16 }}
+                                        fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Rent amount" />
                                 </InputGroup>
                                 <Text color="red.500">{errors.rentDecided?.message}</Text>
@@ -242,16 +243,16 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
 
                             <FormControl>
                                 <FormLabel
-                                fontSize={{ base: 14, md: 16 }}>Shifting Date</FormLabel>
+                                    fontSize={{ base: 14, md: 16 }}>Shifting Date</FormLabel>
                                 <Input {...register("date")}
-                                fontSize={{ base: 14, md: 16 }}
+                                    fontSize={{ base: 14, md: 16 }}
                                     variant='filled' type="date" placeholder="Shifting Date" />
                                 <Text color="red.500">{errors.date?.message}</Text>
                             </FormControl>
 
                             <FormControl>
                                 <FormLabel
-                                fontSize={{ base: 14, md: 16 }}>ID Number</FormLabel>
+                                    fontSize={{ base: 14, md: 16 }}>ID Number</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <RiIdCardFill />
@@ -265,7 +266,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
 
                             <FormControl>
                                 <FormLabel
-                                fontSize={{ base: 14, md: 16 }}>ID File</FormLabel>
+                                    fontSize={{ base: 14, md: 16 }}>ID File</FormLabel>
                                 <Input
                                     type="file"
                                     className="FileInputStyling"
@@ -277,7 +278,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
 
                         <FormControl mt={4}>
                             <FormLabel
-                            fontSize={{ base: 14, md: 16 }}>Address</FormLabel>
+                                fontSize={{ base: 14, md: 16 }}>Address</FormLabel>
                             <InputGroup>
                                 <InputLeftElement>
                                     <FaLocationDot />
@@ -298,8 +299,11 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                     <ModalFooter>
                         <Button
                             mr={3}
+                            bg="#FF6B6B"
+                            color="white"
+                            colorScheme='red'
                             disabled={loading}
-                            colorScheme="blue"
+                            _hover={{ bg: "#FF8E8E" }}
                             onClick={handleSubmit(onSubmit)}>
                             {loading ? "Updating..." : "Update"}
                         </Button>

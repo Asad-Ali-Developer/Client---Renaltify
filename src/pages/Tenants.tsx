@@ -65,7 +65,12 @@ const Tenants = () => {
           <Flex justifyContent='space-between' alignItems='center' mb={5}>
             <Heading size='md' ml={2}>All Tenants</Heading>
             <Link to='/tenants/add_tenant'>
-              <Button size={{ base: 'sm', md: 'md' }}>Add Tenant</Button>
+              <Button
+                bg="#FF6B6B"
+                color="white"
+                colorScheme='red'
+                _hover={{ bg: "#FF8E8E" }}
+                size={{ base: 'sm', md: 'md' }}>Add Tenant</Button>
             </Link>
           </Flex>
 
