@@ -41,6 +41,7 @@ const UserProfile = () => {
     return (
         <Box
             px={4}
+            mt={14}
             py={{ base: 12, lg: 24 }}>
 
             <motion.div
@@ -72,8 +73,11 @@ const UserProfile = () => {
                                             h={24}
                                             objectFit="cover"
                                             borderRadius='50%'
+                                            border='2px solid'
                                             objectPosition="center"
-                                            src={authenticatedUser.IdFileLink} />
+                                            src={authenticatedUser.IdFileLink} 
+                                            borderColor={useColorModeValue('gray.600', '#1A1A1A')}
+                                            />
                                     }
 
                                     {!authenticatedUser?.IdFileLink &&
@@ -205,7 +209,7 @@ const UserProfile = () => {
                                 h={14}
                                 w='100%'
                                 justifyContent='center'
-                                bg={useColorModeValue('gray.50', '#1a202c')}>
+                                bg={useColorModeValue('white', '#1A1A1A')}>
 
                                 <motion.div
                                     whileTap={{ scale: 0.95 }}
@@ -224,7 +228,7 @@ const UserProfile = () => {
                                         transition={{ duration: 0.5, delay: 0.5 }}>
                                         <Text
                                             fontSize={{ base: 28, md: 32 }}
-                                            color={useColorModeValue('blue.500', 'blue.200')}>
+                                            color={useColorModeValue('orange.500', 'orange.200')}>
                                             {totalTenants}
                                         </Text>
                                     </motion.span>

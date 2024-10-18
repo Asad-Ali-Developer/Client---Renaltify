@@ -16,7 +16,7 @@ export default function ModernLanding() {
 
   return (
     <Box
-    mt={10}
+      mt={10}
       minH="100vh"
       bg={colorMode === 'dark' ? "#1A1A1A" : "white"}
       color={colorMode === 'dark' ? "white" : "black"}>
@@ -164,10 +164,10 @@ export default function ModernLanding() {
                   borderColor={colorMode === 'dark' ? "#3A3A3A" : "gray.300"}
                   color={colorMode === 'dark' ? "white" : "black"} />
                 <Button
-                   bg="#e05757"
-                   color="white"
-                   type="button"
-                   _hover={{ bg: "#FF6B6B" }}>
+                  bg="#e05757"
+                  color="white"
+                  type="button"
+                  _hover={{ bg: "#FF6B6B" }}>
                   Subscribe
                 </Button>
               </HStack>

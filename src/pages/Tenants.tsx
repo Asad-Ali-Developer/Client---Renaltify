@@ -71,10 +71,10 @@ const Tenants = () => {
             <Heading size='md' ml={2}>All Tenants</Heading>
             <Link to='/tenants/add_tenant'>
               <Button
-                bg="#FF6B6B"
+                bg="#e05757"
                 color="white"
-                colorScheme='red'
-                _hover={{ bg: "#FF8E8E" }}
+                type="button"
+                _hover={{ bg: "#FF6B6B" }}
                 size={{ base: 'sm', md: 'md' }}>Add Tenant</Button>
             </Link>
           </Flex>

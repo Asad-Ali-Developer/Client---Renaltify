@@ -8,7 +8,7 @@ const TenantSkeleton = () => {
             <Card overflow='hidden'>
                 <Flex>
 
-                    <Skeleton height={16} />
+                    <Skeleton height={{base: 14, md: 16}} />
 
                     <CardBody
                         px={5}
@@ -19,10 +19,10 @@ const TenantSkeleton = () => {
 
                         <SkeletonText
                             ml={2}
-                            w='70%'
-                            noOfLines={1}
-                            borderRadius={10}
-                            skeletonHeight={{ base: 5, sm: 5, lg: 6 }} />
+                            borderRadius={14}
+                            noOfLines={{ base: 2, sm: 1 }}
+                            skeletonHeight={{ base: 3,md: 5, lg: 6 }}
+                            w={{ base: '50%', sm: '60%', lg: '70%' }} />
 
                         <Box
                             gap={3}
@@ -31,30 +31,30 @@ const TenantSkeleton = () => {
                             justifyContent='center'>
 
                             <SkeletonCircle
-                                w={{ base: 3, sm: 4, lg: 5 }}
-                                h={{ base: 3, sm: 4, lg: 5 }} 
+                                w={{ base: 3.5, sm: 4, lg: 5 }}
+                                h={{ base: 3.5, sm: 4, lg: 5 }}
                                 borderRadius={{ base: 2, sm: 2, lg: 5 }}
-                                />
+                            />
                             <SkeletonCircle
-                                w={{ base: 3, sm: 4, lg: 5 }}
-                                h={{ base: 3, sm: 4, lg: 5 }} 
+                                w={{ base: 3.5, sm: 4, lg: 5 }}
+                                h={{ base: 3.5, sm: 4, lg: 5 }}
                                 borderRadius={{ base: 2, sm: 2, lg: 5 }}
-                                />
+                            />
                             <SkeletonCircle
-                                w={{ base: 3, sm: 4, lg: 5 }}
-                                h={{ base: 3, sm: 4, lg: 5 }} 
+                                w={{ base: 3.5, sm: 4, lg: 5 }}
+                                h={{ base: 3.5, sm: 4, lg: 5 }}
                                 borderRadius={{ base: 2, sm: 2, lg: 5 }}
-                                />
-                           
+                            />
+
                         </Box>
 
                         <SkeletonCircle
-                            w={1}
                             top={0}
                             h='100%'
                             left={0}
                             borderRadius={0}
-                            position='absolute' />
+                            position='absolute'
+                            w={{ base: 1, md: 1.5 }} />
 
                     </CardBody>
 

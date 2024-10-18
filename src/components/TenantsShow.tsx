@@ -34,8 +34,8 @@ const TenantsShow = ({ tenants }: Props) => {
     const { isOpen, onOpen, onClose } = useDisclosure(); // Manage modal state
     const [activeTenantName, setActiveTenantName] = useState<string | null>(null)
 
-   
-    if(tenants.length === 0) return <Text textAlign="center">No tenants found!</Text>
+
+    if (tenants.length === 0) return <Text textAlign="center">No tenants found!</Text>
 
     return (
         <>
@@ -72,13 +72,12 @@ const TenantsShow = ({ tenants }: Props) => {
                         <Flex
                             gap={2}
                             alignItems="center"
-                            w={{ base: '', sm: "100px", md: '100px', lg: "70px", xl: '120px' }}
-                        >
+                            w={{ base: '', sm: "100px", md: '100px', lg: "90px", xl: '110px' }}>
 
                             <FaUser size="14" />
                             <Text fontWeight="semibold"
                                 fontSize={{ base: 14, lg: 16 }}>
-                                {tenant.tenantName}
+                                {tenant.tenantName.split(' ')[0]}
                             </Text>
                         </Flex>
 

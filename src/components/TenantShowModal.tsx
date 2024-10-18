@@ -3,6 +3,7 @@ import { BsCreditCardFill } from "react-icons/bs";
 import { FaCalendarAlt, FaHome, FaIdCard, FaPhoneAlt, FaUser } from "react-icons/fa";
 import useTenant from "../hooks/useTenant";
 import StatusUpdater from "./StatusUpdater";
+import TenantDetailSketelton from "./TenantDetailSketelton";
 
 interface Props {
     tenantId: string,
@@ -17,25 +18,21 @@ const TenantShowModal = ({ tenantId }: Props) => {
     const { tenant, isLoading } = useTenant(tenantId);
 
     console.log(tenantId);
-    
+
 
     return (
         <>
 
             <Button
                 px={0}
+                bg="#FF6B6B"
                 type="button"
                 onClick={onOpen}
-                bg="#FF6B6B"
-                // colorScheme='red'
-                // _hover={{ bg: "#FF8E8E" }}
-                // color="white"
-                fontWeight='semibold'
+                fontWeight='bold'
                 backgroundColor='transparent'
                 fontSize={{ base: 12, md: 14 }}
                 _hover={{ backgroundColor: 'transparent' }}
-                color={useColorModeValue('#FF6B6B', '#FF8E8E')}
-                >
+                color={useColorModeValue('#FF6B6B', '#FF8E8E')}>
                 View
             </Button>
 
@@ -50,28 +47,17 @@ const TenantShowModal = ({ tenantId }: Props) => {
 
                 <ModalContent
                     overflow='hidden'
-                    w={{ base: '90%', md: '100%', lg: '100%' }}>
+                    w={{ base: '95%', md: '100%' }}>
 
                     <Flex
-                        gap={8}
+                        gap={5}
                         alignItems='center'
+                        h={{ base: 12, lg: 14 }}
                         bg={useColorModeValue('#f2f3f6', '#282828')}>
 
-                        <Flex
-                            gap={6}
-                            alignItems='center'
-                            justifyContent='center'
-                            ml={{ base: 5, lg: 8 }}
-                            h={{ base: 12, lg: 14 }}>
-
-                            <FaUser size='1em' />
-                            <Text
-                                ml={-2}
-                                fontSize={{ base: 'lg', lg: 'xl' }}>
-                                {tenant.tenantName || 'Tenant...'}
-                            </Text>
-
-                        </Flex>
+                        <Text
+                            ml={{ base: 3, lg: 6 }}
+                            fontWeight='semibold'>Tenant Details:</Text>
 
                         <Flex
                             gap={1}
@@ -87,8 +73,8 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                 </Text>
                             </Badge>
 
-                            <StatusUpdater
-                                tenantId={tenant._id} />
+                            {/* Status Updater Component */}
+                            <StatusUpdater tenantId={tenant._id} />
 
                         </Flex>
                     </Flex>
@@ -103,68 +89,99 @@ const TenantShowModal = ({ tenantId }: Props) => {
                             align="start"
                             fontSize={{ base: 'sm', lg: 16 }}>
 
-                            <Flex alignItems='center' gap={5}>
+                            <Flex
+                                gap={4}
+                                alignItems='center'
+                                justifyContent='center'
+                            >
+                                <FaUser size='1em' />
+
+                                <Text fontWeight="bold" w={{ base: 16, lg: 20 }}>
+                                    Name:
+                                </Text>
+
+                                <Text
+                                    fontWeight='semibold'
+                                    fontSize={{ base: 14, lg: 16 }}>
+                                    {tenant.tenantName || <TenantDetailSketelton />}
+                                </Text>
+
+                            </Flex>
+                            <Flex alignItems='center' gap={4}>
 
                                 <FaPhoneAlt size='1em' />
 
-                                <Text fontWeight="bold">
+                                <Text fontWeight="bold" w={{ base: 16, lg: 20 }}>
                                     Phone:
                                 </Text>
                                 <Text>
-                                    {tenant?.phone ? `0${tenant.phone}` : 'N/A'}
+                                    {tenant?.phone
+                                        ? `0${tenant.phone}`
+                                        : <TenantDetailSketelton />}
                                 </Text>
                             </Flex>
 
-                            <Flex alignItems='center' gap={5}>
+                            <Flex alignItems='center' gap={4}>
                                 <FaUser size='1em' />
-                                <Text fontWeight="bold">
+                                <Text fontWeight="bold" w={{ base: 16, lg: 20 }}>
                                     Members:
                                 </Text>
-                                <Text>{tenant?.members || 0}</Text>
+                                <Text>{tenant?.members || <TenantDetailSketelton />}</Text>
                             </Flex>
 
-                            <Flex alignItems='center' gap={5}>
+                            <Flex alignItems='center' gap={4}>
                                 <FaIdCard size='1em' />
-                                <Text fontWeight="bold">
+                                <Text fontWeight="bold" w={{ base: 16, lg: 20 }}>
                                     ID Card:
                                 </Text>
                                 <Text>{tenant.idNumber
                                     ? `${String(tenant.idNumber).slice(0, 5)}-${String(tenant.idNumber).slice(5, 12)}-${String(tenant.idNumber).slice(12)}`
-                                    : 'N/A'}
+                                    : <TenantDetailSketelton />}
                                 </Text>
                             </Flex>
 
-                            <Flex alignItems='center' gap={5}>
+                            <Flex alignItems='center' gap={4}>
                                 <BsCreditCardFill size='1em' />
-                                <Text fontWeight="bold">
+                                <Text fontWeight="bold" w={{ base: 16, lg: 20 }}>
                                     Rent:
                                 </Text>
-                                <Flex gap={2}>
-                                    <Text fontWeight='semibold' opacity='50%'>Rs.</Text>
-                                    <Text>{tenant.rentDecided || 0}</Text>
-                                </Flex>
+                                {tenant.rentDecided
+                                    ? <Flex gap={2}>
+                                        <Text fontWeight='semibold' opacity='50%'>Rs.</Text>
+                                        <Text>{tenant.rentDecided || 0}</Text>
+                                    </Flex>
+                                    : <TenantDetailSketelton />}
                             </Flex>
 
-                            <Flex alignItems='center' gap={5}>
+                            <Flex alignItems='center' gap={4}>
                                 <FaCalendarAlt size='1em' />
-                                <Text fontWeight="bold">
+                                <Text fontWeight="bold" w={{ base: 16, lg: 20 }}>
                                     Date:
                                 </Text>
                                 <Text>
                                     {tenant?.date
                                         ? new Date(tenant.date).toLocaleDateString()
-                                        : 'N/A'}
+                                        : <TenantDetailSketelton />}
                                 </Text>
                             </Flex>
 
-                            <Flex gap={5} alignItems='center'>
-                                <Flex gap={5} alignItems='center'>
+                            <Flex
+                                gap={5}
+                                alignItems='center'>
+                                <Flex
+                                    gap={4}
+                                    alignItems='center'>
                                     <FaHome size='1em' />
-                                    <Text fontWeight="bold">
+                                    <Text
+                                        fontWeight="bold"
+                                        w={{ base: 16, lg: 20 }}>
                                         Address:
                                     </Text>
                                 </Flex>
-                                <Text>{tenant.address || 'N/A'}
+                                <Text
+                                    ml={-1}
+                                    w={{ base: '50%', sm: '70%', md: '80%', lg: '61%' }}>
+                                    {tenant.address || <TenantDetailSketelton />}
                                 </Text>
                             </Flex>
 
@@ -177,7 +194,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                 position='relative'
                                 objectPosition='center center'
                                 border={isLoading ? '' : '2px solid'}
-                                borderColor={useColorModeValue('#f2f3f6', 'white')}>
+                                borderColor={useColorModeValue('#f2f3f6', 'gray.600')}>
                                 {
                                     isLoading
                                         ? <Spinner color='blue.500' size='sm' />
