@@ -1,5 +1,6 @@
 import {
     Button,
+    Flex,
     FormControl,
     FormLabel,
     Input,
@@ -13,11 +14,12 @@ import {
     ModalHeader,
     ModalOverlay,
     SimpleGrid,
+    Spinner,
     Text,
     Textarea,
 } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { FaPhoneAlt, FaUser } from "react-icons/fa";
@@ -35,7 +37,7 @@ const tenantSchema = z.object({
     AnotherPhone: z.string().length(11, { message: "Phone number must be 11 characters" }),
     members: z.string().refine((val) => !isNaN(Number(val)), {
         message: "Members must be a number",
-    }),
+    }).optional(),
     address: z.string().min(10, { message: "Address must be at least 10 characters" }),
     rentDecided: z.string().refine((val) => !isNaN(Number(val)), {
         message: "Rent must be a number",
@@ -58,61 +60,87 @@ interface Props {
 }
 
 const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Props) => {
-    const { uploadImage, isLoading, setIsLoading, ImageURL } = useUploadImage();
     const id = tenantId || "";
     const { mutate } = useUpdateTenant();
-    const [loading, setLoading] = useState(false)
+    const { uploadImage } = useUploadImage();
+    const [loading, setLoading] = useState(false);
+    const [imageUploading, setImageUploading] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    console.log(tenant);
+
+    useEffect(() => {
+
+    }, [tenant, tenantId])
+
 
     const {
         register,
         setValue,
         handleSubmit,
         formState: { errors },
+        reset
     } = useForm<tenantData>({
         resolver: zodResolver(tenantSchema),
         defaultValues: {
-            members: tenant?.members.toString() || '1',
-            rentDecided: tenant?.rentDecided.toString() || '1000',
-            date: tenant?.date || new Date().toISOString().split("T")[0],
-            isActive: tenant?.isActive || false,
-            IdFileLink: tenant?.IdFileLink || "",
-            idNumber: tenant?.idNumber || "",
-            tenantName: tenant?.tenantName || "",
-            phone: `0${tenant?.phone.toString()}` || "",
-            AnotherPhone: `0${tenant?.AnotherPhone.toString()}` || "",
-            address: tenant?.address || "",
-        },
+            tenantName: "",
+            phone: "",
+            AnotherPhone: "",
+            members: "",
+            address: "",
+            rentDecided: "",
+            idNumber: "",
+            IdFileLink: "",
+            date: "",
+            isActive: false
+        }
     });
 
-
-    const handleFileInput = async (e: ChangeEvent<HTMLInputElement>) => {
+    const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-
         if (file) {
-            setIsLoading(true);
-
-            try {
-                await uploadImage(file);
-                if (ImageURL) {
-                    console.log(ImageURL);
-                    setValue("IdFileLink", ImageURL);
-                    setIsLoading(false);
-                }
-            } catch (error) {
-                toast.error("Not uploaded!");
-                setIsLoading(false);
-                console.log(error);
-            }
+            setSelectedFile(file);
         }
     };
 
     const onSubmit = async (data: tenantData) => {
-        if (!ImageURL) {
-            toast.error("Not uploaded!");
-            return;
-        }
+        // When tenant prop changes, reset the form with the new tenant data
+        useEffect(() => {
+            if (tenant) {
+                reset({
+                    tenantName: tenant.tenantName || "",
+                    phone: tenant.phone ? String(tenant.phone) : "",
+                    AnotherPhone: tenant.AnotherPhone ? String(tenant.AnotherPhone) : "",
+                    members: tenant.members ? String(tenant.members) : "",
+                    address: tenant.address || "",
+                    rentDecided: tenant.rentDecided || "",
+                    idNumber: tenant.idNumber || "",
+                    IdFileLink: tenant.IdFileLink || "",
+                    date: tenant.date || "",
+                    isActive: tenant.isActive || false,
+                });
+            }
+        }, [tenant, reset]); // Reset the form every time tenant data is updated
+
 
         try {
+            let imageUrl = data.IdFileLink; // Default to existing URL if no new file
+
+            if (selectedFile) {
+                setImageUploading(true); // Set loading for image upload
+                try {
+                    imageUrl = await uploadImage(selectedFile);
+                    setValue("IdFileLink", imageUrl); // Set image URL in form data
+                } catch (error) {
+                    console.error("Error uploading image:", error);
+                    toast.error("Error uploading image!");
+                    return;
+                } finally {
+                    setImageUploading(false); // Stop image loading state
+                }
+            }
+
+            // Prepare updated tenant data
             const updatedData: Tenant = {
                 _id: id,
                 tenantName: data.tenantName,
@@ -120,36 +148,39 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                 AnotherPhone: Number(data.AnotherPhone),
                 members: Number(data.members),
                 address: data.address,
-                rentDecided: data.rentDecided,
-                date: tenant?.date
-                    ? new Date(tenant?.date).toLocaleDateString()
-                    : new Date().toISOString().split("T")[0],
+                rentDecided: data.rentDecided || '', // Convert rentDecided to number
+                date: new Date(data.date).toISOString() || "", // Convert to ISO string
                 idNumber: data.idNumber,
-                IdFileLink: data.IdFileLink || ImageURL,
+                IdFileLink: imageUrl || "",
                 isActive: data.isActive || false,
-                QrCode: "",
+                QrCode: tenant?.QrCode || '',
             };
 
             if (id) {
-                setLoading(true)
-                mutate({
-                    id: id,
-                    updatedData: updatedData,
-                }, {
-                    onSuccess: () => {
-                        toast.success("Tenant updated successfully");
-                        onCloseUpdater();
-                        setLoading(false)
-                    },
-                    onError: () => {
-                        toast.error("Not Updated yet!");
-                        setLoading(false)
+                setLoading(true); // Set loading for form submission
+
+                mutate(
+                    { id: id, updatedData: updatedData },
+                    {
+                        onSuccess: () => {
+                            toast.success("Tenant updated successfully");
+                            reset();
+                            onCloseUpdater();
+                            setLoading(false);
+                        },
+                        onError: () => {
+                            toast.error("Not Updated yet!");
+                            setLoading(false);
+                        },
                     }
-                });
+                );
             }
         } catch (error) {
             console.log(error);
             toast.error("Not Updated yet!");
+        } finally {
+            setLoading(false);
+            reset();
         }
     };
 
@@ -161,21 +192,18 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                 onClose={onCloseUpdater}
                 blockScrollOnMount={false}
                 motionPreset='slideInBottom'>
-
                 <ModalOverlay />
                 <ModalContent
                     mx="auto"
-                    // fontSize={{ base: 12, md: 14 }}
                     ml={{ base: 6, sm: 9, md: 'auto' }}
                     maxW={{ base: "90%", md: "500px" }} w="95%">
-                    <ModalHeader>Update Tenant</ModalHeader>
+                    <ModalHeader>Updating Tenant: </ModalHeader>
                     <ModalCloseButton />
 
                     <ModalBody pb={6}>
                         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
                             <FormControl>
-                                <FormLabel
-                                    fontSize={{ base: 14, md: 16 }}>Tenant Name</FormLabel>
+                                <FormLabel fontSize={{ base: 14, md: 16 }}>Tenant Name</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <FaUser />
@@ -189,8 +217,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel
-                                    fontSize={{ base: 14, md: 16 }}>Phone</FormLabel>
+                                <FormLabel fontSize={{ base: 14, md: 16 }}>Phone</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <FaPhoneAlt />
@@ -204,8 +231,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel
-                                    fontSize={{ base: 14, md: 16 }}>Another Phone</FormLabel>
+                                <FormLabel fontSize={{ base: 14, md: 16 }}>Another Phone</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <FaPhoneAlt />
@@ -220,8 +246,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel
-                                    fontSize={{ base: 14, md: 16 }}>Members</FormLabel>
+                                <FormLabel fontSize={{ base: 14, md: 16 }}>Members</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <BsFillPeopleFill />
@@ -235,8 +260,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel
-                                    fontSize={{ base: 14, md: 16 }}>Rent Decided</FormLabel>
+                                <FormLabel fontSize={{ base: 14, md: 16 }}>Rent Decided</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>Rs.</InputLeftElement>
                                     <Input {...register("rentDecided")}
@@ -248,8 +272,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel
-                                    fontSize={{ base: 14, md: 16 }}>Shifting Date</FormLabel>
+                                <FormLabel fontSize={{ base: 14, md: 16 }}>Shifting Date</FormLabel>
                                 <Input {...register("date")}
                                     focusBorderColor="#e05757"
                                     fontSize={{ base: 14, md: 16 }}
@@ -258,8 +281,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel
-                                    fontSize={{ base: 14, md: 16 }}>ID Number</FormLabel>
+                                <FormLabel fontSize={{ base: 14, md: 16 }}>ID Number</FormLabel>
                                 <InputGroup>
                                     <InputLeftElement>
                                         <RiIdCardFill />
@@ -273,20 +295,17 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                             </FormControl>
 
                             <FormControl>
-                                <FormLabel
-                                    fontSize={{ base: 14, md: 16 }}>ID File</FormLabel>
+                                <FormLabel fontSize={{ base: 14, md: 16 }}>ID File</FormLabel>
                                 <Input
                                     type="file"
                                     className="FileInputStyling"
                                     fontSize={{ base: 14, md: 16 }}
                                     variant='filled' onChange={handleFileInput} />
-                                {isLoading && <Text>Uploading Image...</Text>}
                             </FormControl>
                         </SimpleGrid>
 
                         <FormControl mt={4}>
-                            <FormLabel
-                                fontSize={{ base: 14, md: 16 }}>Address</FormLabel>
+                            <FormLabel fontSize={{ base: 14, md: 16 }}>Address</FormLabel>
                             <InputGroup>
                                 <InputLeftElement>
                                     <FaLocationDot />
@@ -314,7 +333,17 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                             disabled={loading}
                             _hover={{ bg: "#FF6B6B" }}
                             onClick={handleSubmit(onSubmit)}>
-                            {loading ? "Updating..." : "Update"}
+                            {loading || imageUploading
+                                ? imageUploading
+                                    ? <Flex alignItems='center'>
+                                        <Spinner size='sm' />
+                                        <Text ml={2}>Uploading Image</Text>
+                                    </Flex>
+                                    : <Flex alignItems='center'>
+                                        <Spinner size='sm' />
+                                        <Text ml={2}>Uploading Data</Text>
+                                    </Flex>
+                                : "Update"}
                         </Button>
                         <Button onClick={onCloseUpdater}>Cancel</Button>
                     </ModalFooter>

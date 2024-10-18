@@ -1,7 +1,7 @@
 import z from "zod";
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Grid, Heading, Input, InputGroup, InputLeftElement, Text, Textarea, useColorModeValue } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent } from "react";
 import { useForm } from "react-hook-form";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { FaPhoneAlt, FaUser } from "react-icons/fa";
@@ -42,12 +42,11 @@ const RegisterTenant = () => {
     const navigate = useNavigate();
 
     // To Upload data
-    const { uploadData } = useAddTenant();
+    const { mutate } = useAddTenant();
 
     // To Upload Image
-    const { uploadImage, ImageURL, setIsLoading, isLoading } = useUploadImage()
+    const { uploadImage, setIsLoading, isLoading } = useUploadImage()
 
-    const [imageURL, setImageURL] = useState<string>('');
 
     document.title = "Add Tenant";
 
@@ -69,32 +68,27 @@ const RegisterTenant = () => {
             setIsLoading(true);
 
             try {
-                await uploadImage(fileInput);
+                // Call the uploadImage function
+                const ImageUrl = await uploadImage(fileInput);
 
-                const Url = ImageURL
-                console.log(ImageURL);
-
-                if (Url) {
-                    setValue('IdFileLink', ImageURL);
-                    setImageURL(Url)
+                // Use the ImageURL state directly from the hook after it's updated
+                if (ImageUrl) {
+                    setValue('IdFileLink', ImageUrl);
+                    console.log(ImageUrl);
                     setIsLoading(false);
                 }
 
             } catch (error) {
-                console.log(error);
+                console.error('Error uploading image:', error);
+            } finally {
                 setIsLoading(false);
             }
-
-
         }
     };
 
+
     // Form submission
     const onSubmit = async (data: tenantData) => {
-        if (!imageURL) {
-            toast.error('Please upload an ID file');
-            return;
-        }
 
         try {
             const tenantDataForSubmission: Tenant = {
@@ -107,23 +101,32 @@ const RegisterTenant = () => {
                 rentDecided: data.rentDecided,
                 date: data.date,
                 idNumber: data.idNumber,
-                IdFileLink: data.IdFileLink || imageURL,
+                IdFileLink: data.IdFileLink || '',
                 isActive: data.isActive || false,
                 QrCode: '',
             };
 
-            await uploadData(tenantDataForSubmission);
-            toast.success('Tenant added successfully!');
-            navigate('/tenants');
+            mutate(tenantDataForSubmission, {
+                onSuccess: () => {
+                    toast.success('Tenant added successfully!');
+                    navigate('/tenants');
+                },
+
+                onError: () => {
+                    toast.error('Tenant not added yet!')
+                }
+
+            });
 
         } catch (error) {
-            toast.error('Error adding tenant. Please try again later.');
             console.error('Error adding tenant:', error);
         }
     };
-    return (
 
+
+    return (
         <Box
+            mt={14}
             mx="auto"
             px={{ base: "3", md: "8", lg: "12" }}
             py={{ base: "6", md: "8", lg: "12" }}

@@ -2,7 +2,7 @@ import axios from "axios";
 import { Tenant } from "./useAllTenants";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiClientOK } from "../services/apiClient";
-import { CACHE_KEY_TENANTS } from "./constants";
+import { CACHE_KEY_TENANT, CACHE_KEY_TENANTS } from "./constants";
 
 interface updateTenantQuery {
     id: string | '';
@@ -19,7 +19,7 @@ const useUpdateTenant = () => {
 
             return axios
                 .patch<Tenant>(
-                    
+
                     // This is URL
                     `${apiClientOK}/api/update-tenant/${id}`,
 
@@ -40,6 +40,9 @@ const useUpdateTenant = () => {
         },
 
         onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [CACHE_KEY_TENANT]
+            })
             queryClient.invalidateQueries({
                 queryKey: [CACHE_KEY_TENANTS]
             })

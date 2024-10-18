@@ -23,6 +23,12 @@ a:focus{
   color: white;
 }
 
+.toast-styling{
+  color: #FF6B6B;
+}
+
+
+
 .table-container::-webkit-scrollbar {
   width: 5px; /* Width of the scrollbar */
 }

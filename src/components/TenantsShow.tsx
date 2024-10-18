@@ -2,7 +2,7 @@ import { Card, Flex, useColorModeValue, Text, Box, useDisclosure } from "@chakra
 import { Tenant } from "../hooks/useAllTenants";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import TenantShowModal from "./TenantShowModal";
 import TenantDeleteBox from "./TenantDeleteBox";
@@ -14,7 +14,17 @@ interface Props {
 
 const TenantsShow = ({ tenants }: Props) => {
 
+
+    useEffect(() => {
+
+    }, [tenants])
+
+
     const [activeTenantId, setActiveTenantId] = useState<string | null>(null);
+    const [activeTenantIdForUpdate, setActiveTenantIdForUpdate] = useState<string | null>(null);
+
+    const [activeTenant, setActiveTenant] = useState<Tenant | null>(null);
+
     const {
         isOpen: isOpenUdater,
         onOpen: onOpenUdater,
@@ -23,6 +33,9 @@ const TenantsShow = ({ tenants }: Props) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure(); // Manage modal state
     const [activeTenantName, setActiveTenantName] = useState<string | null>(null)
+
+   
+    if(tenants.length === 0) return <Text textAlign="center">No tenants found!</Text>
 
     return (
         <>
@@ -60,7 +73,7 @@ const TenantsShow = ({ tenants }: Props) => {
                             gap={2}
                             alignItems="center"
                             w={{ base: '', sm: "100px", md: '100px', lg: "70px", xl: '120px' }}
-                            >
+                        >
 
                             <FaUser size="14" />
                             <Text fontWeight="semibold"
@@ -91,7 +104,8 @@ const TenantsShow = ({ tenants }: Props) => {
                             <Box
                                 cursor="pointer"
                                 onClick={() => {
-                                    setActiveTenantId(tenant._id)
+                                    setActiveTenantIdForUpdate(tenant._id)
+                                    setActiveTenant(tenant)
                                     onOpenUdater();
                                 }}
                                 className="rounded-full flex justify-center items-center">
@@ -99,14 +113,17 @@ const TenantsShow = ({ tenants }: Props) => {
                             </Box>
 
                             <UpdateTenantBox
-                                tenant={tenant}
-                                tenantId={tenant._id}
+                                tenant={activeTenant}
+                                tenantId={
+                                    activeTenantIdForUpdate === tenant._id
+                                        ? tenant._id
+                                        : ""
+                                }
                                 isOpenUdater={isOpenUdater}
                                 onCloseUpdater={() => {
-                                    setActiveTenantId(null);
+                                    setActiveTenantIdForUpdate(null);
                                     onCloseUpdater();
                                 }} />
-
 
                             <Box
                                 mr={-1}

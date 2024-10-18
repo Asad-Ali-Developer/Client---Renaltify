@@ -14,18 +14,19 @@ const useTenantStatusUpdater = () => {
 
     return useMutation<Error, string, updateTenantQuery>({
 
-        mutationFn: (query: updateTenantQuery) => axios
-            .patch(`${apiClientOK}/api/update-tenant/${query._id}`,
-                { isActive: query.newStatus },
-                {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
-                        'Content-Type': 'application/json'
-                    },
-                    withCredentials: true
-                }
-            )
-            .then(res => res.data),
+        mutationFn: (query: updateTenantQuery) =>
+            axios
+                .patch(`${apiClientOK}/api/update-tenant/${query._id}`,
+                    { isActive: query.newStatus },
+                    {
+                        headers: {
+                            'Authorization': `Bearer ${localStorage.getItem('serverToken')}`,
+                            'Content-Type': 'application/json'
+                        },
+                        withCredentials: true
+                    }
+                )
+                .then(res => res.data),
 
         onSuccess: () => {
             queryClient.invalidateQueries({

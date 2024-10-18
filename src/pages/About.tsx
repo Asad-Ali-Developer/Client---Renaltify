@@ -25,7 +25,7 @@ export default function About() {
   const { isLoggedIn } = useAuth()
 
   return (
-    <Box maxW="container.md" mx="auto" px={4} py={8} mt={14 }>
+    <Box maxW="container.md" mx="auto" px={4} py={8} mt={14}>
       {/* Main Title */}
       <Heading as="h1" size="lg" mb={6} textAlign="center">
         About Rentalify
