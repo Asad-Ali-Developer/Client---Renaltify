@@ -3,12 +3,12 @@ import {
   Button,
   Input,
   Heading,
-  useColorModeValue,
   HStack,
   InputGroup,
   InputLeftElement,
   Flex,
   Text,
+  Card,
 } from "@chakra-ui/react";
 import { z } from "zod";
 import { toast } from "react-toastify";
@@ -136,14 +136,13 @@ const Register = () => {
 
   return (
     <Box
-      bg='gray.900'
+      mt={14}
       display="flex"
       alignItems="center"
       justifyContent="center"
-      minH={{ base: "90vh", lg: "92vh" }}
-      bgImage='https://plus.unsplash.com/premium_photo-1664302091622-32248181a4b6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'>
+      minH={{ base: "90vh", lg: "92vh" }}>
 
-      <Box
+      <Card
         w="full"
         maxW="md"
         shadow="lg"
@@ -151,7 +150,7 @@ const Register = () => {
         backdropBlur={40}
         p={{ base: 6, sm: 8 }}
         mx={{ base: 2, lg: 4 }}
-        bg={useColorModeValue("white", "gray.800")}>
+        fontSize={{ base: 14, md: 16 }}>
 
         <Box textAlign="center" mb={6}>
           <Heading size="lg" fontWeight="bold">
@@ -180,7 +179,8 @@ const Register = () => {
                   placeholder="John Doe"
                   value={user.username}
                   onChange={handleInput}
-                  focusBorderColor="telegram.500"
+                  focusBorderColor="#e05757"
+                  fontSize={{ base: 14, md: 16 }}
                 />
               </InputGroup>
               <Text color="red">{errors.username?.message}</Text>
@@ -201,8 +201,9 @@ const Register = () => {
                   variant='filled'
                   value={user.email}
                   onChange={handleInput}
+                  focusBorderColor="#e05757"
                   placeholder="m@example.com"
-                  focusBorderColor="telegram.500"
+                  fontSize={{ base: 14, md: 16 }}
                 />
               </InputGroup>
               <Text color='red'>{errors.email?.message}</Text>
@@ -225,7 +226,8 @@ const Register = () => {
                 value={user.phone}
                 placeholder="phone"
                 onChange={handleInput}
-                focusBorderColor="telegram.500"
+                focusBorderColor="#e05757"
+                fontSize={{ base: 14, md: 16 }}
               />
             </InputGroup>
             <Text color='red'>{errors.phone?.message}</Text>
@@ -246,13 +248,14 @@ const Register = () => {
                 value={user.password}
                 onChange={handleInput}
                 placeholder="Password"
-                focusBorderColor="telegram.500"
+                focusBorderColor="#e05757"
+                fontSize={{ base: 14, md: 16 }}
               />
             </InputGroup>
             <Text color='red'>{errors.password?.message}</Text>
           </Box>
 
-          <Box mb={4}>
+          <Box my={4}>
             <Flex alignItems='center' gap={1}>
               <Text fontSize={{ base: 'sm', md: 'md' }}> ID File </Text>
               <PiUploadSimpleBold />
@@ -263,7 +266,9 @@ const Register = () => {
               id="IdCardFile"
               variant='filled'
               onChange={handleFileInput}
+              focusBorderColor="#e05757"
               className="FileInputStyling"
+              fontSize={{ base: 14, md: 16 }}
             />
             <Text color="red.500">{errors.IdFileLink?.message}</Text>
           </Box>
@@ -275,8 +280,10 @@ const Register = () => {
             mt={6}
             w="full"
             size="lg"
-            type="submit"
-            colorScheme="telegram">
+            bg="#e05757"
+            color="white"
+            type="button"
+            _hover={{ bg: "#FF6B6B" }}>
             Register
           </Button>
         </form>
@@ -293,7 +300,7 @@ const Register = () => {
             Already have an account?{" "}
           </Text>
 
-          <Text color="telegram.400" fontWeight="medium">
+          <Text color="#FF6B6B" fontWeight="medium">
             <NavLink to='/login'>
               Log in
             </NavLink>
@@ -301,7 +308,7 @@ const Register = () => {
 
         </HStack>
 
-      </Box>
+      </Card>
     </Box>
   );
 };

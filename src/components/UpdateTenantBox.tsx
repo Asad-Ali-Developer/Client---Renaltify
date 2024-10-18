@@ -181,6 +181,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                                         <FaUser />
                                     </InputLeftElement>
                                     <Input {...register("tenantName")}
+                                        focusBorderColor="#e05757"
                                         fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Enter tenant name" />
                                 </InputGroup>
@@ -195,6 +196,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                                         <FaPhoneAlt />
                                     </InputLeftElement>
                                     <Input {...register("phone")}
+                                        focusBorderColor="#e05757"
                                         fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Enter phone" />
                                 </InputGroup>
@@ -208,7 +210,9 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                                     <InputLeftElement>
                                         <FaPhoneAlt />
                                     </InputLeftElement>
-                                    <Input {...register("AnotherPhone")}
+                                    <Input
+                                        {...register("AnotherPhone")}
+                                        focusBorderColor="#e05757"
                                         fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Enter another phone" />
                                 </InputGroup>
@@ -223,6 +227,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                                         <BsFillPeopleFill />
                                     </InputLeftElement>
                                     <Input {...register("members")}
+                                        focusBorderColor="#e05757"
                                         fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Total members" />
                                 </InputGroup>
@@ -235,6 +240,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                                 <InputGroup>
                                     <InputLeftElement>Rs.</InputLeftElement>
                                     <Input {...register("rentDecided")}
+                                        focusBorderColor="#e05757"
                                         fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Rent amount" />
                                 </InputGroup>
@@ -245,6 +251,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                                 <FormLabel
                                     fontSize={{ base: 14, md: 16 }}>Shifting Date</FormLabel>
                                 <Input {...register("date")}
+                                    focusBorderColor="#e05757"
                                     fontSize={{ base: 14, md: 16 }}
                                     variant='filled' type="date" placeholder="Shifting Date" />
                                 <Text color="red.500">{errors.date?.message}</Text>
@@ -258,6 +265,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                                         <RiIdCardFill />
                                     </InputLeftElement>
                                     <Input {...register("idNumber")}
+                                        focusBorderColor="#e05757"
                                         fontSize={{ base: 14, md: 16 }}
                                         variant='filled' placeholder="Enter ID number" />
                                 </InputGroup>
@@ -284,10 +292,11 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                                     <FaLocationDot />
                                 </InputLeftElement>
                                 <Textarea
+                                    {...register("address")}
                                     px={8}
                                     resize='none'
                                     variant='filled'
-                                    {...register("address")}
+                                    focusBorderColor="#e05757"
                                     placeholder="Enter address"
                                     fontSize={{ base: 14, md: 16 }}
                                 />
@@ -299,11 +308,11 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
                     <ModalFooter>
                         <Button
                             mr={3}
-                            bg="#FF6B6B"
+                            bg="#e05757"
+                            type="submit"
                             color="white"
-                            colorScheme='red'
                             disabled={loading}
-                            _hover={{ bg: "#FF8E8E" }}
+                            _hover={{ bg: "#FF6B6B" }}
                             onClick={handleSubmit(onSubmit)}>
                             {loading ? "Updating..." : "Update"}
                         </Button>

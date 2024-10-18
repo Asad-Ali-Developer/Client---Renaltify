@@ -16,6 +16,7 @@ export default function ModernLanding() {
 
   return (
     <Box
+    mt={10}
       minH="100vh"
       bg={colorMode === 'dark' ? "#1A1A1A" : "white"}
       color={colorMode === 'dark' ? "white" : "black"}>
@@ -44,10 +45,10 @@ export default function ModernLanding() {
                   <Link to='/register'>
                     <Button
                       size="md"
-                      bg="#FF6B6B"
-                      colorScheme='red'
-                      _hover={{ bg: "#FF8E8E" }}
+                      bg="#e05757"
                       color="white"
+                      type="button"
+                      _hover={{ bg: "#FF6B6B" }}
                       zIndex="1">
                       Register
                     </Button>
@@ -58,10 +59,10 @@ export default function ModernLanding() {
                   <Link to='/tenants/add_tenant'>
                     <Button
                       size="md"
-                      bg="#FF6B6B"
-                      colorScheme='red'
-                      _hover={{ bg: "#FF8E8E" }}
+                      bg="#e05757"
                       color="white"
+                      type="button"
+                      _hover={{ bg: "#FF6B6B" }}
                       zIndex="1">
                       Add Tenant
                     </Button>
@@ -69,10 +70,10 @@ export default function ModernLanding() {
                 }
                 <Button
                   size="md"
+                  color="#e05757"
                   variant="outline"
-                  borderColor="#FF6B6B"
-                  color="#FF6B6B"
-                  _hover={{ bg: "#FF6B6B", color: "white" }}
+                  borderColor="#e05757"
+                  _hover={{ bg: "#e05757", color: "white" }}
                   zIndex="1" // Added zIndex to ensure visibility
                 >
                   Learn More
@@ -157,11 +158,16 @@ export default function ModernLanding() {
               <HStack spacing={4}>
                 <Input
                   variant='filled'
+                  focusBorderColor="#e05757"
                   placeholder="Enter your email"
                   bg={colorMode === 'dark' ? "#2A2A2A" : "white"}
                   borderColor={colorMode === 'dark' ? "#3A3A3A" : "gray.300"}
                   color={colorMode === 'dark' ? "white" : "black"} />
-                <Button bg="#FF6B6B" _hover={{ bg: "#FF8E8E" }} color="white">
+                <Button
+                   bg="#e05757"
+                   color="white"
+                   type="button"
+                   _hover={{ bg: "#FF6B6B" }}>
                   Subscribe
                 </Button>
               </HStack>
@@ -172,12 +178,20 @@ export default function ModernLanding() {
       </Box>
 
       <Box as="footer" py={8} bg={colorMode === 'dark' ? "#222222" : "#F9F9F9"}>
-        <Container maxW="container.xl" display="flex" justifyContent="space-between" alignItems="center">
-          <Flex alignItems="center">
-            <Icon as={FaBuilding} h={6} w={6} color="#FF6B6B" />
-            <Text fontSize="xl" fontWeight="bold" ml={2}>Rentalify</Text>
+        <Container maxW="container.xl" display="flex"
+          gap={8}
+          justifyContent="center" alignItems="center">
+
+          <Flex alignItems='center' gap={2} fontWeight='normal'>
+            <Text as={'span'}>
+              &copy;
+            </Text>
+            <Text fontSize="md" fontWeight="semibold">
+              Rentalify
+            </Text>
           </Flex>
-          <HStack spacing={4}>
+
+          <HStack spacing={2} fontSize={{ base: 10, md: 14 }}>
             {["Privacy Policy", "Terms of Service", "Contact Us", "FAQ"].map((item) => (
               <Text key={item} color={colorMode === 'dark' ? "gray.400" : "gray.600"} _hover={{ color: "#FF6B6B" }}>{item}</Text>
             ))}

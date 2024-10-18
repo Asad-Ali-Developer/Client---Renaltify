@@ -28,7 +28,7 @@ const Tenants = () => {
 
 
   return (
-    <Flex direction="column" pt={5} zIndex={-1} bg={useColorModeValue('#f2f3f6', '')}>
+    <Flex direction="column" pt={5} mt={14} zIndex={-1} bg={useColorModeValue('#f2f3f6', '')}>
 
       <Box mx={{ base: 0, sm: 2, md: 8, lg: 10, xl: 52 }} p={4} flex="1">
         <Card

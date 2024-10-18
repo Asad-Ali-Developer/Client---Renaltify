@@ -4,10 +4,10 @@ import {
   Input,
   Text,
   Heading,
-  useColorModeValue,
   HStack,
   InputGroup,
   InputLeftElement,
+  Card,
 } from "@chakra-ui/react";
 
 import { z } from "zod";
@@ -98,23 +98,15 @@ const Login = () => {
   }
 
 
-  const LoginWithGoogle = async () => {
-    window.open(`http://localhost:4000/api/auth/google/callback`, "_self")
-  }
-
-
-
-
   return (
     <Box
-      bg='gray.900'
+      mt={14}
       display="flex"
       alignItems="center"
       justifyContent="center"
-      minH={{ base: "90vh", lg: "92vh" }}
-      bgImage='https://plus.unsplash.com/premium_photo-1664302091622-32248181a4b6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'>
+      minH={{ base: "90vh", lg: "92vh" }}>
 
-      <Box
+      <Card
         w="full"
         maxW="md"
         shadow="lg"
@@ -122,7 +114,7 @@ const Login = () => {
         backdropBlur={40}
         p={{ base: 6, sm: 8 }}
         mx={{ base: 2, lg: 4 }}
-        bg={useColorModeValue("white", "gray.800")}>
+        fontSize={{ base: 14, md: 16 }}>
 
         <Box textAlign="center" mb={6}>
           <Heading size="lg" fontWeight="bold">
@@ -139,7 +131,9 @@ const Login = () => {
 
             {/* This field is for email */}
             <Box>
-              <label htmlFor="email">Email</label>
+              <label
+                htmlFor="email">
+                Email</label>
               <InputGroup>
                 <InputLeftElement>
                   <MdEmail color='gray.300' />
@@ -149,10 +143,12 @@ const Login = () => {
                   id="email"
                   type="email"
                   variant='filled'
+                  colorScheme="red"
                   value={user.email}
                   onChange={handleInput}
                   placeholder="m@example.com"
-                  focusBorderColor="telegram.500"
+                  focusBorderColor="#e05757"
+                  fontSize={{ base: 14, md: 16 }}
                 />
               </InputGroup>
               <Text color='red'>{errors.email?.message}</Text>
@@ -174,7 +170,8 @@ const Login = () => {
                 value={user.password}
                 onChange={handleInput}
                 placeholder="Password"
-                focusBorderColor="telegram.500"
+                focusBorderColor="#e05757"
+                fontSize={{ base: 14, md: 16 }}
               />
             </InputGroup>
             <Text color='red'>{errors.password?.message}</Text>
@@ -186,20 +183,13 @@ const Login = () => {
             w="full"
             size="lg"
             type="submit"
-            colorScheme="telegram">
+            bg="#FF6B6B"
+            colorScheme='red'
+            _hover={{ bg: "#FF8E8E" }}
+            color="white">
             Login
           </Button>
         </form>
-        <Button
-          mt={6}
-          w="full"
-          size="lg"
-          type="submit"
-          variant='outline'
-          colorScheme="telegram"
-          onClick={() => LoginWithGoogle()}>
-          Login with Google
-        </Button>
 
 
         <HStack
@@ -213,7 +203,7 @@ const Login = () => {
             Or register for a new account?{" "}
           </Text>
 
-          <Text color="telegram.400" fontWeight="medium">
+          <Text color="#FF6B6B" fontWeight="medium">
             <NavLink to='/register'>
               Register
             </NavLink>
@@ -221,7 +211,7 @@ const Login = () => {
 
         </HStack>
 
-      </Box>
+      </Card>
     </Box>
   );
 };

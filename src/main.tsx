@@ -1,10 +1,10 @@
 import './index.css'
 import App from './App.tsx'
+import theme from './theme.ts'
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
-import theme from './theme.ts'
 import { ToastContainer } from 'react-toastify';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import 'react-toastify/dist/ReactToastify.css';

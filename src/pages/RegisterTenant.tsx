@@ -168,6 +168,7 @@ const RegisterTenant = () => {
                                         <Input
                                             {...register("tenantName")}
                                             variant='filled'
+                                            focusBorderColor="#e05757"
                                             placeholder="Enter tenant name"
                                         />
                                     </InputGroup>
@@ -185,6 +186,7 @@ const RegisterTenant = () => {
                                             type="tel"
                                             variant='filled'
                                             placeholder="Enter phone"
+                                            focusBorderColor="#e05757"
                                         />
                                     </InputGroup>
                                     <Text color="red.500">{errors.phone?.message}</Text>
@@ -199,6 +201,7 @@ const RegisterTenant = () => {
                                             {...register('AnotherPhone')}
                                             type="tel"
                                             variant='filled'
+                                            focusBorderColor="#e05757"
                                             placeholder="Enter another phone"
                                         />
                                     </InputGroup>
@@ -213,8 +216,9 @@ const RegisterTenant = () => {
                                         </InputLeftElement>
                                         <Textarea
                                             {...register('address')}
-                                            variant='filled'
                                             pl={10}
+                                            variant='filled'
+                                            focusBorderColor="#e05757"
                                             placeholder="Enter address"
                                             h={{ base: 'auto', lg: 32 }}
                                         />
@@ -234,6 +238,7 @@ const RegisterTenant = () => {
                                             type="tel"
                                             {...register('members')}
                                             variant='filled'
+                                            focusBorderColor="#e05757"
                                             placeholder="Total members"
                                         />
                                     </InputGroup>
@@ -250,6 +255,7 @@ const RegisterTenant = () => {
                                             {...register('rentDecided')}
                                             type="number"
                                             variant='filled'
+                                            focusBorderColor="#e05757"
                                             placeholder="Rent decided"
                                         />
                                         <Text color="red.500" fontSize='sm'>{errors.rentDecided?.message}</Text>
@@ -262,6 +268,7 @@ const RegisterTenant = () => {
                                         {...register('date')}
                                         type="date"
                                         variant='filled'
+                                        focusBorderColor="#e05757"
                                         placeholder="Shifting Date"
                                     />
                                     <Text color="red.500" fontSize='sm'>{errors.date?.message}</Text>
@@ -276,6 +283,7 @@ const RegisterTenant = () => {
                                         <Input
                                             {...register('idNumber')}
                                             variant='filled'
+                                            focusBorderColor="#e05757"
                                             placeholder="Enter ID number"
                                         />
                                     </InputGroup>
@@ -309,9 +317,9 @@ const RegisterTenant = () => {
                     <CardFooter>
                         <Button
                             type="submit"
-                            bg="#FF6B6B"
-                            _hover={{ bg: "#FF8E8E" }}
+                            bg="#e05757"
                             color="white"
+                            _hover={{ bg: "#FF6B6B" }}
                             w={{ base: '100%', sm: 'auto' }}>
                             Add Tenant
                         </Button>

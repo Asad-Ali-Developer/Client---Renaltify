@@ -2,7 +2,6 @@ import {
   Box,
   Heading,
   Text,
-
   SimpleGrid,
   Avatar,
   AvatarBadge,
@@ -13,15 +12,20 @@ import {
   Icon,
 } from "@chakra-ui/react";
 import { MdHome, MdPeople, MdDescription, MdAttachMoney } from "react-icons/md";
+import { Link } from "react-router-dom";
+import { useAuth } from "../store/authToken";
 
 export default function About() {
   const teamMembers = [
     { name: "Najaf", role: "CEO & Co-founder" },
     { name: "Zain Ali", role: "CTO & Co-founder" },
+    { name: "Kashif Bilal", role: "CTO & Co-founder" },
   ];
 
+  const { isLoggedIn } = useAuth()
+
   return (
-    <Box maxW="container.md" mx="auto" px={4} py={8}>
+    <Box maxW="container.md" mx="auto" px={4} py={8} mt={14 }>
       {/* Main Title */}
       <Heading as="h1" size="lg" mb={6} textAlign="center">
         About Rentalify
@@ -45,7 +49,7 @@ export default function About() {
       </Card>
 
       {/* Core Features Section */}
-      <Heading as="h2" size="lg" mb={4}>
+      <Heading as="h2" size="lg" mb={4} ml={2}>
         Our Core Features
       </Heading>
 
@@ -104,7 +108,7 @@ export default function About() {
       </SimpleGrid>
 
       {/* Team Section */}
-      <Heading as="h2" size="lg" mb={4}>
+      <Heading as="h2" size="lg" mb={4} ml={2}>
         Our Team
       </Heading>
 
@@ -146,14 +150,19 @@ export default function About() {
 
       {/* Get Started Button */}
       <Box textAlign="center">
-        <Button
-          size="lg"
-          bg="#FF6B6B"
-          colorScheme='red'
-          _hover={{ bg: "#FF8E8E" }}
-          color="white">
-          Get Started with Rentalify
-        </Button>
+
+        {!isLoggedIn &&
+          <Link to='/register'>
+            <Button
+              size="lg"
+              bg="#e05757"
+              color="white"
+              type="button"
+              _hover={{ bg: "#FF6B6B" }}>
+              Get Started with Rentalify
+            </Button>
+          </Link>
+        }
       </Box>
     </Box>
   );

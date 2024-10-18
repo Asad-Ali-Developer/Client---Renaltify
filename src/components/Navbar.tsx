@@ -26,6 +26,9 @@ import {
     Image,
     VStack,
     useColorMode,
+    DrawerFooter,
+    DrawerHeader,
+    Icon,
 } from "@chakra-ui/react";
 import CustomSwitch from "./CustomSwitch";
 import { useAuth } from "../store/authToken";
@@ -36,14 +39,9 @@ import { FaBuilding } from "react-icons/fa";
 const Navbar = () => {
     const { isOpen, onOpen, onClose } = useDisclosure()
 
-    const navLinks = [
-        { id: 1, path: '/', Item: 'Home' },
-        { id: 2, path: '/tenants', Item: 'Tenants' },
-        { id: 3, path: '/about', Item: 'About' },
-    ];
+    const navigate = useNavigate();
 
     const { isLoggedIn, LogoutUser, authenticatedUser } = useAuth();
-    const navigate = useNavigate();
 
     const { colorMode } = useColorMode()
 
@@ -58,15 +56,16 @@ const Navbar = () => {
                 w='100%'
                 as="header"
                 zIndex="10"
-                pos="sticky"
+                pos="fixed"
                 display='flex'
                 borderRadius={0}
-                justifyContent='space-between'
-                px={{ base: 2, sm: 10, lg: 20 }}
                 backdropFilter="blur(10px)"
+                justifyContent='space-between'
+                px={{ base: 6, sm: 10, lg: 40 }}
                 bg={colorMode === 'dark'
                     ? "rgba(26, 26, 26, 0.8)"
-                    : "rgba(255, 255, 255, 0.8)"}>
+                    : "rgba(255, 255, 255, 0.8)"}
+            >
                 <HStack
                     h={14}
                     width='100%'
@@ -74,19 +73,22 @@ const Navbar = () => {
                     fontWeight='medium'
                     background='transparent'
                     justifyContent='space-between'
-                    px={{ base: 6, sm: 8, lg: 20 }}>
+                >
 
                     <Flex alignItems='center' gap={4}>
-                        <Show below='lg'>
-                            <Box onClick={onOpen}>
-                                <LuMenu size={20} />
-                            </Box>
-                        </Show>
+                        {isLoggedIn &&
+                            <Show below='lg'>
+                                <Box onClick={onOpen}>
+                                    <LuMenu size={20} />
+                                </Box>
+                            </Show>
+                        }
 
                         <Link to='/'>
                             <Flex alignItems='center' gap={1}>
                                 <FaBuilding size='1em' color="#FF6B6B" />
-                                <Text fontSize={{ base: 18, md: 20, lg:20 }} fontWeight='semibold'>
+                                <Text fontSize={{ base: 18, md: 20, lg: 20 }}
+                                    fontWeight='semibold'>
                                     Rentalify
                                 </Text>
                             </Flex>
@@ -104,96 +106,142 @@ const Navbar = () => {
                             gap={{ md: 2, lg: 5, xl: 10 }}>
 
                             <Show above="lg">
-                                {navLinks.map(item => (
-                                    <List
-                                        gap={10}
-                                        key={item.id}
-                                        display='flex'
-                                        fontSize={18} fontWeight='medium'>
-                                        <ListItem>
-                                            <NavLink to={item.path}>{item.Item}</NavLink>
+
+                                <List
+                                    gap={10}
+                                    fontSize={18}
+                                    display='flex'
+                                    alignItems='center'
+                                    fontWeight='medium'>
+                                    <ListItem
+                                        transition='ease-in-out'
+                                        transitionDuration='0.3s'
+                                        _hover={{ color: '#FF6B6B' }}>
+                                        <NavLink to='/'>
+                                            <Text>
+                                                Home
+                                            </Text>
+                                        </NavLink>
+                                    </ListItem>
+
+                                    {isLoggedIn &&
+                                        <ListItem
+                                            transitionDuration='0.3s'
+                                            _hover={{ color: '#FF6B6B' }}>
+                                            <NavLink to='/tenants'>
+                                                <Text>
+                                                    Tenants
+                                                </Text>
+                                            </NavLink>
                                         </ListItem>
-                                    </List>
-                                ))}
+                                    }
+
+                                    <ListItem
+                                        transitionDuration='0.3s'
+                                        _hover={{ color: '#FF6B6B' }}>
+                                        <NavLink to='/about'>
+                                            <Text>
+                                                About Us
+                                            </Text>
+                                        </NavLink>
+                                    </ListItem>
+
+                                    {!isLoggedIn &&
+                                        <Flex gap={5}>
+                                            <Button
+                                                type="button"
+                                                color="#e05757"
+                                                variant='outline'
+                                                borderColor="#e05757"
+                                                _hover={{ bg: "#e05757", color: "white" }}
+                                            >
+                                                <Link to='/login'>Login</Link>
+                                            </Button>
+
+                                            <Button
+                                                bg="#e05757"
+                                                color="white"
+                                                type="button"
+                                                _hover={{ bg: "#FF6B6B" }}
+                                            >
+                                                <Link to='/register'>Register</Link>
+                                            </Button>
+                                        </Flex>
+                                    }
+
+                                </List>
+
                             </Show>
 
                         </Box>
 
+                        {!isLoggedIn &&
+                            <Show below='lg'>
+                                <Box onClick={onOpen}>
+                                    <LuMenu size={20} />
+                                </Box>
+                            </Show>
+                        }
 
-                        <Menu>
+                        {isLoggedIn &&
 
-                            <MenuButton>
+                            <Menu>
 
-                                {!isLoggedIn &&
-                                    <Stack direction='row'>
-                                        <Avatar
-                                            size='sm'
-                                            src='https://bit.ly/broken-link' />
-                                    </Stack>
-                                }
+                                <MenuButton>
 
-                                {isLoggedIn &&
-                                    <WrapItem>
-                                        {authenticatedUser?.IdFileLink &&
-                                            <Image
-                                                w={8}
-                                                h={8}
-                                                objectFit='cover'
-                                                objectPosition='center'
-                                                border='2px solid'
-                                                borderRadius='50%'
-                                                borderColor='gray.500'
-                                                src={authenticatedUser?.IdFileLink} />
-                                        }
-
-                                        {!authenticatedUser?.IdFileLink &&
-                                            <Stack direction='row'>
-                                                <Avatar
-                                                    size='sm'
-                                                    src='https://bit.ly/broken-link' />
-                                            </Stack>
-                                        }
-                                    </WrapItem>
-                                }
-
-                            </MenuButton>
-                            <MenuList>
-
-                                {isLoggedIn &&
-                                    <MenuGroup>
-                                        <Link to='/profile'>
-                                            <MenuItem>
-                                                Profile
-                                            </MenuItem>
-                                        </Link>
-                                    </MenuGroup>
-                                }
-
-                                {isLoggedIn && <MenuDivider />}
-
-                                <MenuGroup>
                                     {isLoggedIn &&
-                                        <Link to='/tenants'>
-                                            <MenuItem>
-                                                Tenants
-                                            </MenuItem>
-                                        </Link>
+                                        <WrapItem>
+                                            {authenticatedUser?.IdFileLink &&
+                                                <Image
+                                                    w={8}
+                                                    h={8}
+                                                    objectFit='cover'
+                                                    objectPosition='center'
+                                                    border='2px solid'
+                                                    borderRadius='50%'
+                                                    borderColor='gray.500'
+                                                    src={authenticatedUser?.IdFileLink} />
+                                            }
+
+                                            {!authenticatedUser?.IdFileLink &&
+                                                <Stack direction='row'>
+                                                    <Avatar
+                                                        size='sm'
+                                                        src='https://bit.ly/broken-link' />
+                                                </Stack>
+                                            }
+                                        </WrapItem>
                                     }
 
+                                </MenuButton>
+                                <MenuList>
 
-                                    <Flex
-                                        px={4}
-                                        pb={2}
-                                        alignItems='center'
-                                        justifyContent='space-between'>
-                                        <Text>Dark Mode:</Text>
-                                        <CustomSwitch />
-                                    </Flex>
+                                    {isLoggedIn &&
+                                        <MenuGroup>
+                                            <Link to='/profile'>
+                                                <MenuItem>
+                                                    Profile
+                                                </MenuItem>
+                                            </Link>
+                                        </MenuGroup>
+                                    }
 
+                                    {isLoggedIn && <MenuDivider />}
 
                                     <MenuGroup>
-                                        {isLoggedIn ?
-                                            (
+                                        <Flex
+                                            px={4}
+                                            pb={2}
+                                            alignItems='center'
+                                            justifyContent='space-between'>
+                                            <Text>Dark Mode:</Text>
+                                            <CustomSwitch />
+                                        </Flex>
+
+
+                                        <MenuGroup>
+                                            {isLoggedIn &&
+
                                                 <VStack mt={2}>
                                                     <Button
                                                         w='90%'
@@ -201,30 +249,12 @@ const Navbar = () => {
                                                         Logout
                                                     </Button>
                                                 </VStack>
-                                            ) :
-                                            (
-                                                <VStack w='full'>
-
-                                                    <Button
-                                                        w='90%'
-                                                        type="button"
-                                                        variant='outline'>
-                                                        <Link to='/login'>Login</Link>
-                                                    </Button>
-
-
-                                                    <Button
-                                                        w='90%'
-                                                        type="button">
-                                                        <Link to='/register'>Register</Link>
-                                                    </Button>
-
-                                                </VStack>
-                                            )}
+                                            }
+                                        </MenuGroup>
                                     </MenuGroup>
-                                </MenuGroup>
-                            </MenuList>
-                        </Menu>
+                                </MenuList>
+                            </Menu>
+                        }
                     </HStack>
 
                 </HStack>
@@ -233,13 +263,15 @@ const Navbar = () => {
 
             {/* This is for mobile */}
 
-            <HStack display='flex' gap={{ base: 4, lg: 5 }}>
+            <HStack
+                display='flex'
+                gap={{ base: 4, lg: 5 }}>
 
 
                 <Drawer
                     isOpen={isOpen}
-                    placement='left'
-                    onClose={onClose}>
+                    onClose={onClose}
+                    placement={isLoggedIn ? 'left' : 'right'}>
 
                     <DrawerOverlay />
 
@@ -249,32 +281,104 @@ const Navbar = () => {
 
                         <DrawerBody py={28}>
 
-                            <Text fontSize={14} fontWeight='semibold' ml={1} mb={2}>Navigations :</Text>
-                            {navLinks.map(item => (
+                            <DrawerHeader
+                                mb={10}
+                                mt={-10}
+                                gap={2}
+                                display='flex'
+                                alignItems='center'
+                                justifyContent='center'>
+                                <Icon as={FaBuilding} h={5} w={5} color="#FF6B6B" />
+                                <Text>Rentalify</Text>
+                            </DrawerHeader>
 
-                                <List
-                                    gap={10}
-                                    w={'100%'}
-                                    fontSize={20}
-                                    display='flex'
-                                    alignItems='center'
-                                    key={item.id}
-                                    flexDirection='column'>
+                            <List
+                                gap={10}
+                                w={'100%'}
+                                fontSize={24}
+                                display='flex'
+                                alignItems='center'
+                                flexDirection='column'>
 
+                                <ListItem
+                                    transition='ease-in-out'
+                                    onClick={() => onClose()}
+                                    transitionDuration='0.3s'
+                                    _hover={{ color: '#FF6B6B' }}>
+                                    <NavLink to='/'>
+                                        <Text>
+                                            Home
+                                        </Text>
+                                    </NavLink>
+                                </ListItem>
+
+                                {isLoggedIn &&
                                     <ListItem
-                                        mb={2}
-                                        py={2}
-                                        w={'100%'}
-                                        onClick={onClose}
-                                        borderRadius={10}
-                                        textAlign='center'>
-                                        <NavLink to={item.path}>{item.Item}</NavLink>
+                                        onClick={() => onClose()}
+                                        transitionDuration='0.3s'
+                                        _hover={{ color: '#FF6B6B' }}>
+                                        <NavLink to='/tenants'>
+                                            <Text>
+                                                Tenants
+                                            </Text>
+                                        </NavLink>
                                     </ListItem>
+                                }
 
-                                </List>
-                            ))}
+                                <ListItem
+                                    onClick={() => onClose()}
+                                    transitionDuration='0.3s'
+                                    _hover={{ color: '#FF6B6B' }}>
+                                    <NavLink to='/about'>
+                                        <Text>
+                                            About Us
+                                        </Text>
+                                    </NavLink>
+                                </ListItem>
+
+
+                            </List>
+
+                            <Box
+                                mt={44}
+                                textAlign='center'>
+                                Revolutionize Your <br />
+                                <Text
+                                    ml={1}
+                                    as="span"
+                                    color="#FF6B6B">
+                                    Property Management
+                                </Text>
+                            </Box>
 
                         </DrawerBody>
+
+                        {!isLoggedIn &&
+                            <DrawerFooter>
+                                <Flex gap={2} w='100%' px={5}>
+                                    <Button
+                                        w='100%'
+                                        type="button"
+                                        color="#e05757"
+                                        variant='outline'
+                                        borderColor="#e05757"
+                                        onClick={() => onClose()}
+                                        _hover={{ bg: "#e05757", color: "white" }}>
+                                        <Link to='/login'>Login</Link>
+                                    </Button>
+
+                                    <Button
+                                        w='100%'
+                                        bg="#e05757"
+                                        color="white"
+                                        type="button"
+                                        _hover={{ bg: "#FF6B6B" }}
+                                        onClick={() => onClose()}>
+                                        <Link to='/register'>Register</Link>
+                                    </Button>
+                                </Flex>
+                            </DrawerFooter>
+                        }
 
                     </DrawerContent>
                 </Drawer>
