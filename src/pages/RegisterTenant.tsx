@@ -1,7 +1,7 @@
 import z from "zod";
-import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Grid, Heading, Input, InputGroup, InputLeftElement, Text, Textarea, useColorModeValue } from "@chakra-ui/react";
+import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Grid, Heading, Input, InputGroup, InputLeftElement, Spinner, Text, Textarea, useColorModeValue } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { useForm } from "react-hook-form";
 import { BsFillPeopleFill } from "react-icons/bs";
 import { FaPhoneAlt, FaUser } from "react-icons/fa";
@@ -45,8 +45,13 @@ const RegisterTenant = () => {
     const { mutate } = useAddTenant();
 
     // To Upload Image
-    const { uploadImage, setIsLoading, isLoading } = useUploadImage()
+    const { uploadImage, setIsLoading } = useUploadImage()
 
+    const [imageFile, setImageFile] = useState<File | null>(null)
+
+    const [imageUploading, setImageUploading] = useState(false)
+
+    const [isUploadingTenant, setIsUploadingTenant] = useState(false)
 
     document.title = "Add Tenant";
 
@@ -65,30 +70,37 @@ const RegisterTenant = () => {
         const fileInput = e.target.files?.[0];
 
         if (fileInput) {
-            setIsLoading(true);
-
-            try {
-                // Call the uploadImage function
-                const ImageUrl = await uploadImage(fileInput);
-
-                // Use the ImageURL state directly from the hook after it's updated
-                if (ImageUrl) {
-                    setValue('IdFileLink', ImageUrl);
-                    console.log(ImageUrl);
-                    setIsLoading(false);
-                }
-
-            } catch (error) {
-                console.error('Error uploading image:', error);
-            } finally {
-                setIsLoading(false);
-            }
+            setImageFile(fileInput)
         }
     };
 
-
     // Form submission
     const onSubmit = async (data: tenantData) => {
+
+        try {
+            let imageUrl = data.IdFileLink
+            if (imageFile) {
+                setIsLoading(true);
+
+                // Call the uploadImage function
+                imageUrl = await uploadImage(imageFile);
+
+
+                // Use the ImageURL state directly from the hook after it's updated
+                try {
+                    setValue('IdFileLink', imageUrl);
+                    console.log(imageUrl);
+                    setImageUploading
+                } catch (error) {
+                    setImageUploading(false);
+                    console.error('Error setting image URL:', error);
+                }
+            }
+
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            setImageUploading(false);
+        }
 
         try {
             const tenantDataForSubmission: Tenant = {
@@ -106,20 +118,28 @@ const RegisterTenant = () => {
                 QrCode: '',
             };
 
-            mutate(tenantDataForSubmission, {
-                onSuccess: () => {
-                    toast.success('Tenant added successfully!');
-                    navigate('/tenants');
-                },
+            setIsUploadingTenant(true);
+            mutate(
+                tenantDataForSubmission,
+                {
+                    onSuccess: () => {
+                        toast.success('Tenant added successfully!');
+                        setIsUploadingTenant(false);
+                        setTimeout(() => {
+                            navigate('/tenants');
+                        }, 3000);
+                    },
 
-                onError: () => {
-                    toast.error('Tenant not added yet!')
-                }
+                    onError: () => {
+                        toast.error('Tenant not added yet!')
+                        setIsUploadingTenant(false);
+                    }
 
-            });
+                });
 
         } catch (error) {
             console.error('Error adding tenant:', error);
+            setIsUploadingTenant(false);
         }
     };
 
@@ -306,10 +326,6 @@ const RegisterTenant = () => {
                                         onChange={handleFileInput}
                                         className="FileInputStyling"
                                     />
-                                    {isLoading
-                                        ? <Text fontSize='sm'>Please wait uploading...</Text>
-                                        : null}
-
                                     <Text color="red.500" fontSize='sm'>{errors.IdFileLink?.message}</Text>
                                 </Box>
                             </Box>
@@ -319,12 +335,25 @@ const RegisterTenant = () => {
 
                     <CardFooter>
                         <Button
-                            type="submit"
                             bg="#e05757"
+                            type="submit"
                             color="white"
                             _hover={{ bg: "#FF6B6B" }}
-                            w={{ base: '100%', sm: 'auto' }}>
-                            Add Tenant
+                            w={{ base: '100%', sm: 'auto' }}
+                            disabled={imageUploading || isUploadingTenant}>
+                                
+                            {imageUploading || isUploadingTenant
+                                ? imageUploading
+                                    ? <Flex gap={1.5} alignItems='center'>
+                                        <Spinner size='sm' />
+                                        <Text>Uploading Image</Text>
+                                    </Flex>
+                                    : <Flex gap={1.5} alignItems='center'>
+                                        <Spinner size='sm' />
+                                        <Text>Registering Tenant</Text>
+                                    </Flex>
+                                : 'Regiter Tenant'
+                            }
                         </Button>
                     </CardFooter>
 

@@ -61,13 +61,13 @@ const Navbar = () => {
                 borderRadius={0}
                 backdropFilter="blur(10px)"
                 justifyContent='space-between'
-                px={{ base: 6, sm: 10, lg: 40 }}
+                px={{ base: 6, sm: 10, md: 10, lg: 16, xl:40 }}
                 bg={colorMode === 'dark'
                     ? "rgba(26, 26, 26, 0.8)"
                     : "rgba(255, 255, 255, 0.8)"}
             >
                 <HStack
-                    h={14}
+                    h={16}
                     width='100%'
                     display='flex'
                     fontWeight='medium'
@@ -109,7 +109,7 @@ const Navbar = () => {
 
                                 <List
                                     gap={10}
-                                    fontSize={18}
+                                    fontSize='18px'
                                     display='flex'
                                     alignItems='center'
                                     fontWeight='medium'>
@@ -277,7 +277,13 @@ const Navbar = () => {
 
                     <DrawerContent>
 
-                        <DrawerCloseButton m={3} />
+                        {!isLoggedIn &&
+                            <DrawerCloseButton mt={3} mr={64} />
+                        }
+
+                        {isLoggedIn &&
+                            <DrawerCloseButton m={3} />
+                        }
 
                         <DrawerBody py={28}>
 
@@ -335,8 +341,6 @@ const Navbar = () => {
                                         </Text>
                                     </NavLink>
                                 </ListItem>
-
-
                             </List>
 
                             <Box
@@ -346,6 +350,8 @@ const Navbar = () => {
                                 <Text
                                     ml={1}
                                     as="span"
+                                    fontSize='lg'
+                                    fontWeight='semibold'
                                     color="#FF6B6B">
                                     Property Management
                                 </Text>
@@ -355,7 +361,7 @@ const Navbar = () => {
 
                         {!isLoggedIn &&
                             <DrawerFooter>
-                                <Flex gap={2} w='100%' px={5}>
+                                <Flex gap={2} w='100%' px={1}>
                                     <Button
                                         w='100%'
                                         type="button"

@@ -1,29 +1,28 @@
 import {
   Box,
   Button,
-  Input,
-  Heading,
+  Card,
+  Flex,
   HStack,
+  Heading,
+  Input,
   InputGroup,
   InputLeftElement,
-  Flex,
+  Spinner,
   Text,
-  Card,
 } from "@chakra-ui/react";
 import { z } from "zod";
-import { toast } from "react-toastify";
 import { MdEmail } from "react-icons/md";
-import firebaseApp from "../firebaseConfig";
+import { useForm } from "react-hook-form";
 import { ChangeEvent, useState } from "react";
 import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import { PiUploadSimpleBold } from "react-icons/pi";
 import { RiLockPasswordFill } from "react-icons/ri";
-import { apiClientOK } from "../services/apiClient";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldValues, useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
-import imageCompression from 'browser-image-compression';
-import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import useUploadImage from "../hooks/useUploadImage";
+import useRegister from "../hooks/useRegister";
+import { toast } from "react-toastify";
 
 
 const schema = z.object({
@@ -34,12 +33,21 @@ const schema = z.object({
   IdFileLink: z.string().optional()
 })
 
-type formData = z.infer<typeof schema>
+export type formData = z.infer<typeof schema>
 
 const Register = () => {
 
-  const navigate = useNavigate()
-  const [imageUrl, setImageURL] = useState<string>('')
+  const navigate = useNavigate();
+
+  const { mutate } = useRegister();
+
+  const { uploadImage } = useUploadImage()
+
+  const [imageUploading, setImageUploading] = useState(false);
+
+  const [registerLoading, setRegisterLoading] = useState(false);
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const {
     register,
@@ -51,88 +59,77 @@ const Register = () => {
   })
 
 
-  const [user, setUser] = useState<formData>({
-    username: "",
-    email: "",
-    phone: "",
-    password: "",
-    IdFileLink: imageUrl || "",
-  })
-
-
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value
-    })
-  }
-
-
   const handleFileInput = async (e: ChangeEvent<HTMLInputElement>) => {
 
     const fileInput = e.target.files?.[0]
 
     if (fileInput) {
-
-      const Options = {
-        maxSizeMB: 1,
-        maxWidthOrHeight: 1920,
-        useWebWorker: true
-      }
-
-      const compressedFile = await imageCompression(fileInput, Options);
-
-      const storage = getStorage(firebaseApp);
-
-      const storageRef = ref(storage, `profiles/${compressedFile.name}`);
-
-      await uploadBytes(storageRef, compressedFile);
-
-      const downloadURL = await getDownloadURL(storageRef);
-
-      setImageURL(downloadURL);
-
-      console.log(downloadURL);
-
-      setValue('IdFileLink', downloadURL)
-
-      setUser(prev => ({ ...prev, IdFileLink: downloadURL }));  // Update local state
-
+      setImageFile(fileInput)
     }
   }
 
-  const onSubmit = async (data: FieldValues) => {
+
+  const onSubmit = async (data: formData) => {
     console.log(data);
 
-    const response = await fetch(`${apiClientOK}/api/auth/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user),
-      credentials: 'include'
-    })
+    try {
 
-    console.log(response);
+      let imageUrl = data.IdFileLink
 
-    if (response.ok) {
-      toast.success("Account created successfully")
-      setUser({
-        username: "",
-        email: "",
-        phone: "",
-        password: "",
-        IdFileLink: imageUrl || "",
-      })
+      if (imageFile) {
+        setImageUploading(true)
+        try {
+          imageUrl = await uploadImage(imageFile)
+          setValue('IdFileLink', imageUrl);
+          setImageUploading(false)
+          console.log(imageUrl);
 
-      navigate('/login')
+        } catch (error) {
+          console.log(error);
+          return;
 
-    } else {
-      toast.error('User not registered!')
+        } finally {
+          setImageUploading(false)
+        }
+      }
+
+      try {
+        setRegisterLoading(true)
+
+        mutate(
+          { ...data, IdFileLink: imageUrl },
+          {
+            onSuccess: () => {
+              toast.success('Registered successfully')
+              setRegisterLoading(false)
+
+              setTimeout(() => {
+                navigate('/')
+              }, 2000)
+
+            },
+
+            onError: () => {
+              toast.error('Error registering')
+              setRegisterLoading(false)
+            }
+
+          })
+
+      } catch (error) {
+        console.log(error);
+        setRegisterLoading(false)
+        toast.error('Error registering')
+      }
+
+    } catch (error) {
+      console.log(error);
+      toast.error('Not registered')
     }
+
   }
+
+
 
   return (
     <Box
@@ -177,8 +174,6 @@ const Register = () => {
                   id="username"
                   variant='filled'
                   placeholder="John Doe"
-                  value={user.username}
-                  onChange={handleInput}
                   focusBorderColor="#e05757"
                   fontSize={{ base: 14, md: 16 }}
                 />
@@ -199,8 +194,6 @@ const Register = () => {
                   id="email"
                   type="email"
                   variant='filled'
-                  value={user.email}
-                  onChange={handleInput}
                   focusBorderColor="#e05757"
                   placeholder="m@example.com"
                   fontSize={{ base: 14, md: 16 }}
@@ -223,9 +216,7 @@ const Register = () => {
                 id="phone"
                 type="number"
                 variant='filled'
-                value={user.phone}
                 placeholder="phone"
-                onChange={handleInput}
                 focusBorderColor="#e05757"
                 fontSize={{ base: 14, md: 16 }}
               />
@@ -245,8 +236,6 @@ const Register = () => {
                 id="password"
                 type="password"
                 variant='filled'
-                value={user.password}
-                onChange={handleInput}
                 placeholder="Password"
                 focusBorderColor="#e05757"
                 fontSize={{ base: 14, md: 16 }}
@@ -282,9 +271,22 @@ const Register = () => {
             size="lg"
             bg="#e05757"
             color="white"
-            type="button"
-            _hover={{ bg: "#FF6B6B" }}>
-            Register
+            type="submit"
+            _hover={{ bg: "#FF6B6B" }}
+            disabled={imageUploading || registerLoading}>
+            {imageUploading || registerLoading
+              ? imageUploading
+                ? <Flex gap={1.5} alignItems='center'>
+                  <Spinner size='sm' />
+                  <Text>Uploading Image</Text>
+                </Flex>
+                : <Flex gap={1.5} alignItems='center'>
+                  <Spinner size='sm' />
+                  <Text>Registering</Text>
+                </Flex>
+
+              : 'Register'
+            }
           </Button>
         </form>
 

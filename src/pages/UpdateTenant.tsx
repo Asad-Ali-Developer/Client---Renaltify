@@ -173,13 +173,8 @@ const UpdateTenant = () => {
             });
 
 
-            // const res_data = await response.json();
-            // console.log('API response:', res_data);
-
-
             if (response.ok) {
                 toast.success('Tenant Updated successfully!')
-                // console.log('Tenant added successfully!');
                 navigate('/tenants');
             }
             else {

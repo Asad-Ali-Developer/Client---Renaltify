@@ -103,6 +103,7 @@ const UpdateTenantBox = ({ tenantId, isOpenUdater, onCloseUpdater, tenant }: Pro
         }
     };
 
+    
     const onSubmit = async (data: tenantData) => {
         // When tenant prop changes, reset the form with the new tenant data
         useEffect(() => {

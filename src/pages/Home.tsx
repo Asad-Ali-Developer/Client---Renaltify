@@ -29,8 +29,8 @@ export default function ModernLanding() {
               style={{ marginBottom: '2rem' }}
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-            >
+              transition={{ duration: 0.8 }}>
+
               <Heading as="h1" size="2xl" mb={4} lineHeight="tight">
                 Revolutionize Your <Text as="span" color="#FF6B6B">Property Management</Text>
               </Heading>
@@ -39,7 +39,7 @@ export default function ModernLanding() {
                 color={colorMode === 'dark' ? "gray.300" : "gray.600"} mb={6}>
                 Streamline your tenant data, automate rent collection, and gain valuable insights with our cutting-edge platform.
               </Text>
-              <HStack spacing={4}>
+              <HStack spacing={4} w='100%'>
 
                 {!isLoggedIn &&
                   <Link to='/register'>
@@ -68,14 +68,14 @@ export default function ModernLanding() {
                     </Button>
                   </Link>
                 }
+
                 <Button
                   size="md"
                   color="#e05757"
                   variant="outline"
                   borderColor="#e05757"
                   _hover={{ bg: "#e05757", color: "white" }}
-                  zIndex="1" // Added zIndex to ensure visibility
-                >
+                  zIndex="1">
                   Learn More
                 </Button>
               </HStack>
@@ -126,10 +126,26 @@ export default function ModernLanding() {
             <Grid
               templateColumns={{ base: "1fr", md: "repeat(2, 1fr)", lg: "repeat(4, 1fr)" }} gap={8}>
               {[
-                { icon: FaBuilding, title: "Smart Property Management", description: "Manage all your properties effortlessly from one dashboard" },
-                { icon: AiOutlineTeam, title: "Tenant Insights", description: "Gain valuable insights into your tenants' behavior and preferences" },
-                { icon: AiOutlineFileText, title: "Automated Documentation", description: "Generate and manage leases and other documents automatically" },
-                { icon: AiOutlineLoading, title: "Real-time Analytics", description: "Access real-time data and analytics to make informed decisions" },
+                {
+                  icon: FaBuilding,
+                  title: "Smart Property Management",
+                  description: "Manage all your properties effortlessly from one dashboard"
+                },
+                {
+                  icon: AiOutlineTeam,
+                  title: "Tenant Insights",
+                  description: "Gain valuable insights into your tenants' behavior and preferences"
+                },
+                {
+                  icon: AiOutlineFileText,
+                  title: "Automated Documentation",
+                  description: "Generate and manage leases and other documents automatically"
+                },
+                {
+                  icon: AiOutlineLoading,
+                  title: "Real-time Analytics",
+                  description: "Access real-time data and analytics to make informed decisions"
+                },
               ].map((feature, index) => (
                 <motion.div
                   key={index}

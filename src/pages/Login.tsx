@@ -1,25 +1,24 @@
 import {
   Box,
   Button,
-  Input,
-  Text,
+  Card,
   Heading,
   HStack,
+  Input,
   InputGroup,
   InputLeftElement,
-  Card,
+  Spinner,
+  Text,
 } from "@chakra-ui/react";
-
-import { z } from "zod";
-import { toast } from "react-toastify";
-import { apiClientOK } from "../services/apiClient";
-import { MdEmail } from "react-icons/md";
-import { useAuth } from "../store/authToken";
-import { ChangeEvent, useState } from "react";
-import { RiLockPasswordFill } from "react-icons/ri";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FieldValues, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
+import { MdEmail } from "react-icons/md";
+import { RiLockPasswordFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { z } from "zod";
+import useLogin from "../hooks/useLogin";
+import { useState } from "react";
 
 
 const schema = z.object({
@@ -27,74 +26,52 @@ const schema = z.object({
   password: z.string().min(6, { message: "Password must be at least 6 characters" }),
 })
 
-
-type formData = z.infer<typeof schema>
-
+export type formDataLogin = z.infer<typeof schema>
 
 const Login = () => {
 
   const navigate = useNavigate()
 
-  const { storeTokenInLS } = useAuth()
+  const { mutate } = useLogin()
+
+  const [loginLoading, setLoginLoading] = useState(false)
 
   const {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<formData>({
+  } = useForm<formDataLogin>({
     resolver: zodResolver(schema)
   })
 
 
-  const [user, setUser] = useState<formData>({
-    email: "",
-    password: "",
-  })
-
-
-  const handleInput = (e: ChangeEvent<HTMLInputElement>) => {
-    e.preventDefault()
-
-    setUser({
-      ...user,
-      [e.target.name]: e.target.value
-    })
-  }
-
-
-  const onSubmit = async (data: FieldValues) => {
+  const onSubmit = async (data: formDataLogin) => {
     console.log(data);
 
-    const response = await fetch(`${apiClientOK}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(user),
-      credentials: 'include'
-    })
+    try {
 
-    console.log(response);
+      setLoginLoading(true);
+      mutate(
+        data,
+        {
+          onSuccess: () => {
+            toast.success('Login Successfully')
+            setLoginLoading(false);
+            setTimeout(() => {
+              navigate('/')
+            }, 1000)
+          },
 
+          onError: () => {
+            toast.error('Login Error')
+            setLoginLoading(false);
+          }
+        })
 
-    const res_data = await response.json();
-
-    storeTokenInLS(res_data.token)
-
-
-    if (response.ok) {
-      toast.success("Login Successful!")
-      setUser({
-        email: "",
-        password: ""
-      })
-
-      navigate('/')
-
-    } else {
-      toast.error('Invalid credentials!')
+    } catch (error) {
+      console.log(error);
+      setLoginLoading(false);
     }
-
   }
 
 
@@ -144,8 +121,6 @@ const Login = () => {
                   type="email"
                   variant='filled'
                   colorScheme="red"
-                  value={user.email}
-                  onChange={handleInput}
                   placeholder="m@example.com"
                   focusBorderColor="#e05757"
                   fontSize={{ base: 14, md: 16 }}
@@ -167,8 +142,6 @@ const Login = () => {
                 id="password"
                 type="password"
                 variant='filled'
-                value={user.password}
-                onChange={handleInput}
                 placeholder="Password"
                 focusBorderColor="#e05757"
                 fontSize={{ base: 14, md: 16 }}
@@ -182,12 +155,15 @@ const Login = () => {
             mt={6}
             w="full"
             size="lg"
-            type="submit"
             bg="#FF6B6B"
+            type="submit"
+            color="white"
             colorScheme='red'
-            _hover={{ bg: "#FF8E8E" }}
-            color="white">
-            Login
+            disabled={loginLoading}
+            _hover={{ bg: "#FF8E8E" }}>
+            {loginLoading
+              ? <Spinner size='sm' />
+              : 'Login'}
           </Button>
         </form>
 
@@ -196,7 +172,6 @@ const Login = () => {
           mt={6}
           alignItems='center'
           justifyContent='center'>
-
           <Text
             fontSize="sm"
             textAlign="center">
