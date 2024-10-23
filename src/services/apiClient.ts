@@ -1,11 +1,11 @@
 import axios, { AxiosRequestConfig } from 'axios'
-export const apiClientOK = 'https://server-production-3fb3.up.railway.app'
-// export const apiClientOK = 'http://localhost:4000'
+// export const apiClientOK = 'https://server-production-3fb3.up.railway.app'
+export const apiClientOK = 'http://localhost:4000'
 
 
 const axiosInstance = axios.create({
-    baseURL: 'https://server-production-3fb3.up.railway.app',
-    // baseURL: 'http://localhost:4000',
+    // baseURL: 'https://server-production-3fb3.up.railway.app',
+    baseURL: 'http://localhost:4000',
 })
 
 

@@ -136,7 +136,10 @@ const Register = () => {
       mt={14}
       display="flex"
       alignItems="center"
+      backgroundSize='cover'
       justifyContent="center"
+      backgroundPosition='center'
+      backgroundImage='https://images.pexels.com/photos/1853542/pexels-photo-1853542.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
       minH={{ base: "90vh", lg: "92vh" }}>
 
       <Card
@@ -144,9 +147,12 @@ const Register = () => {
         maxW="md"
         shadow="lg"
         rounded="lg"
-        backdropBlur={40}
+        bg='transparent'
+        border='2px solid'
+        borderColor='gray.600'
         p={{ base: 6, sm: 8 }}
         mx={{ base: 2, lg: 4 }}
+        backdropFilter='blur(50px)'
         fontSize={{ base: 14, md: 16 }}>
 
         <Box textAlign="center" mb={6}>

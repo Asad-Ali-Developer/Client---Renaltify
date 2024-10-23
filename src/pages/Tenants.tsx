@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 import TenantSkeleton from "../components/TenantSkeleton";
 import TenantsShow from "../components/TenantsShow";
 import TenantsContext from "../context/TenantsContext";
+import { FaPlus } from "react-icons/fa";
 
 
 const Tenants = () => {
@@ -64,9 +65,7 @@ const Tenants = () => {
 
         </Card>
 
-
         <Box my={5}>
-
           <Flex justifyContent='space-between' alignItems='center' mb={5}>
             <Heading size='md' ml={2}>All Tenants</Heading>
             <Link to='/tenants/add_tenant'>
@@ -75,6 +74,7 @@ const Tenants = () => {
                 color="white"
                 type="button"
                 _hover={{ bg: "#FF6B6B" }}
+                leftIcon={<FaPlus />}
                 size={{ base: 'sm', md: 'md' }}>Add Tenant</Button>
             </Link>
           </Flex>

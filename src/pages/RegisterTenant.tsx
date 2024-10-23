@@ -1,4 +1,3 @@
-import z from "zod";
 import { Box, Button, Card, CardBody, CardFooter, CardHeader, Flex, Grid, Heading, Input, InputGroup, InputLeftElement, Spinner, Text, Textarea, useColorModeValue } from "@chakra-ui/react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ChangeEvent, useState } from "react";
@@ -11,6 +10,7 @@ import { PiUploadSimpleBold } from "react-icons/pi";
 import { RiIdCardFill } from "react-icons/ri";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import z from "zod";
 import useAddTenant from "../hooks/useAddTenant";
 import { Tenant } from "../hooks/useAllTenants";
 import useUploadImage from "../hooks/useUploadImage";
@@ -27,7 +27,7 @@ const tenantSchema = z.object({
     rentDecided: z.string().refine((val) => !isNaN(Number(val)), {
         message: "Rent must be a number",
     }),
-    idNumber: z.string().min(4, { message: "Id number must be at least 13 digits" }),
+    idNumber: z.string().min(13, { message: "Id number must be at least 13 digits" }),
     IdFileLink: z.string().optional(), // Ensure it's a string
     date: z.string().refine((val) => !isNaN(Date.parse(val)), {
         message: "Please provide a valid date",
@@ -45,7 +45,7 @@ const RegisterTenant = () => {
     const { mutate } = useAddTenant();
 
     // To Upload Image
-    const { uploadImage, setIsLoading } = useUploadImage()
+    const { uploadImage } = useUploadImage()
 
     const [imageFile, setImageFile] = useState<File | null>(null)
 
@@ -74,74 +74,54 @@ const RegisterTenant = () => {
         }
     };
 
-    // Form submission
     const onSubmit = async (data: tenantData) => {
-
+        setIsUploadingTenant(true);
+        let imageUrl = data.IdFileLink;
+    
         try {
-            let imageUrl = data.IdFileLink
-            if (imageFile) {
-                setIsLoading(true);
-
-                // Call the uploadImage function
-                imageUrl = await uploadImage(imageFile);
-
-
-                // Use the ImageURL state directly from the hook after it's updated
-                try {
-                    setValue('IdFileLink', imageUrl);
-                    console.log(imageUrl);
-                    setImageUploading
-                } catch (error) {
-                    setImageUploading(false);
-                    console.error('Error setting image URL:', error);
-                }
-            }
-
-        } catch (error) {
-            console.error('Error uploading image:', error);
+          // Handle image upload if image file is selected
+          if (imageFile) {
+            setImageUploading(true);
+            imageUrl = await uploadImage(imageFile);
+            setValue("IdFileLink", imageUrl); // Update form data with the uploaded image URL
             setImageUploading(false);
-        }
-
-        try {
-            const tenantDataForSubmission: Tenant = {
-                _id: '', // If the server generates it
-                tenantName: data.tenantName,
-                phone: Number(data.phone),
-                AnotherPhone: Number(data.AnotherPhone),
-                members: Number(data.members),
-                address: data.address,
-                rentDecided: data.rentDecided,
-                date: data.date,
-                idNumber: data.idNumber,
-                IdFileLink: data.IdFileLink || '',
-                isActive: data.isActive || false,
-                QrCode: '',
-            };
-
-            setIsUploadingTenant(true);
-            mutate(
-                tenantDataForSubmission,
-                {
-                    onSuccess: () => {
-                        toast.success('Tenant added successfully!');
-                        setIsUploadingTenant(false);
-                        setTimeout(() => {
-                            navigate('/tenants');
-                        }, 3000);
-                    },
-
-                    onError: () => {
-                        toast.error('Tenant not added yet!')
-                        setIsUploadingTenant(false);
-                    }
-
-                });
-
+          }
+    
+          // Prepare tenant data for submission
+          const tenantDataForSubmission: Tenant = {
+            _id: "", // Server generates this
+            tenantName: data.tenantName,
+            phone: Number(data.phone),
+            AnotherPhone: Number(data.AnotherPhone),
+            members: Number(data.members),
+            address: data.address,
+            rentDecided: data.rentDecided.toString(),
+            date: data.date,
+            idNumber: data.idNumber,
+            IdFileLink: imageUrl || "",
+            isActive: data.isActive || false,
+            QrCode: "",
+          };
+    
+          // Submit tenant data after image upload completes
+          mutate(tenantDataForSubmission, {
+            onSuccess: () => {
+              toast.success("Tenant added successfully!");
+              setIsUploadingTenant(false);
+              setTimeout(() => {
+                navigate("/tenants");
+              }, 3000);
+            },
+            onError: () => {
+              toast.error("Failed to add tenant");
+              setIsUploadingTenant(false);
+            },
+          });
         } catch (error) {
-            console.error('Error adding tenant:', error);
-            setIsUploadingTenant(false);
+          console.error("Error adding tenant:", error);
+          setIsUploadingTenant(false);
         }
-    };
+      };
 
 
     return (
@@ -341,7 +321,7 @@ const RegisterTenant = () => {
                             _hover={{ bg: "#FF6B6B" }}
                             w={{ base: '100%', sm: 'auto' }}
                             disabled={imageUploading || isUploadingTenant}>
-                                
+
                             {imageUploading || isUploadingTenant
                                 ? imageUploading
                                     ? <Flex gap={1.5} alignItems='center'>

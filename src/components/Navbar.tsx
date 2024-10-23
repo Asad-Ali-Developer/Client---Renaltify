@@ -61,7 +61,7 @@ const Navbar = () => {
                 borderRadius={0}
                 backdropFilter="blur(10px)"
                 justifyContent='space-between'
-                px={{ base: 6, sm: 10, md: 10, lg: 16, xl:40 }}
+                px={{ base: 6, sm: 10, md: 10, lg: 16, xl: 40 }}
                 bg={colorMode === 'dark'
                     ? "rgba(26, 26, 26, 0.8)"
                     : "rgba(255, 255, 255, 0.8)"}
@@ -149,6 +149,7 @@ const Navbar = () => {
                                     {!isLoggedIn &&
                                         <Flex gap={5}>
                                             <Button
+                                                w='100%'
                                                 type="button"
                                                 color="#e05757"
                                                 variant='outline'
@@ -159,6 +160,7 @@ const Navbar = () => {
                                             </Button>
 
                                             <Button
+                                                w='100%'
                                                 bg="#e05757"
                                                 color="white"
                                                 type="button"

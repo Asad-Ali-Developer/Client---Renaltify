@@ -180,7 +180,7 @@ const TenantShowModal = ({ tenantId }: Props) => {
                                 </Flex>
                                 <Text
                                     ml={-1}
-                                    w={{ base: '50%', sm: '70%', md: '80%', lg: '61%' }}>
+                                    w={{ base: '40%', sm: '70%', md: '70%', lg: '55%' }}>
                                     {tenant.address || <TenantDetailSketelton />}
                                 </Text>
                             </Flex>
