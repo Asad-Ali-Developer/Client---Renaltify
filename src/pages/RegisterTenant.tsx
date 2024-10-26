@@ -39,6 +39,7 @@ type tenantData = z.infer<typeof tenantSchema>;
 
 const RegisterTenant = () => {
     document.title = "Add Tenant";
+    
     const navigate = useNavigate();
 
     // To Upload data

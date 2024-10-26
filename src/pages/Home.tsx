@@ -42,57 +42,60 @@ const ModernLanding = () => {
 
               <HStack
                 mt={2}
-                w='100%'
+                w="100%"
                 spacing={2}
-                display='flex'
+                display="flex"
                 flexDirection={{ base: 'column', sm: 'row' }}
+                alignItems="center"  // Center-align items in the stack
               >
                 {!isLoggedIn && (
-                  <Link to='/register'>
+                  <Link to="/register" style={{ width: '100%' }}> {/* Full width on small screens */}
                     <Button
-                      w={{ base: '100%', md: 'auto' }}  // Responsive width
+                      w={{ base: '100%', sm: 'auto' }} // Full width for base, auto for sm+
                       size="md"
                       bg="#e05757"
                       color="white"
                       type="button"
                       _hover={{ bg: "#FF6B6B" }}
-                      zIndex="1">
+                      zIndex="1"
+                    >
                       Register
                     </Button>
                   </Link>
                 )}
 
                 {isLoggedIn && (
-                  <Box w={{ base: '100%', md: 'auto' }}> {/* Added Box wrapper for full width */}
-                    <Link to='/tenants/add_tenant'>
+                  <Box w={{ base: '100%', sm: 'auto' }}>
+                    <Link to="/tenants/add_tenant" style={{ width: '100%' }}>
                       <Button
-                        w="full"  // Set button width to full within the Box
+                        w="full"
                         size="md"
                         bg="#e05757"
                         color="white"
                         type="button"
                         _hover={{ bg: "#FF6B6B" }}
-                        zIndex="1">
+                        zIndex="1"
+                      >
                         Add Tenant
                       </Button>
                     </Link>
                   </Box>
                 )}
 
-                <Button
-                  w={{ base: '100%', md: 'auto' }}  // Responsive width
-                  size="md"
-                  color="#e05757"
-                  variant="outline"
-                  borderColor="#e05757"
-                  _hover={{ bg: "#e05757", color: "white" }}
-                  zIndex="1">
-                  <Link to='/about'>
+                <Link to="/about" style={{ width: '100%' }}>
+                  <Button
+                    w={{ base: '100%', sm: 'auto' }}  // Full width on small screens
+                    size="md"
+                    color="#e05757"
+                    variant="outline"
+                    borderColor="#e05757"
+                    _hover={{ bg: "#e05757", color: "white" }}
+                    zIndex="1"
+                  >
                     Learn More
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
               </HStack>
-
 
             </motion.div>
 

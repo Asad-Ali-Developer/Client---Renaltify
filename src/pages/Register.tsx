@@ -39,7 +39,7 @@ const Register = () => {
 
   const navigate = useNavigate();
 
-  const { mutate } = useRegister();
+  const registerUser = useRegister();
 
   const { uploadImage } = useUploadImage()
 
@@ -58,77 +58,49 @@ const Register = () => {
     resolver: zodResolver(schema)
   })
 
-
-  const handleFileInput = async (e: ChangeEvent<HTMLInputElement>) => {
-
-    const fileInput = e.target.files?.[0]
-
-    if (fileInput) {
-      setImageFile(fileInput)
-    }
-  }
-
+  const handleFileInput = (e: ChangeEvent<HTMLInputElement>) => {
+    const fileInput = e.target.files?.[0];
+    if (fileInput) setImageFile(fileInput);
+  };
 
   const onSubmit = async (data: formData) => {
-    console.log(data);
+    setRegisterLoading(true);
+    
+    let imageUrl = data.IdFileLink;
 
-    try {
-
-      let imageUrl = data.IdFileLink
-
-      if (imageFile) {
-        setImageUploading(true)
-        try {
-          imageUrl = await uploadImage(imageFile)
-          setValue('IdFileLink', imageUrl);
-          setImageUploading(false)
-          console.log(imageUrl);
-
-        } catch (error) {
-          console.log(error);
-          return;
-
-        } finally {
-          setImageUploading(false)
-        }
-      }
-
+    if (imageFile) {
+      setImageUploading(true);
       try {
-        setRegisterLoading(true)
-
-        mutate(
-          { ...data, IdFileLink: imageUrl },
-          {
-            onSuccess: () => {
-              toast.success('Registered successfully')
-              setRegisterLoading(false)
-
-              setTimeout(() => {
-                navigate('/')
-              }, 2000)
-
-            },
-
-            onError: () => {
-              toast.error('Error registering')
-              setRegisterLoading(false)
-            }
-
-          })
+        imageUrl = await uploadImage(imageFile);
+        setValue('IdFileLink', imageUrl);
 
       } catch (error) {
-        console.log(error);
-        setRegisterLoading(false)
-        toast.error('Error registering')
+        toast.error("Image upload failed");
+        return;
+
+      } finally {
+        setImageUploading(false);
       }
+    }
+    
+    const userData: formData = { ...data, IdFileLink: imageUrl };
+    
+    try {
+      
+      await registerUser(userData);
+      toast.success("Registration successful!");
+      setRegisterLoading(false);
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000)
 
     } catch (error) {
-      console.log(error);
-      toast.error('Not registered')
+      setRegisterLoading(false)
+      toast.error("Registration failed");
     }
 
   }
-
 
 
   return (
